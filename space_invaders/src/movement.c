@@ -44,8 +44,8 @@ int tankOriginY;
 void initializeMovement(){
 	firstColAliveAliens = 0;
 	lastColAliveAliens = ALIENS_PER_ROW - 1;
-	alienOriginX = ORIGIN_X_INITIAL;
-	alienOriginY = ORIGIN_Y_INITIAL;
+	alienOriginX = ALIEN_ORIGIN_X_INITIAL;
+	alienOriginY = ALIEN_ORIGIN_Y_INITIAL;
 	tankOriginX = TANK_X_INITIAL;
 	tankOriginY = TANK_Y_INITIAL;
 	alienFarRightOffset = FARRIGHT_OFFSET_INITIAL;
