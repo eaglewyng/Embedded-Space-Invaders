@@ -16,7 +16,8 @@
 #define TANK_X_INITIAL 0
 #define TANK_Y_INITIAL 420
 
-
+int moveTankBullet();
+ScreenPoint tankBulletCollision();
 
 
 

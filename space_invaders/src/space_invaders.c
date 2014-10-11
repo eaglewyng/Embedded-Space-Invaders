@@ -107,10 +107,10 @@ int initializeLevel(){
 	bunkerArray[3].damageStateBlockBottomLeft = BUNKER_INITIAL_DAMAGE;
 	bunkerArray[3].damageStateBlockLeftSide = BUNKER_INITIAL_DAMAGE;
 	bunkerArray[3].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
-	bunkerArray[0].x = 74;
-	bunkerArray[1].x = 222;
-	bunkerArray[2].x = 370;
-	bunkerArray[3].x = 518;
+	bunkerArray[0].x = BUNKER0_INITIAL_X;
+	bunkerArray[1].x = BUNKER1_INITIAL_X;
+	bunkerArray[2].x = BUNKER2_INITIAL_X;
+	bunkerArray[3].x = BUNKER3_INITIAL_X;
 	bunkerArray[0].y = BUNKER_INITIAL_Y;
 	bunkerArray[1].y = BUNKER_INITIAL_Y;
 	bunkerArray[2].y = BUNKER_INITIAL_Y;

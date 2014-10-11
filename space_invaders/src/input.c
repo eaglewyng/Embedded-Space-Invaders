@@ -164,6 +164,7 @@ void getButtonInput(){
 	 drawAliens();
 	 drawTank();
 	 drawAlienBullet(-1);
+	 drawTankBullet();
 
 }
 
