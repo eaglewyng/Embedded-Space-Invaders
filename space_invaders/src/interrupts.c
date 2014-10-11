@@ -55,6 +55,9 @@ void interrupt_handler_dispatcher(){
 void timer_interrupt_handler(){
 	incrementDC(1);
 
+	int haveDrawnAliens = 0;
+	int haveDrawnBullets = 0;
+
 	//is it time to update the location?
 	if(fitcounter % TICS_PER_ALIEN_LOC_UPDATE == 0){
 		moveAliens();
@@ -67,6 +70,7 @@ void timer_interrupt_handler(){
 		moveAlienBullets();
 		moveTankBullet();
 	}
+
 
 
 	if(fitcounter == FITCOUNTER_MAX){
