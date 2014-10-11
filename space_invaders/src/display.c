@@ -66,6 +66,7 @@ extern int crossBullet_state3[];
 extern int tankBulletSymbol[];
 extern int firstColAliveAliens;
 extern int lastColAliveAliens;
+extern int deadAlien[];
 
 extern Bullet tankBullet;
 
@@ -352,7 +353,7 @@ int drawAliens(){
 				alienBMP = noAlien;
 				break;
 			case DEAD_ALIEN:
-				alienBMP = noAlien;
+				alienBMP = deadAlien;
 				break;
 			case BIG_SQUID:
 				alienBMP = (alienInOut == 0 ? bigSquidIn :
@@ -385,9 +386,12 @@ int drawAliens(){
 					}
 				}
 			}
-
+			if(alienBMP == deadAlien){
+				alienArray[row * ALIENS_PER_ROW + col] = NO_ALIEN;
+			}
 		}
 	}
+
 
 	return 0;
 }

@@ -426,28 +426,37 @@ int chooseAlienToKill(int x, int y){
 	int* alienBMP;
 	for(i = 0; i < ALIEN_ROWS*ALIENS_PER_ROW; i++){
 		if(alienArray[i] > DEAD_ALIEN){
-			if((y >= (alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT)) && (y < (alienOriginY + i/ALIENS_PER_ROW*(ALIEN_HEIGHT+1)))){
+			if(i >= 0 && i <= 10){
+				int testY = alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT;
+				int testX = alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT+ALIEN_HEIGHT;
+			}
+
+			if((y >= (alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT)) && (y < (alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT+ALIEN_HEIGHT))){
 				//xil_printf("Made it into checking the alien Y bounds for alien %d.\n\r",i);
 				int myLeftBound = alienOriginX + i%ALIENS_PER_ROW*ALIEN_WIDTH;
 				int myRightBound = alienOriginX + i%ALIENS_PER_ROW*ALIEN_WIDTH+ALIEN_WIDTH;
 				if((x >= (myLeftBound)) && (x < (myRightBound))){
+					xil_printf("You've hit alien %d! Blarg!\n\r",i);
+					alienArray[i] = DEAD_ALIEN;
+					return 1;
 					switch(alienArray[i]){
-								case BIG_SQUID:
-									alienBMP = (alienInOut == 0 ? bigSquidIn :
-									bigSquidOut);
-									break;
-								case LITTLE_SQUID:
-									alienBMP = (alienInOut == 0 ? littleSquidIn :
-									littleSquidOut);
-									break;
-								case JUMPING_JACK:
-									alienBMP = (alienInOut == 0 ? jumpingJackIn :
-									jumpingJackOut);
-									break;
-								default:
-									alienBMP = noAlien;
-									break;
-								}
+					case BIG_SQUID:
+						alienBMP = (alienInOut == 0 ? bigSquidIn :
+						bigSquidOut);
+						break;
+					case LITTLE_SQUID:
+						alienBMP = (alienInOut == 0 ? littleSquidIn :
+						littleSquidOut);
+						xil_printf("We're in the little squid space.\n\r");
+						break;
+					case JUMPING_JACK:
+						alienBMP = (alienInOut == 0 ? jumpingJackIn :
+						jumpingJackOut);
+						break;
+					default:
+						alienBMP = noAlien;
+						break;
+					}
 					int myTestInt = alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x));
 					int whatsInTheRow = bigSquidIn[y / ALIEN_HEIGHT];
 					int theRow = y / ALIEN_HEIGHT;
