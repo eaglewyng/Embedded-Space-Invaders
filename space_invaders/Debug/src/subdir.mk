@@ -12,6 +12,7 @@ C_SRCS += \
 ../src/interrupts.c \
 ../src/movement.c \
 ../src/platform.c \
+../src/score.c \
 ../src/space_invaders.c \
 ../src/utils.c 
 
@@ -27,6 +28,7 @@ OBJS += \
 ./src/interrupts.o \
 ./src/movement.o \
 ./src/platform.o \
+./src/score.o \
 ./src/space_invaders.o \
 ./src/utils.o 
 
@@ -39,6 +41,7 @@ C_DEPS += \
 ./src/interrupts.d \
 ./src/movement.d \
 ./src/platform.d \
+./src/score.d \
 ./src/space_invaders.d \
 ./src/utils.d 
 
