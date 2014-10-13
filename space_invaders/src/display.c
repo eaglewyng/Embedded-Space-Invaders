@@ -68,6 +68,13 @@ extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int deadAlien[];
 
+extern int scoreI[];
+extern int scoreS[];
+extern int scoreO[];
+extern int scoreR[];
+extern int scoreE[];
+
+
 extern Bullet tankBullet;
 
 
@@ -903,6 +910,59 @@ void drawAlienBullet(int myIndex){
 		}
 	}
 }
+
+void drawScoreText(){
+	int x;
+	int y;
+	//S
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){	
+			if(scoreS[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y) * 640 + SCORETEXT_START_X + x] = 0xFFFFFFFF;
+			}
+		}
+	}
+	
+	//C
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreC[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
+					(SCORETEXT_START_X + SCORETEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+	
+	//O
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreO[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
+					(SCORETEXT_START_X + SCORETEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+	//R
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreR[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
+					(SCORETEXT_START_X + SCORETEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+	
+	//E
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreE[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
+					(SCORETEXT_START_X + SCORETEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+	
+} 
 
 
 
