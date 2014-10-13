@@ -676,8 +676,6 @@ int moveTankBullet(){
 		drawTankBullet();
 	}
 
-
-
 	return 0;
 }
 
