@@ -2,10 +2,21 @@
 **** Build of configuration Debug for project space_invaders ****
 
 make all 
-Building file: ../src/space_invaders.c
+Building file: ../src/movement.c
 Invoking: MicroBlaze gcc compiler
-mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -I../../space_invaders_bsp_0/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.20.b -mno-xl-soft-mul -MMD -MP -MF"src/space_invaders.d" -MT"src/space_invaders.d" -o"src/space_invaders.o" "../src/space_invaders.c"
-Finished building: ../src/space_invaders.c
+mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -I../../space_invaders_bsp_0/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.20.b -mno-xl-soft-mul -MMD -MP -MF"src/movement.d" -MT"src/movement.d" -o"src/movement.o" "../src/movement.c"
+../src/movement.c: In function 'tankBulletCollision':
+../src/movement.c:283: warning: implicit declaration of function 'chooseAlienToKill'
+../src/movement.c:303: warning: implicit declaration of function 'chooseBunkerBlockToDamage'
+../src/movement.c: In function 'chooseAlienToKill':
+../src/movement.c:459: warning: unused variable 'testX'
+../src/movement.c:458: warning: unused variable 'testY'
+../src/movement.c:467: warning: implicit declaration of function 'xil_printf'
+../src/movement.c:491: warning: unused variable 'theCol'
+../src/movement.c:490: warning: unused variable 'theRow'
+../src/movement.c:489: warning: unused variable 'whatsInTheRow'
+../src/movement.c:488: warning: unused variable 'myTestInt'
+Finished building: ../src/movement.c
 ' '
 Building target: space_invaders.elf
 Invoking: MicroBlaze gcc linker
@@ -15,7 +26,7 @@ Finished building target: space_invaders.elf
 Invoking: MicroBlaze Print Size
 mb-size space_invaders.elf  |tee "space_invaders.elf.size"
    text	   data	    bss	    dec	    hex	filename
-  89870	   1484	   8362	  99716	  18584	space_invaders.elf
+  89958	   1484	   8374	  99816	  185e8	space_invaders.elf
 Finished building: space_invaders.elf.size
 ' '
 Invoking: Xilinx ELF Check

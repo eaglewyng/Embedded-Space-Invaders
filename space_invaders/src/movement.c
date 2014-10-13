@@ -36,9 +36,9 @@ int firstColAliveAliens;
 int lastColAliveAliens;
 int alienFarRightOffset;
 int alienDirection;		//see #defines in movement.h for possible directions
-
-
-
+int redSpaceshipOriginX;
+int redSpaceshipOriginY;
+int redSpaceshipDirection;
 int tankOriginX;
 int tankOriginY;
 
@@ -68,10 +68,34 @@ void updateLocations(){
 	moveAlienBullets();
 }
 
+void moveRedSpaceship(){
+	if(redSpaceshipDirection == LEFT){
+		redSpaceshipOriginY += PIXELS_PER_MOVE;
+		undrawRedSpaceship(DOWN);
+		redSpaceshipDirection = RIGHT;
+	}
+	//redSpaceships are on the right side of the screen
+	else if(redSpaceshipDirection == RIGHT){
+		redSpaceshipOriginY += PIXELS_PER_MOVE;
+		undrawRedSpaceship(DOWN);
+		redSpaceshipDirection = LEFT;
+	}
+	//redSpaceships are free to move as normal
+	else{
+		redSpaceshipOriginX += redSpaceshipDirection == RIGHT ? PIXELS_PER_MOVE : PIXELS_PER_MOVE * -1;
+		undrawRedSpaceship(redSpaceshipDirection);
+	}
+	int in;
+	for(in = 0; in < NUM_BUNKERS; in++){
+		drawBunker(in);
+	}
+	drawRedSpaceship();
+
+}
+
 
 //updates the origin location by the predefined amount
 int moveAliens(){
-	//basic implementation, without ups or downs
 
 	//what to do if aliens are on the left side of the screen
 	if(alienDirection == LEFT && (alienOriginX - PIXELS_PER_MOVE < -1*(ALIEN_WIDTH * firstColAliveAliens))){

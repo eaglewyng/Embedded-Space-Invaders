@@ -39,6 +39,8 @@ void initializeDC(){
 		insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
 	}
 
+	insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
+
 }
 
 int initializeGame(){

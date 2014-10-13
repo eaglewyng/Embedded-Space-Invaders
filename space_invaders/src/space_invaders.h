@@ -60,6 +60,12 @@
 #define ALIEN_BULLETS_PIXELS_PER_MOVE 12
 #define TANK_BULLET_PIXELS_PER_MOVE 7//7
 
+#define RED_SPACESHIP_PIXELS_PER_MOVE 12
+#define RED_SPACESHIP_INITIAL_X_LEFT 0
+#define RED_SPACESHIP_INITIAL_X_RIGHT 600
+#define RED_SPACESHIP_INITIAL_Y 0
+#define RED_SPACESHIP_WIDTH 32
+
 #define NUMBER_HEIGHT 14
 
 #define GREEN 0x0000FF00
@@ -71,6 +77,7 @@
 #define EVENT_ALIEN_FIRE 1
 #define EVENT_RED_SPACESHIP_APPEAR 2
 #define MAX_TICS_BETWEEN_ALIEN_FIRE 1500
+#define MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR 3000
 
 #define TEXT_WIDTH 10
 #define TEXT_HEIGHT 14
@@ -157,6 +164,8 @@ void clearAlienBullet(int);
 void drawTankBullet();
 void undrawTankBullet();
 void clearTankBullet();
+void drawRedSpaceship();
+void undrawRedSpaceship(int);
 
 
 //-----gameplay.c---------//

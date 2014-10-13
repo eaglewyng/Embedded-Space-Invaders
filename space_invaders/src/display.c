@@ -266,37 +266,17 @@ void drawScoreText(){
 }
 
 
-
-
-
-//returns 1 if a tank pixel should be drawn here, and 0 if not
-//the row and column should be the current row & column on the screen
-int isTankPixelHere(int row, int col){
-
-	//if the the current row and column is not in the alien "grid", return 0
-	if(col < tankOriginX || col >= (tankOriginX + TANK_WIDTH)){
-		return 0;
-	}
-
-	if(row < tankOriginY || row >= (tankOriginY + TANK_HEIGHT) ){
-		return 0;
-	}
-
-
-
-	int rawIdxX = col - tankOriginX;
-	int rawIdxY = row - tankOriginY;
-
-	int idxIntoTankY = rawIdxY % TANK_HEIGHT;
-	int idxIntoTankX = rawIdxX % TANK_WIDTH;
-
-	return (1 && (tank[idxIntoTankY] & (1<<(TANK_WIDTH - 1 - idxIntoTankX))));
+void drawRedSpaceship(){
 
 }
 
-int isBunkerPixelHere(int row, int col){
-	return 0;
+void undrawRedSpaceship(int direction){
+
 }
+
+
+
+
 
 int undrawTank(int direction){
 	int x;
@@ -616,15 +596,12 @@ void clearAlienBullet(int bulletIndex){
 
 
 
+
 /* #define INACTIVE_BULLET 0
 #define SQUIGGLY_BULLET 1
 #define CROSS_BULLET 2
 #define TANK_BULLET 3
 #define NUM_ALIEN_BULLETS 4*/
-
-
-
-
 void drawAlienBullet(int myIndex){
 	int col;
 	int row;
