@@ -2,21 +2,10 @@
 **** Build of configuration Debug for project space_invaders ****
 
 make all 
-Building file: ../src/movement.c
+Building file: ../src/space_invaders.c
 Invoking: MicroBlaze gcc compiler
-mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -I../../space_invaders_bsp_0/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.20.b -mno-xl-soft-mul -MMD -MP -MF"src/movement.d" -MT"src/movement.d" -o"src/movement.o" "../src/movement.c"
-../src/movement.c: In function 'tankBulletCollision':
-../src/movement.c:259: warning: implicit declaration of function 'chooseAlienToKill'
-../src/movement.c:279: warning: implicit declaration of function 'chooseBunkerBlockToDamage'
-../src/movement.c: In function 'chooseAlienToKill':
-../src/movement.c:435: warning: unused variable 'testX'
-../src/movement.c:434: warning: unused variable 'testY'
-../src/movement.c:443: warning: implicit declaration of function 'xil_printf'
-../src/movement.c:467: warning: unused variable 'theCol'
-../src/movement.c:466: warning: unused variable 'theRow'
-../src/movement.c:465: warning: unused variable 'whatsInTheRow'
-../src/movement.c:464: warning: unused variable 'myTestInt'
-Finished building: ../src/movement.c
+mb-gcc -Wall -O0 -g3 -c -fmessage-length=0 -I../../space_invaders_bsp_0/microblaze_0/include -mlittle-endian -mxl-barrel-shift -mxl-pattern-compare -mcpu=v8.20.b -mno-xl-soft-mul -MMD -MP -MF"src/space_invaders.d" -MT"src/space_invaders.d" -o"src/space_invaders.o" "../src/space_invaders.c"
+Finished building: ../src/space_invaders.c
 ' '
 Building target: space_invaders.elf
 Invoking: MicroBlaze gcc linker

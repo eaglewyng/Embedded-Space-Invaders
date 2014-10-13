@@ -1,2 +1,9 @@
 .metadata/
+.metadata/.plugins/
+.metadata/.plugins/org.eclipse.core.resources/
+.metadata/.plugins/org.eclipse.core.resources/.projects/
+.metadata/.plugins/org.eclipse.core.resources/.root/
+.metadata/.plugins/org.eclipse.cdt.ui/
+
+
 space_invaders/Debug/
