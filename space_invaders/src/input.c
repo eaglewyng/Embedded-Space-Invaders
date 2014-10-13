@@ -158,9 +158,9 @@ void getButtonInput(){
 
 	//update the screen
 	int ioa;
-	 for(ioa = 0; ioa < NUM_BUNKERS; ioa ++){
+/*	 for(ioa = 0; ioa < NUM_BUNKERS; ioa ++){
 		 drawBunker(ioa);
-	 }
+	 }*/
 	 drawAliens();
 	 drawTank();
 	 drawAlienBullet(-1);

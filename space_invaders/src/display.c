@@ -68,12 +68,13 @@ extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int deadAlien[];
 
+
 extern int scoreI[];
 extern int scoreS[];
 extern int scoreO[];
 extern int scoreR[];
+extern int scoreC[];
 extern int scoreE[];
-
 
 extern Bullet tankBullet;
 
@@ -174,9 +175,9 @@ int runDisplay()
 	for( row=0; row<480; row++) {
 		for(col=0; col<640; col++) {
 			framePointer0[row*640 + col] = BLACK;
+			framePointer1[row*640 + col] = BLACK;
 		}
 	}
-
 
 
 	// This tells the HDMI controller the resolution of your display (there must be a better way to do this).
@@ -211,7 +212,58 @@ void updateScreen(){
 	}
 }
 
+void drawScoreText(){
+	int x;
+	int y;
+	//S
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreS[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y) * 640 + SCORETEXT_START_X + x] = 0xFFFFFFFF;
+			}
+		}
+	}
 
+	//C
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreC[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 +
+					(SCORETEXT_START_X + TEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+
+	//O
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreO[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 +
+					(SCORETEXT_START_X + TEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+	//R
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreR[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 +
+					(SCORETEXT_START_X + TEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+
+	//E
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreE[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(SCORETEXT_START_Y + y )* 640 +
+					(SCORETEXT_START_X + TEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = 0xFFFFFFFF;
+			}
+		}
+	}
+
+}
 
 
 
@@ -336,7 +388,29 @@ int undrawAliens(int direction){
 	}
 	for(x = leftBound; x <= (rightBound); x++){
 		for(y = upperBound; y <= (lowerBound); y++){
-			framePointer0[y*640 + x] = BLACK;
+			if(((y) >= BUNKER_INITIAL_Y) && (y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
+				if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x ] == GREEN)){
+					framePointer0[(y) * 640 + x ] = GREEN;
+				}
+				else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[(y) * 640 + x ] = GREEN;
+				}
+				else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[(y) * 640 + x ] = GREEN;
+				}
+				else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[(y) * 640 + x] = GREEN;
+				}
+				else{
+					framePointer0[(y) * 640 + x] = BLACK;
+				}
+			}
+			else{
+				framePointer0[(y) * 640 + x] = BLACK;
+			}
+
+
+			//framePointer0[y*640 + x] = BLACK;
 		}
 	}
 	return 0;
@@ -345,7 +419,7 @@ int undrawAliens(int direction){
 int drawAliens(){
 	int row;
 	int col;
-	int* alienBMP;
+	int* alienBMP;	//MAKE SURE THIS WON'T CREATE MEMORY LEAKS!
 
 	for(row = 0; row < ALIEN_ROWS; row++){
 		int y = row * ALIEN_HEIGHT + alienOriginY;
@@ -386,10 +460,30 @@ int drawAliens(){
 				for(aY = 0; aY < ALIEN_HEIGHT; aY++){
 					if(1 && (alienBMP[aY] & (1<<(ALIEN_WIDTH - 1 - aX)))){
 
-						framePointer0[(y+aY) * 640 + x + aX] = 0xFFFFFFFF;
+						framePointer0[(y+aY) * 640 + x + aX] = WHITE;
 					}
 					else{
-						framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+						if(((y+aY) >= BUNKER_INITIAL_Y) && (y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
+							if((((x+aX) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else if((((x+aX) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else if((((x+aX) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else if((((x+aX) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else{
+								framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+							}
+						}
+						else{
+							framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+						}
+
 					}
 				}
 			}
@@ -402,314 +496,6 @@ int drawAliens(){
 
 	return 0;
 }
-
-
-//draw the bunker with its bunkerArray[bunkerNum].damageState states
-void drawBunker(int bunkerNum){
-	int col;
-	int row;
-	for(row = 0; row < BUNKER_HEIGHT; row++){
-		for(col = 0; col < BUNKER_WIDTH; col++){
-			if(bunkerArray[bunkerNum].damageStateTopLeft <= 4){
-				if ((bunkerTopLeftSymbol[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateTopLeft == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-		for(col = BUNKER_WIDTH; col < BUNKER_WIDTH*2; col++){
-			if(bunkerArray[bunkerNum].damageStateBlockTopLeft <= 4){
-				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateBlockTopLeft == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-		for(col = BUNKER_WIDTH*2; col < BUNKER_WIDTH*3; col++){
-			if(bunkerArray[bunkerNum].damageStateBlockTopRight <= 4){
-				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateBlockTopRight == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-		for(col = BUNKER_WIDTH*3; col < BUNKER_WIDTH*4; col++){
-			if(bunkerArray[bunkerNum].damageStateTopRight <= 4){
-				if ((bunkerTopRightSymbol[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateTopRight == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-	}
-	for(row = BUNKER_HEIGHT; row < 2*BUNKER_HEIGHT; row++){
-		for(col = 0; col < BUNKER_WIDTH; col++){
-			if(bunkerArray[bunkerNum].damageStateBlockLeftSide <= 4){
-				if(bunkerArray[bunkerNum].damageStateBlockLeftSide <= 4){
-					if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))) {
-
-						if(bunkerArray[bunkerNum].damageStateBlockLeftSide == 0){
-							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-						}
-						else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-						}
-						else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-						}
-						else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-						}
-						else {//bunkerArray[bunkerNum].damageState == 4
-							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-						}
-					}
-					else
-					{
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-			}
-		}
-		for(col = BUNKER_WIDTH; col < BUNKER_WIDTH*2; col++){
-			if(bunkerArray[bunkerNum].damageStateBottomLeft <= 4){
-				if ((bunkerBottomLeftSymbol[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateBottomLeft == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-		for(col = BUNKER_WIDTH*2; col < BUNKER_WIDTH*3; col++){
-			if(bunkerArray[bunkerNum].damageStateBottomRight <= 4){
-				if ((bunkerBottomRightSymbol[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateBottomRight == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-		for(col = BUNKER_WIDTH*3; col < BUNKER_WIDTH*4; col++){
-			if(bunkerArray[bunkerNum].damageStateBlockRightSide <= 4){
-				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateBlockRightSide == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-	}
-	for(row = 2*BUNKER_HEIGHT; row < 3*BUNKER_HEIGHT; row++){
-		for(col = 0; col < BUNKER_WIDTH; col++){
-			if(bunkerArray[bunkerNum].damageStateBlockBottomLeft <= 4){
-				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateBlockBottomLeft == 0){//algorithm for bunkerArray[bunkerNum].damageState sequence
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-		for(col = BUNKER_WIDTH; col < BUNKER_WIDTH*2; col++){
-			//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-		}
-		for(col = BUNKER_WIDTH*2; col < BUNKER_WIDTH*3; col++){
-			//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-		}
-		for(col = BUNKER_WIDTH*3; col < BUNKER_WIDTH*4; col++){
-			if(bunkerArray[bunkerNum].damageStateBlockBottomRight <= 4){
-				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))) {
-					if(bunkerArray[bunkerNum].damageStateBlockBottomRight == 0){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
-					}
-					else {//bunkerArray[bunkerNum].damageState == 4
-						framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-					}
-				}
-				else
-				{
-					framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
-				}
-			}
-		}
-	}
-
-	if(bunkerArray[bunkerNum].damageStateTopLeft == 4){
-		bunkerArray[bunkerNum].damageStateTopLeft++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBlockTopLeft == 4){
-		bunkerArray[bunkerNum].damageStateBlockTopLeft++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBlockTopRight == 4){
-		bunkerArray[bunkerNum].damageStateBlockTopRight++;
-	}
-	if(bunkerArray[bunkerNum].damageStateTopRight == 4){
-		bunkerArray[bunkerNum].damageStateTopRight++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBlockLeftSide == 4){
-		bunkerArray[bunkerNum].damageStateBlockLeftSide++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBottomLeft == 4){
-		bunkerArray[bunkerNum].damageStateBottomLeft++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBottomRight == 4){
-		bunkerArray[bunkerNum].damageStateBottomRight++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBlockRightSide == 4){
-		bunkerArray[bunkerNum].damageStateBlockRightSide++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBlockBottomLeft == 4){
-		bunkerArray[bunkerNum].damageStateBlockBottomLeft++;
-	}
-	if(bunkerArray[bunkerNum].damageStateBlockBottomRight == 4){
-		bunkerArray[bunkerNum].damageStateBlockBottomRight++;
-	}
-
-}
-
-
-
-
 
 void drawTankBullet(){
 	int col;
@@ -911,59 +697,6 @@ void drawAlienBullet(int myIndex){
 	}
 }
 
-void drawScoreText(){
-	int x;
-	int y;
-	//S
-	for(y = 0; y < TEXT_HEIGHT; y++){
-		for(x = 0; x < TEXT_WIDTH; x++){	
-			if(scoreS[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
-				framePointer0[(SCORETEXT_START_Y + y) * 640 + SCORETEXT_START_X + x] = 0xFFFFFFFF;
-			}
-		}
-	}
-	
-	//C
-	for(y = 0; y < TEXT_HEIGHT; y++){
-		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreC[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
-				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
-					(SCORETEXT_START_X + SCORETEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = 0xFFFFFFFF;
-			}
-		}
-	}
-	
-	//O
-	for(y = 0; y < TEXT_HEIGHT; y++){
-		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreO[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
-				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
-					(SCORETEXT_START_X + SCORETEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = 0xFFFFFFFF;
-			}
-		}
-	}
-	//R
-	for(y = 0; y < TEXT_HEIGHT; y++){
-		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreR[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
-				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
-					(SCORETEXT_START_X + SCORETEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = 0xFFFFFFFF;
-			}
-		}
-	}
-	
-	//E
-	for(y = 0; y < TEXT_HEIGHT; y++){
-		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreE[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
-				framePointer0[(SCORETEXT_START_Y + y )* 640 + 
-					(SCORETEXT_START_X + SCORETEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = 0xFFFFFFFF;
-			}
-		}
-	}
-	
-} 
-
 
 
 
@@ -976,6 +709,873 @@ void drawScoreText(){
 }*/
 
 
+void drawBunker(int bunkerNum){
+	int col;
+	int row;
+	for(row = 0; row < BUNKER_HEIGHT; row++){ //the algorithm draws each block of the bunker, starting with the top row, furthest left
+		for(col = 0; col < BUNKER_WIDTH; col++){ //the algorithm determining whether to draw the pixel or not is repeated every block
+			if(bunkerArray[bunkerNum].damageStateTopLeft <= 4){ //make sure the bunker block hasn't been completely destroyed
+				if ((bunkerTopLeftSymbol[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))) { //make sure we should draw a pixel here based on the bitmap
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						//check if the aliens are over the bunkers --> if they are, we need to make sure we don't draw over an alien pixel
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){ //if there's not an alien pixel already in the buffer, check the damage state and draw the appropriate pixel
+							if(bunkerArray[bunkerNum].damageStateTopLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{ //if there is an alien pixel, update what the state of the bunker is in the second frame buffer, but don't update the first frame buffer
+							if(bunkerArray[bunkerNum].damageStateTopLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //since the aliens aren't over the bunker, perform our normal checks on what pixel to draw
+						if(bunkerArray[bunkerNum].damageStateTopLeft == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+				}
+				else
+				{ //no pixel should be drawn, so don't draw any
+					//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+
+				}
+			}
+		}
+		for(col = BUNKER_WIDTH; col < BUNKER_WIDTH*2; col++){
+			if(bunkerArray[bunkerNum].damageStateBlockTopLeft <= 4){
+				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBlockTopLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBlockTopLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{//normal
+						if(bunkerArray[bunkerNum].damageStateBlockTopLeft == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockTopLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+		}
+		for(col = BUNKER_WIDTH*2; col < BUNKER_WIDTH*3; col++){
+			if(bunkerArray[bunkerNum].damageStateBlockTopRight <= 4){
+				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBlockTopRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBlockTopRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateBlockTopRight == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+		}
+
+		for(col = BUNKER_WIDTH*3; col < BUNKER_WIDTH*4; col++){
+			if(bunkerArray[bunkerNum].damageStateTopRight <= 4){
+				if ((bunkerTopRightSymbol[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateTopRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateTopRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateTopRight == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateTopRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateTopRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateTopRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+
+		}
+
+	}
+	for(row = BUNKER_HEIGHT; row < 2*BUNKER_HEIGHT; row++){
+		for(col = 0; col < BUNKER_WIDTH; col++){
+			if(bunkerArray[bunkerNum].damageStateBlockLeftSide <= 4){
+				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBlockLeftSide == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBlockLeftSide == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateBlockLeftSide == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockLeftSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+
+		}
+		for(col = BUNKER_WIDTH; col < BUNKER_WIDTH*2; col++){
+			if(bunkerArray[bunkerNum].damageStateBottomLeft <= 4){
+				if ((bunkerBottomLeftSymbol[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBottomLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBottomLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateBottomLeft == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(2*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+
+		}
+		for(col = BUNKER_WIDTH*2; col < BUNKER_WIDTH*3; col++){
+			if(bunkerArray[bunkerNum].damageStateBottomRight <= 4){
+				if ((bunkerBottomRightSymbol[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBottomRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBottomRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateBottomRight == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(3*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+		}
+
+
+		for(col = BUNKER_WIDTH*3; col < BUNKER_WIDTH*4; col++){
+			if(bunkerArray[bunkerNum].damageStateBlockRightSide <= 4){
+				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBlockRightSide == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBlockRightSide == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateBlockRightSide == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockRightSide == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+		}
+
+	}
+
+	for(row = 2*BUNKER_HEIGHT; row < 3*BUNKER_HEIGHT; row++){
+		for(col = 0; col < BUNKER_WIDTH; col++){
+			if(bunkerArray[bunkerNum].damageStateBlockBottomLeft <= 4){
+				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBlockBottomLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBlockBottomLeft == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateBlockBottomLeft == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockBottomLeft == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+
+		}
+		for(col = BUNKER_WIDTH; col < BUNKER_WIDTH*2; col++){
+			//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+		}
+		for(col = BUNKER_WIDTH*2; col < BUNKER_WIDTH*3; col++){
+			//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+		}
+		for(col = BUNKER_WIDTH*3; col < BUNKER_WIDTH*4; col++){
+			if(bunkerArray[bunkerNum].damageStateBlockBottomRight <= 4){
+				if ((bunkerBlockSymbol[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))) {
+					if((bunkerArray[bunkerNum].y + row) >= alienOriginY && (bunkerArray[bunkerNum].y + row) <= (alienOriginY + ALIEN_ROWS*ALIEN_HEIGHT) && (bunkerArray[bunkerNum].x+col) >= alienOriginX && (bunkerArray[bunkerNum].x+col) <= (alienOriginX + (lastColAliveAliens+1)*ALIEN_WIDTH)){
+						if(framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] != WHITE){
+							if(bunkerArray[bunkerNum].damageStateBlockBottomRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+						else{
+							if(bunkerArray[bunkerNum].damageStateBlockBottomRight == 0){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							}
+							else {//bunkerArray[bunkerNum].damageState == 4
+								framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+								//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							}
+						}
+					}
+					else{ //normal
+						if(bunkerArray[bunkerNum].damageStateBlockBottomRight == 0){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 1) && (bunkerBlockSymbolD1[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 2) && (bunkerBlockSymbolD2[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else if((bunkerArray[bunkerNum].damageStateBlockBottomRight == 3) && (bunkerBlockSymbolD3[row % BUNKER_HEIGHT] & (1<<(4*BUNKER_WIDTH-1-col)))){
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = GREEN;
+						}
+						else {//bunkerArray[bunkerNum].damageState == 4
+							framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+							framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+						}
+					}
+
+				}
+
+			}
+			else
+			{
+				//framePointer1[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+				//framePointer0[(bunkerArray[bunkerNum].y + row)*640 + (bunkerArray[bunkerNum].x+col)] = BLACK;
+			}
+		}
+	}
+
+
+	if(bunkerArray[bunkerNum].damageStateTopLeft == 4){ //update the damage states after the bunker is complete destroyed so we don't redraw black over bullets, etc.
+		bunkerArray[bunkerNum].damageStateTopLeft++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBlockTopLeft == 4){
+		bunkerArray[bunkerNum].damageStateBlockTopLeft++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBlockTopRight == 4){
+		bunkerArray[bunkerNum].damageStateBlockTopRight++;
+	}
+	if(bunkerArray[bunkerNum].damageStateTopRight == 4){
+		bunkerArray[bunkerNum].damageStateTopRight++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBlockLeftSide == 4){
+		bunkerArray[bunkerNum].damageStateBlockLeftSide++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBottomLeft == 4){
+		bunkerArray[bunkerNum].damageStateBottomLeft++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBottomRight == 4){
+		bunkerArray[bunkerNum].damageStateBottomRight++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBlockRightSide == 4){
+		bunkerArray[bunkerNum].damageStateBlockRightSide++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBlockBottomLeft == 4){
+		bunkerArray[bunkerNum].damageStateBlockBottomLeft++;
+	}
+	if(bunkerArray[bunkerNum].damageStateBlockBottomRight == 4){
+		bunkerArray[bunkerNum].damageStateBlockBottomRight++;
+	}
+
+}
 
 
 

@@ -1,0 +1,37 @@
+/*
+ * interrupts.c
+ *
+ *  Created on: Oct 7, 2014
+ *      Author: superman
+ */
+#include "xgpio.h"          // Provides access to PB GPIO driver.
+#include <stdio.h>          // xil_printf and so forth.
+#include "platform.h"       // Enables caching and other system stuff.
+#include "mb_interface.h"   // provides the microblaze interrupt enables, etc.
+#include "xintc_l.h"        // Provides handy macros for the interrupt controller.
+
+u32 const TICS_UNTIL_DEBOUNCED = 5;		//the number of ticks needed from the timer for the switches to be debounced
+u32 const MS_PER_TIC = 10;
+u32 const TICS_PER_SECOND = 100;
+u32 const SECONDS_PER_MINUTE = 60;
+u32 const MINUTES_PER_HOUR = 60;
+u32 const HOURS_PER_DAY = 24;
+
+XGpio gpPB;   // This is a handle for the push-button GPIO block.
+
+void initGPIO(){
+	 int success;
+	success = XGpio_Initialize(&gpPB, XPAR_PUSH_BUTTONS_5BITS_DEVICE_ID);
+	// Set the push button peripheral to be inputs.
+	XGpio_SetDataDirection(&gpPB, 1, 0x0000001F);
+	// Enable the global GPIO interrupt for push buttons.
+	XGpio_InterruptGlobalEnable(&gpPB);
+	// Enable all interrupts in the push button peripheral.
+	XGpio_InterruptEnable(&gpPB, 0xFFFFFFFF);
+
+	microblaze_register_handler(interrupt_handler_dispatcher, NULL);
+	XIntc_EnableIntr(XPAR_INTC_0_BASEADDR,
+			(XPAR_FIT_TIMER_0_INTERRUPT_MASK | XPAR_PUSH_BUTTONS_5BITS_IP2INTC_IRPT_MASK));
+	XIntc_MasterEnable(XPAR_INTC_0_BASEADDR);
+	microblaze_enable_interrupts();
+}

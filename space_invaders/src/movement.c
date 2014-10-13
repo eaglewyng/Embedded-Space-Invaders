@@ -91,6 +91,10 @@ int moveAliens(){
 		alienOriginX += alienDirection == RIGHT ? PIXELS_PER_MOVE : PIXELS_PER_MOVE * -1;
 		undrawAliens(alienDirection);
 	}
+	int in;
+	for(in = 0; in < NUM_BUNKERS; in++){
+		drawBunker(in);
+	}
 	drawAliens();
 
 	return 0;
@@ -211,7 +215,7 @@ int damageBunker(int bunkerNum, int bunkerBlock){
 		break;
 	}
 
-	//drawBunker(bunkerNum);
+	drawBunker(bunkerNum);
 
 	return 0;
 }
@@ -286,7 +290,7 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 				}
 			}
 		}
-		else if(((tankBullet.x >= BUNKER1_INITIAL_X) && (tankBullet.x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 1
+		else if((((tankBullet.x+BULLET_WIDTH) >= BUNKER1_INITIAL_X) && (tankBullet.x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 1
 			for(row = BULLET_HEIGHT-1; row >= 0; row--){
 				for(col = 0; col < BULLET_WIDTH; col++){
 					if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
@@ -304,7 +308,7 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 				}
 			}
 		}
-		else if(((tankBullet.x >= BUNKER2_INITIAL_X) && (tankBullet.x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 2
+		else if((((tankBullet.x+BULLET_WIDTH) >= BUNKER2_INITIAL_X) && (tankBullet.x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 2
 			for(row = BULLET_HEIGHT-1; row >= 0; row--){
 				for(col = 0; col < BULLET_WIDTH; col++){
 					if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
@@ -321,7 +325,7 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 					}
 				}
 			}
-		}else if(((tankBullet.x >= BUNKER3_INITIAL_X) && (tankBullet.x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 3
+		}else if((((tankBullet.x+BULLET_WIDTH) >= BUNKER3_INITIAL_X) && (tankBullet.x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 3
 			for(row = BULLET_HEIGHT-1; row >= 0; row--){
 				for(col = 0; col < BULLET_WIDTH; col++){
 					if(chooseBunkerBlockToDamage(tankBullet.x + col, tankBullet.y + row)){
@@ -664,8 +668,9 @@ int moveTankBullet(){
 		}
 		else if(hitCoord.xcoord >= 0 && hitCoord.ycoord >= 0){
 			xil_printf("This is oops: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
-			tankBullet.type = INACTIVE_BULLET; //bullet has hit something
 			clearTankBullet();
+			tankBullet.type = INACTIVE_BULLET; //bullet has hit something
+
 			//chooseBunkerBlockToDamage(hitCoord);
 		}
 		drawTankBullet();

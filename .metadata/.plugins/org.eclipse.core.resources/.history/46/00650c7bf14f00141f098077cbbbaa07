@@ -1,0 +1,133 @@
+/*
+ * space_invaders.c
+ *
+ *  Created on: Sep 24, 2014
+ *      Author: superman
+ */
+#include "space_invaders.h"
+#include <stdlib.h>
+#include <stdio.h>
+#include "time.h"
+
+int alienArray[55];	//1 denotes the alien is alive, 0 denotes the alien is dead
+Bunker bunkerArray[NUM_BUNKERS];
+Bullet bulletArray[NUM_ALIEN_BULLETS];
+Bullet tankBullet;
+int bottomRowAliens[ALIENS_PER_ROW];
+DeltaClock* dcFront;
+
+int main(){
+	srand(time
+			(NULL));
+	initializeGame();
+	initializeMovement();
+	initializeDisplay();
+	initButtons();
+	initInterrupts();
+	runDisplay();
+	dcFront = 0;
+	while(1);
+	return 0;
+
+}
+
+int inititalizeDC(){
+	int i;
+	for(i = 0; i < 4; i++){
+
+	}
+}
+
+int initializeGame(){
+	initializeLevel();
+	return 0;
+}
+
+int initializeLevel(){
+	int i;
+
+
+	for(i = 0; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
+		int tempAlienRow = getAlienRow(i);
+		alienArray[i] = tempAlienRow == 0 ? LITTLE_SQUID:
+						tempAlienRow < 3 ? JUMPING_JACK:
+						BIG_SQUID;
+	}
+
+	/*int damageStateTopLeft;
+	int damageStateBlockTopLeft;
+	int damageStateBlockTopRight;
+	int damageStateTopRight;
+	int damageStateBlockLeftSide;
+	int damageStateBottomLeft;
+	int damageStateBottomRight;
+	int damageStateBlockRightSide;
+	int damageStateBlockBottomLeft;
+	int damageStateBlockBottomRight;*/
+	bunkerArray[0].damageStateTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBlockTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBlockTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBlockRightSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBlockBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBlockLeftSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBlockTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBlockTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBlockRightSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBlockBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBlockLeftSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[1].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBlockTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBlockTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBlockRightSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBlockBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBlockLeftSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[2].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBlockTopLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBlockTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateTopRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBlockRightSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBlockBottomLeft = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBlockLeftSide = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[3].damageStateBottomRight = BUNKER_INITIAL_DAMAGE;
+	bunkerArray[0].x = 74;
+	bunkerArray[1].x = 222;
+	bunkerArray[2].x = 370;
+	bunkerArray[3].x = 518;
+	bunkerArray[0].y = BUNKER_INITIAL_Y;
+	bunkerArray[1].y = BUNKER_INITIAL_Y;
+	bunkerArray[2].y = BUNKER_INITIAL_Y;
+	bunkerArray[3].y = BUNKER_INITIAL_Y;
+
+
+	for(i = 0; i < NUM_ALIEN_BULLETS; i++){
+		bulletArray[i].x = -1;
+		bulletArray[i].y = -1;
+		bulletArray[i].type = INACTIVE_BULLET;
+		bulletArray[i].state = 0;
+
+	}
+
+	tankBullet.x = -1;
+	tankBullet.y = -1;
+	tankBullet.type = INACTIVE_BULLET;
+	tankBullet.state = 0;
+
+
+	return 0;
+}
+

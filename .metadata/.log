@@ -1,0 +1,32 @@
+!SESSION 2014-10-07 19:02:02.479 -----------------------------------------------
+eclipse.buildId=Release 13.4 Build SDK_O.87xd
+java.version=1.6.0_21
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.cdt.core 1 0 2014-10-07 19:07:46.121
+!MESSAGE Indexed 'space_invaders' (0 sources, 21 headers) in 0.38 sec: 153 declarations; 291 references; 3 unresolved inclusions; 0 syntax errors; 1 unresolved names (0.22%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2014-10-07 19:07:47.205
+!MESSAGE Indexed 'space_invaders_bsp_0' (61 sources, 50 headers) in 1.06 sec: 1,921 declarations; 9,148 references; 18 unresolved inclusions; 0 syntax errors; 81 unresolved names (0.73%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2014-10-07 19:08:23.231
+!MESSAGE Indexed 'hello_world_bsp_0' (61 sources, 50 headers) in 0.80 sec: 1,921 declarations; 9,148 references; 18 unresolved inclusions; 0 syntax errors; 81 unresolved names (0.73%)
+
+!ENTRY org.eclipse.cdt.core 1 0 2014-10-07 19:08:23.406
+!MESSAGE Indexed 'hello_world_0' (2 sources, 31 headers) in 0.17 sec: 871 declarations; 826 references; 3 unresolved inclusions; 0 syntax errors; 1 unresolved names (0.06%)
+!SESSION 2014-10-09 13:14:25.036 -----------------------------------------------
+eclipse.buildId=Release 13.4 Build SDK_O.87xd
+java.version=1.6.0_21
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2014-10-09 13:15:53.441
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.
+
+!ENTRY org.eclipse.cdt.core 4 0 2014-10-09 13:22:40.085
+!MESSAGE Could not write file: C:\Users\superman\Desktop\Team_PT\workspace_lab4\space_invaders\.cproject.
+** Error occured because of file status <hidden>.
+** This status is disabled now, to allow writing.
