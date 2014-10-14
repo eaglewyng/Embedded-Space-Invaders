@@ -18,7 +18,7 @@
 
 int moveTankBullet();
 ScreenPoint tankBulletCollision();
-
+ScreenPoint alienBulletCollision(int i);
 
 
 

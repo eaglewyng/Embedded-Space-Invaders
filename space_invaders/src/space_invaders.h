@@ -78,6 +78,10 @@
 #define SCORETEXT_START_X 0
 #define SCORETEXT_START_Y 0
 
+#define ALIVE_TANK 0
+#define DEAD_TANK1 1
+#define DEAD_TANK2 2
+
 
 
 typedef struct{

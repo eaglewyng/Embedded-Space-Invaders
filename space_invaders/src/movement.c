@@ -13,6 +13,7 @@ extern Bunker bunkerArray[];
 extern Bullet bulletArray[];
 extern Bullet tankBullet;
 extern int alienInOut;
+extern int tankState;
 extern int* framePointer0;
 extern int* lightningBullet_state1;
 extern int* lightningBullet_state2;
@@ -102,25 +103,27 @@ int moveAliens(){
 
 //updates the position of the tank
 int moveTank(int direction){
-	if(direction == LEFT){
-		if(!(tankOriginX - PIXELS_PER_MOVE < 0)){
-			tankOriginX -= PIXELS_PER_MOVE;
+	if(tankState == ALIVE_TANK){
+		if(direction == LEFT){
+			if(!(tankOriginX - PIXELS_PER_MOVE < 0)){
+				tankOriginX -= PIXELS_PER_MOVE;
+			}
+			else{
+				tankOriginX = 0;
+			}
+
 		}
 		else{
-			tankOriginX = 0;
+			if(!(tankOriginX + PIXELS_PER_MOVE + TANK_WIDTH >= SCREEN_X_PIXELS )){
+				tankOriginX += PIXELS_PER_MOVE;
+			}
+			else{
+				tankOriginX = SCREEN_X_PIXELS - 1 - TANK_WIDTH;
+			}
 		}
 
+		undrawTank(direction);
 	}
-	else{
-		if(!(tankOriginX + PIXELS_PER_MOVE + TANK_WIDTH >= SCREEN_X_PIXELS )){
-			tankOriginX += PIXELS_PER_MOVE;
-		}
-		else{
-			tankOriginX = SCREEN_X_PIXELS - 1 - TANK_WIDTH;
-		}
-	}
-
-	undrawTank(direction);
 	drawTank();
 
 
@@ -227,12 +230,19 @@ int moveAlienBullets(){
 			bulletArray[i].y += ALIEN_BULLETS_PIXELS_PER_MOVE;
 			bulletArray[i].state = (bulletArray[i].state + 1) % 3;
 			undrawAlienBullet();
+			ScreenPoint hitCoord = alienBulletCollision(i);
 			if(bulletArray[i].y >= 480 - BULLET_HEIGHT){
 				bulletArray[i].type = INACTIVE_BULLET; //bullet has gone offscreen so deactivate the bullet
 				clearAlienBullet(i);
 
 				//schedule the next bullet fire
 				insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
+			}
+			else if(hitCoord.xcoord >= 0 && hitCoord.ycoord >= 0){
+				xil_printf("These are the alien bullet hit coordiantes: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
+				xil_printf("And these are the bullet's x,y coordinates: %d, %d\n\r",bulletArray[i].x, bulletArray[i].y);
+				clearAlienBullet(i);
+				bulletArray[i].type = INACTIVE_BULLET; //deactive the bullet since it's hit either the bunker or the tank
 			}
 
 		}
@@ -353,10 +363,119 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 	return myPoint;
 }
 
-int alienBulletCollision(int i){
+ScreenPoint alienBulletCollision(int i){
+	ScreenPoint myPoint;
+	myPoint.xcoord = -1;
+	myPoint.ycoord = -1;
+	int* bulletBMP;
+
+
+	if(bulletArray[i].type == SQUIGGLY_BULLET){
+		switch(bulletArray[i].state){
+		case 0:
+			bulletBMP = lightningBullet_state1;
+			break;
+		case 1:
+			bulletBMP = lightningBullet_state2;
+			break;
+		default:
+			bulletBMP = lightningBullet_state3;
+			break;
+		}
+	}
+	else{ //(bulletArray[i].type == CROSS_BULLET){
+		switch(bulletArray[i].state){
+		case 0:
+			bulletBMP = crossBullet_state1;
+			break;
+		case 1:
+			bulletBMP = crossBullet_state2;
+			break;
+		default:
+			bulletBMP = crossBullet_state3;
+			break;
+		}
+	}
+
+
 	//check if in the range of the bunkers
-	if((bulletArray[i].y >= BUNKER_INITIAL_Y) && (bulletArray[i].y <= BUNKER_HEIGHT*3)){
-		return 0;
+	if((bulletArray[i].y >= BUNKER_INITIAL_Y) && (bulletArray[i].y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
+		int row, col;
+		if((((bulletArray[i].x+BULLET_WIDTH) >= BUNKER0_INITIAL_X) && (bulletArray[i].x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 0
+			for(row = 0; row <= BULLET_HEIGHT; row++){//row = BULLET_HEIGHT-1; row >= 0; row--
+				for(col = 0; col < BULLET_WIDTH; col++){
+
+					if((bulletBMP[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
+
+						if(chooseBunkerBlockToDamage(bulletArray[i].x + col, bulletArray[i].y + row)){
+							myPoint.xcoord = bulletArray[i].x + col;
+							myPoint.ycoord = bulletArray[i].y + row;
+							return myPoint;
+						}
+						/*if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
+							myPoint.xcoord = bulletArray[i].x + col;
+							myPoint.ycoord = bulletArray[i].y + row;
+							return myPoint;
+						}*/
+					}
+				}
+			}
+		}
+		else if((((bulletArray[i].x+BULLET_WIDTH) >= BUNKER1_INITIAL_X) && (bulletArray[i].x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 1
+			for(row = 0; row <= BULLET_HEIGHT; row++){
+				for(col = 0; col < BULLET_WIDTH; col++){
+					//if((bulletBMP[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
+						if(chooseBunkerBlockToDamage(bulletArray[i].x + col, bulletArray[i].y + row)){
+							myPoint.xcoord = bulletArray[i].x + col;
+							myPoint.ycoord = bulletArray[i].y + row;
+							return myPoint;
+						//}
+						/*if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
+							myPoint.xcoord = bulletArray[i].x + col;
+							myPoint.ycoord = bulletArray[i].y + row;
+							return myPoint;
+						}*/
+					}
+				}
+			}
+		}
+		else if((((bulletArray[i].x+BULLET_WIDTH) >= BUNKER2_INITIAL_X) && (bulletArray[i].x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 2
+			for(row = 0; row <= BULLET_HEIGHT; row++){
+				for(col = 0; col < BULLET_WIDTH; col++){
+					if((bulletBMP[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
+						if(chooseBunkerBlockToDamage(bulletArray[i].x + col, bulletArray[i].y + row)){
+							myPoint.xcoord = bulletArray[i].x + col;
+							myPoint.ycoord = bulletArray[i].y + row;
+							return myPoint;
+						}
+						/*if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
+							myPoint.xcoord = bulletArray[i].x + col;
+							myPoint.ycoord = bulletArray[i].y + row;
+							return myPoint;
+						}*/
+					}
+				}
+			}
+		}else if((((bulletArray[i].x+BULLET_WIDTH) >= BUNKER3_INITIAL_X) && (bulletArray[i].x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH)))){//bunker 3
+			for(row = 0; row <= BULLET_HEIGHT; row++){
+				for(col = 0; col < BULLET_WIDTH; col++){
+					if(chooseBunkerBlockToDamage(bulletArray[i].x + col, bulletArray[i].y + row)){
+						myPoint.xcoord = bulletArray[i].x + col;
+						myPoint.ycoord = bulletArray[i].y + row;
+						return myPoint;
+					}
+					/*if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
+						myPoint.xcoord = bulletArray[i].x + col;
+						myPoint.ycoord = bulletArray[i].y + row;
+						return myPoint;
+					}*/
+				}
+			}
+		}
+		else{
+			return myPoint; //no collision
+		}
+
 	}
 	//check if in range of the tank
 	else if((bulletArray[i].y >= tankOriginY) && (bulletArray[i].y <= tankOriginY+TANK_HEIGHT) && (bulletArray[i].x >= tankOriginX) && (bulletArray[i].x <= tankOriginX+TANK_WIDTH)){
@@ -364,63 +483,21 @@ int alienBulletCollision(int i){
 		int type = bulletArray[i].type;
 		for(row = 0; row < BULLET_HEIGHT; row++){
 			for(col = 0; col < BULLET_WIDTH; col++){
-				switch (type){
-				case SQUIGGLY_BULLET:
-					if(bulletArray[i].state == 0){
-						if((lightningBullet_state1[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-							if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
-								return 1;
-							}
-						}
+				if((bulletBMP[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
+					if(framePointer0[(bulletArray[i].y + row) * 640 + bulletArray[i].x+col] == GREEN){
+						tankState = DEAD_TANK1;
+						myPoint.xcoord = bulletArray[i].x + col;
+						myPoint.ycoord = bulletArray[i].y + row;
+						return myPoint;
 					}
-					else if(bulletArray[i].state == 1){
-						if((lightningBullet_state2[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-							if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
-								return 1;
-							}
-						}
-					}
-					else{
-						if((lightningBullet_state3[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-							if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
-								return 1;
-							}
-						}
-					}
-					break;
-				case CROSS_BULLET:
-					if(bulletArray[i].state == 0){
-						if((crossBullet_state1[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-							if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
-								return 1;
-							}
-						}
-					}
-					else if(bulletArray[i].state == 1){
-						if((crossBullet_state2[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-							if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
-								return 1;
-							}
-						}
-					}
-					else{
-						if((crossBullet_state3[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-							if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
-								return 1;
-							}
-						}
-					}
-					break;
-				default:
-					break;
 				}
 			}
 		}
 	}
 	else{
-		return 0; //no collision
+		return myPoint; //no collision
 	}
-	return 0;
+	return myPoint;
 
 }
 

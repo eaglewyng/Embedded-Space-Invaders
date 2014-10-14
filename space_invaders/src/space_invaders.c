@@ -15,6 +15,7 @@ Bullet bulletArray[NUM_ALIEN_BULLETS];
 Bullet tankBullet;
 int bottomRowAliens[ALIENS_PER_ROW];
 DeltaClock* dcFront;
+extern int tankState;
 
 int main(){
 	srand(time(NULL));
@@ -115,7 +116,7 @@ int initializeLevel(){
 	bunkerArray[1].y = BUNKER_INITIAL_Y;
 	bunkerArray[2].y = BUNKER_INITIAL_Y;
 	bunkerArray[3].y = BUNKER_INITIAL_Y;
-
+	tankState = ALIVE_TANK;
 
 	for(i = 0; i < NUM_ALIEN_BULLETS; i++){
 		bulletArray[i].x = -1;

@@ -30,7 +30,7 @@ extern int alienOriginY;
 extern Bullet tankBullet;
 extern int tankOriginX;
 extern int tankOriginY;
-
+int tankState;
 
 //-----------------------------------------functions related to killing aliens---------------------------------------//
 void killAlien(int alienIndex){

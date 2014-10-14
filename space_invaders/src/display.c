@@ -40,6 +40,7 @@ extern int tankOriginY;
 extern int alienFarRightOffset;
 extern int alienArray[];
 extern int noAlien[];
+extern int tankState;
 
 //bitmaps
 extern int bigSquidIn[];
@@ -67,6 +68,8 @@ extern int tankBulletSymbol[];
 extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int deadAlien[];
+extern int tankDeath1[];
+extern int tankDeath2[];
 
 
 extern int scoreI[];
@@ -229,7 +232,7 @@ void drawScoreText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreC[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
-					(SCORETEXT_START_X + TEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = 0xFFFFFFFF;
+				              (SCORETEXT_START_X + TEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = 0xFFFFFFFF;
 			}
 		}
 	}
@@ -239,7 +242,7 @@ void drawScoreText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreO[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
-					(SCORETEXT_START_X + TEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = 0xFFFFFFFF;
+				              (SCORETEXT_START_X + TEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = 0xFFFFFFFF;
 			}
 		}
 	}
@@ -248,7 +251,7 @@ void drawScoreText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreR[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
-					(SCORETEXT_START_X + TEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = 0xFFFFFFFF;
+				              (SCORETEXT_START_X + TEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = 0xFFFFFFFF;
 			}
 		}
 	}
@@ -258,7 +261,7 @@ void drawScoreText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreE[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
-					(SCORETEXT_START_X + TEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = 0xFFFFFFFF;
+				              (SCORETEXT_START_X + TEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = 0xFFFFFFFF;
 			}
 		}
 	}
@@ -344,14 +347,41 @@ int drawTank(){
 	int aY;
 	for(aX = 0; aX < TANK_WIDTH; aX++){
 		for(aY = 0; aY < TANK_HEIGHT; aY++){
-			if(1 && (tank[aY] & (1<<(TANK_WIDTH - 1 - aX)))){
+			if(tankState == ALIVE_TANK){
+				if(1 && (tank[aY] & (1<<(TANK_WIDTH - 1 - aX)))){
 
-				framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+					framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+				}
+				else{
+					framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+				}
 			}
-			else{
-				framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+			else if(tankState == DEAD_TANK1){
+				if(1 && (tankDeath1[aY] & (1<<(TANK_WIDTH - 1 - aX)))){
+
+					framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+				}
+				else{
+					framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+				}
+			}
+			else if(tankState == DEAD_TANK2){
+				if(1 && (tankDeath2[aY] & (1<<(TANK_WIDTH - 1 - aX)))){
+
+					framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+				}
+				else{
+					framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+				}
 			}
 		}
+	}
+
+	if(tankState == DEAD_TANK1){
+		tankState = DEAD_TANK2;
+	}
+	else if(tankState == DEAD_TANK2){
+		tankState = DEAD_TANK1;
 	}
 
 	return 0;
@@ -531,7 +561,22 @@ void undrawTankBullet(){
 	int x, y;
 	for(x = leftBound; x <= (rightBound); x++){
 		for(y = upperBound; y <= (lowerBound); y++){
-			framePointer0[y*640 + x] = BLACK;
+			if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else{
+				framePointer0[y*640 + x] = BLACK;
+			}
+			//framePointer0[y*640 + x] = BLACK;
 		}
 	}
 
@@ -558,10 +603,24 @@ void clearTankBullet(){
 	int x, y;
 	for(x = leftBound; x <= (rightBound); x++){
 		for(y = upperBound; y <= (lowerBound); y++){
-			framePointer0[y*640 + x] = BLACK;
+			if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else{
+				framePointer0[y*640 + x] = BLACK;
+			}
+			//framePointer0[y*640 + x] = BLACK;
 		}
 	}
-
 }
 
 
@@ -609,7 +668,21 @@ void clearAlienBullet(int bulletIndex){
 	int x, y;
 	for(x = leftBound; x <= (rightBound); x++){
 		for(y = upperBound; y <= (lowerBound); y++){
-			framePointer0[y*640 + x] = BLACK;
+			if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else{
+				framePointer0[y*640 + x] = BLACK;
+			}
 		}
 	}
 }
