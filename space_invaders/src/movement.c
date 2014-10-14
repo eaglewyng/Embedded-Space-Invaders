@@ -243,6 +243,7 @@ int moveAlienBullets(){
 				xil_printf("And these are the bullet's x,y coordinates: %d, %d\n\r",bulletArray[i].x, bulletArray[i].y);
 				clearAlienBullet(i);
 				bulletArray[i].type = INACTIVE_BULLET; //deactive the bullet since it's hit either the bunker or the tank
+				insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
 			}
 
 		}
