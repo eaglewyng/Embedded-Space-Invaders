@@ -67,6 +67,9 @@ extern int tankBulletSymbol[];
 extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int deadAlien[];
+extern int mothership[];
+extern int redSpaceshipOriginX;
+extern int redSpaceshipOriginY;
 
 
 extern int scoreI[];
@@ -265,13 +268,21 @@ void drawScoreText(){
 
 }
 
-
+//draw the red spaceship, or the mothership
 void drawRedSpaceship(){
+	int x;
+	int y;
+	for(x = 0; x < RED_SPACESHIP_WIDTH; x++){
+		for(y = 0; y < RED_SPACESHIP_HEIGHT; y++){
+			if(1 && (mothership[y] & (1<<(RED_SPACESHIP_HEIGHT - 1 - x)))){
+				framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = RED;
+			}
+		}
+	}
 
 }
 
 void undrawRedSpaceship(int direction){
-
 }
 
 

@@ -8,7 +8,7 @@
 #ifndef SPACE_INVADERS_H_
 #define SPACE_INVADERS_H_
 
-#define DB_ON1 0
+#define DB_ON1 0			//debug mode
 #define INPUT_MODE 1 		//0 = keyboard, 1 = buttons
 
 #define BULLET_HEIGHT 10
@@ -65,6 +65,7 @@
 #define RED_SPACESHIP_INITIAL_X_RIGHT 600
 #define RED_SPACESHIP_INITIAL_Y 0
 #define RED_SPACESHIP_WIDTH 32
+#define RED_SPACESHIP_HEIGHT ALIEN_HEIGHT
 
 #define NUMBER_HEIGHT 14
 
