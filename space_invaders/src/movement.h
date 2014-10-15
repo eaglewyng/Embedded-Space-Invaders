@@ -8,14 +8,11 @@
 #ifndef MOVEMENT_H_
 #define MOVEMENT_H_
 
-<<<<<<< HEAD
-=======
+
 #define ALIEN_ORIGIN_X_INITIAL 0
-#define ALIEN_ORIGIN_Y_INITIAL 60
 #define FARRIGHT_OFFSET_INITIAL 352
 #define ALIEN_DIRECTION_INITIAL 1
 #define RED_SPACESHIP_DIRECTION_INITIAL 1
->>>>>>> red_spaceship
 
 
 

@@ -68,14 +68,11 @@ extern int tankBulletSymbol[];
 extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int deadAlien[];
-<<<<<<< HEAD
 extern int tankDeath1[];
 extern int tankDeath2[];
-=======
 extern int mothership[];
 extern int redSpaceshipOriginX;
 extern int redSpaceshipOriginY;
->>>>>>> red_spaceship
 
 
 extern int scoreI[];

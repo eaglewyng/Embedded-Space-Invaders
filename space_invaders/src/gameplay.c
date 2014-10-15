@@ -30,14 +30,11 @@ extern int alienOriginY;
 extern Bullet tankBullet;
 extern int tankOriginX;
 extern int tankOriginY;
-<<<<<<< HEAD
 int tankState;
-=======
 extern int redSpaceshipStatus;
 extern int redSpaceshipDirection;
 extern int redSpaceshipOriginX;
 extern int redSpaceshipOriginY;
->>>>>>> red_spaceship
 
 //-----------------------------------------functions related to killing aliens---------------------------------------//
 void killAlien(int alienIndex){
