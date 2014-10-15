@@ -23,8 +23,10 @@ u32 const TICS_PER_ALIEN_LOC_UPDATE = 10;			//1/2 a second before every location
 u32 const TICS_PER_TANK_LOC_UPDATE = 2;
 u32 const TICS_PER_BULLET_LOC_UPDATE = 2;
 u32 const TICS_PER_SCREEN_UPDATE = 2;
+u32 const TICS_PER_RED_SPACESHIP_LOC_UPDATE = 10;
 
 extern int alienInOut;
+extern int redSpaceshipStatus;
 
 
 u32 fitcounter;
@@ -70,6 +72,10 @@ void timer_interrupt_handler(){
 		moveAlienBullets();
 		moveTankBullet();
 	}
+	if(redSpaceshipStatus == RED_SPACESHIP_ALIVE && fitcounter % TICS_PER_RED_SPACESHIP_LOC_UPDATE == 0){
+		moveRedSpaceship();
+	}
+
 
 
 

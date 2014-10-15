@@ -61,9 +61,7 @@
 #define TANK_BULLET_PIXELS_PER_MOVE 7//7
 
 #define RED_SPACESHIP_PIXELS_PER_MOVE 12
-#define RED_SPACESHIP_INITIAL_X_LEFT 0
-#define RED_SPACESHIP_INITIAL_X_RIGHT 600
-#define RED_SPACESHIP_INITIAL_Y 30
+#define RED_SPACESHIP_ORIGIN_Y_INITIAL 30
 #define RED_SPACESHIP_WIDTH 32
 #define RED_SPACESHIP_HEIGHT ALIEN_HEIGHT
 
@@ -85,6 +83,11 @@
 #define SPACE_BETWEEN_CHARACTERS 4
 #define SCORETEXT_START_X 0
 #define SCORETEXT_START_Y 0
+
+#define RED_SPACESHIP_INACTIVE 0
+#define RED_SPACESHIP_DEAD 1
+#define RED_SPACESHIP_ALIVE 2
+
 
 
 
@@ -146,6 +149,7 @@ int damageBunker(int,int);
 int moveAlienBullets();
 int moveTankBullet();
 void updateLocations();
+void moveRedSpaceship();
 
 //-------display.c----------//
 int isAlienPixelHere(int,int);
@@ -173,6 +177,7 @@ void undrawRedSpaceship(int);
 void killAlien(int);
 int findBottomRowAliens();
 int fireTankBullet();
+void redSpaceshipAppear();
 
 
 //-----input.c----------//

@@ -62,6 +62,9 @@ int incrementDC(int tics){
 			if(prevClk->evnum == EVENT_ALIEN_FIRE){
 				fireAlienBullet();
 			}
+			else if(prevClk->evnum == EVENT_RED_SPACESHIP_APPEAR){
+				redSpaceshipAppear();
+			}
 			retcode = currClk->evnum;
 			currClk = currClk->next;
 

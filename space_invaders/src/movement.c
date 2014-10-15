@@ -29,7 +29,7 @@ extern int* jumpingJackOut;
 extern int* littleSquidIn;
 extern int* littleSquidOut;
 extern int* noAlien;
-extern int redSpaceshipActive;
+extern int redSpaceshipStatus;
 
 int alienOriginX;		//we put the origin on the top left corner
 int alienOriginY;
@@ -57,6 +57,7 @@ void initializeMovement(){
 	tankOriginY = TANK_Y_INITIAL;
 	alienFarRightOffset = FARRIGHT_OFFSET_INITIAL;
 	alienDirection = ALIEN_DIRECTION_INITIAL;
+	redSpaceshipOriginY = RED_SPACESHIP_ORIGIN_Y_INITIAL;
 
 }
 
@@ -73,16 +74,18 @@ void moveRedSpaceship(){
 	if(redSpaceshipDirection == LEFT){
 		redSpaceshipOriginX -= PIXELS_PER_MOVE;
 		undrawRedSpaceship(LEFT);
-		if(redSpaceshipOriginX >= SCREEN_X_PIXELS){
-			redSpaceshipActive = 0;
+		if(redSpaceshipOriginX + RED_SPACESHIP_WIDTH < 0){
+			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
+			insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
 		}
 	}
 	//redSpaceships are on the right side of the screen
 	else if(redSpaceshipDirection == RIGHT){
-		redSpaceshipOriginY += PIXELS_PER_MOVE;
+		redSpaceshipOriginX += PIXELS_PER_MOVE;
 		undrawRedSpaceship(RIGHT);
-		if(redSpaceshipOriginX + RED_SPACESHIP_WIDTH < 0){
-			redSpaceshipActive = 0;
+		if(redSpaceshipOriginX >= SCREEN_X_PIXELS){
+			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
+			insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
 		}
 	}
 

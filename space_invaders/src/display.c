@@ -275,9 +275,11 @@ void drawRedSpaceship(){
 	for(x = 0; x < RED_SPACESHIP_WIDTH; x++){
 		for(y = 0; y < RED_SPACESHIP_HEIGHT; y++){
 			//make sure the spaceship is in a drawable area and that there should be a red pixel drawn here
-			if(1 && (mothership[y] & (1<<(RED_SPACESHIP_HEIGHT - 1 - x))
-					&& x + redSpaceshipOriginX >= 0 && x + redSpaceshipOriginX < SCREEN_X_PIXELS)){
-				framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = RED;
+			if(x + redSpaceshipOriginX >= 0 && x + redSpaceshipOriginX < SCREEN_X_PIXELS){
+				if(1 && (mothership[y] & (1<<(RED_SPACESHIP_WIDTH - 1 - x))))
+					framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = RED;
+				else
+					framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = BLACK;
 			}
 		}
 	}

@@ -15,7 +15,7 @@ Bullet bulletArray[NUM_ALIEN_BULLETS];
 Bullet tankBullet;
 int bottomRowAliens[ALIENS_PER_ROW];
 DeltaClock* dcFront;
-int redSpaceshipActive = 0;
+int redSpaceshipStatus = 0;
 
 int main(){
 	srand(time(NULL));
