@@ -231,7 +231,7 @@ int moveAlienBullets(){
 			bulletArray[i].state = (bulletArray[i].state + 1) % 3;
 			undrawAlienBullet();
 			ScreenPoint hitCoord = alienBulletCollision(i);
-			if(bulletArray[i].y >= 480 - BULLET_HEIGHT){
+			if(bulletArray[i].y >= BOTTOM_OF_PLAYABLE_AREA - BULLET_HEIGHT){
 				bulletArray[i].type = INACTIVE_BULLET; //bullet has gone offscreen so deactivate the bullet
 				clearAlienBullet(i);
 

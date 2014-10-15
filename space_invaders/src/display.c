@@ -169,6 +169,14 @@ int initializeDisplay(){
 	return 0;
 }
 
+void drawGreenLine(){
+	int x;
+	int y = GREEN_LINE_Y;
+	for(x = 0; x < SCREEN_X_PIXELS; x++){
+		framePointer0[y*640 + x] = GREEN;
+	}
+}
+
 int runDisplay()
 {
 	//blank the screen
@@ -204,6 +212,7 @@ int runDisplay()
 		drawBunker(in);
 	}
 	drawTankBullet();
+	drawGreenLine();
 
 	return 0;
 }
@@ -652,11 +661,11 @@ void clearAlienBullet(int bulletIndex){
 	int rightBound;
 	int upperBound;
 	int lowerBound;
-	if(bulletArray[bulletIndex].y >= 480 - BULLET_HEIGHT){
+	if(bulletArray[bulletIndex].y >= BOTTOM_OF_PLAYABLE_AREA - BULLET_HEIGHT){
 		leftBound = bulletArray[bulletIndex].x;
 		rightBound = bulletArray[bulletIndex].x + BULLET_WIDTH - 1;
 		upperBound = bulletArray[bulletIndex].y;
-		lowerBound = SCREEN_X_PIXELS - 1;
+		lowerBound = BOTTOM_OF_PLAYABLE_AREA - 1;
 	}
 	else{
 		leftBound = bulletArray[bulletIndex].x;

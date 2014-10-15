@@ -82,7 +82,7 @@
 #define DEAD_TANK1 1
 #define DEAD_TANK2 2
 
-#define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 60
+#define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 30
 #define TOP_OF_PLAYABLE_AREA 60
 
 #define ALIEN_ORIGIN_X_INITIAL 0
@@ -91,7 +91,9 @@
 #define ALIEN_DIRECTION_INITIAL 1
 
 #define TANK_X_INITIAL 0
-#define TANK_Y_INITIAL BOTTOM_OF_PLAYABLE_AREA
+#define TANK_Y_INITIAL BOTTOM_OF_PLAYABLE_AREA - 30
+
+#define GREEN_LINE_Y BOTTOM_OF_PLAYABLE_AREA +1
 
 
 
@@ -174,6 +176,7 @@ void clearAlienBullet(int);
 void drawTankBullet();
 void undrawTankBullet();
 void clearTankBullet();
+void drawGreenLine();
 
 
 //-----gameplay.c---------//
