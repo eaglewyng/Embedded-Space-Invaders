@@ -79,7 +79,7 @@ int findLastAliveColumn(){
 
 //--------------------------------------------functions related to tank bullets----------------------------------------//
 int fireTankBullet(){
-	if(tankBullet.type == INACTIVE_BULLET){
+	if(tankBullet.type == INACTIVE_BULLET && tankState == 0){
 		tankBullet.type = TANK_BULLET;
 		tankBullet.x = tankOriginX + TANK_WIDTH / 2 - 3;
 		tankBullet.y = tankOriginY - BULLET_HEIGHT;
