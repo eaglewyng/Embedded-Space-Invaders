@@ -29,6 +29,7 @@ extern int* jumpingJackOut;
 extern int* littleSquidIn;
 extern int* littleSquidOut;
 extern int* noAlien;
+extern int redSpaceshipActive;
 
 int alienOriginX;		//we put the origin on the top left corner
 int alienOriginY;
@@ -70,25 +71,21 @@ void updateLocations(){
 
 void moveRedSpaceship(){
 	if(redSpaceshipDirection == LEFT){
-		redSpaceshipOriginY += PIXELS_PER_MOVE;
-		undrawRedSpaceship(DOWN);
-		redSpaceshipDirection = RIGHT;
+		redSpaceshipOriginX -= PIXELS_PER_MOVE;
+		undrawRedSpaceship(LEFT);
+		if(redSpaceshipOriginX >= SCREEN_X_PIXELS){
+			redSpaceshipActive = 0;
+		}
 	}
 	//redSpaceships are on the right side of the screen
 	else if(redSpaceshipDirection == RIGHT){
 		redSpaceshipOriginY += PIXELS_PER_MOVE;
-		undrawRedSpaceship(DOWN);
-		redSpaceshipDirection = LEFT;
+		undrawRedSpaceship(RIGHT);
+		if(redSpaceshipOriginX + RED_SPACESHIP_WIDTH < 0){
+			redSpaceshipActive = 0;
+		}
 	}
-	//redSpaceships are free to move as normal
-	else{
-		redSpaceshipOriginX += redSpaceshipDirection == RIGHT ? PIXELS_PER_MOVE : PIXELS_PER_MOVE * -1;
-		undrawRedSpaceship(redSpaceshipDirection);
-	}
-	int in;
-	for(in = 0; in < NUM_BUNKERS; in++){
-		drawBunker(in);
-	}
+
 	drawRedSpaceship();
 
 }

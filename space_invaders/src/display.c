@@ -274,7 +274,9 @@ void drawRedSpaceship(){
 	int y;
 	for(x = 0; x < RED_SPACESHIP_WIDTH; x++){
 		for(y = 0; y < RED_SPACESHIP_HEIGHT; y++){
-			if(1 && (mothership[y] & (1<<(RED_SPACESHIP_HEIGHT - 1 - x)))){
+			//make sure the spaceship is in a drawable area and that there should be a red pixel drawn here
+			if(1 && (mothership[y] & (1<<(RED_SPACESHIP_HEIGHT - 1 - x))
+					&& x + redSpaceshipOriginX >= 0 && x + redSpaceshipOriginX < SCREEN_X_PIXELS)){
 				framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = RED;
 			}
 		}
@@ -283,6 +285,45 @@ void drawRedSpaceship(){
 }
 
 void undrawRedSpaceship(int direction){
+	int x;
+	int y;
+	int leftBound;
+	int rightBound;
+	int upperBound;
+	int lowerBound;
+
+	switch(direction){
+	case LEFT:
+		if(redSpaceshipOriginX > 0){
+			leftBound = redSpaceshipOriginX + RED_SPACESHIP_WIDTH;
+
+		}
+		else{
+			leftBound = 0;
+		}
+		rightBound = redSpaceshipOriginX + RED_SPACESHIP_WIDTH + PIXELS_PER_MOVE - 1;
+		upperBound = redSpaceshipOriginY;
+		lowerBound = redSpaceshipOriginY + TANK_HEIGHT - 1;
+		break;
+	default:
+		if(redSpaceshipOriginX < SCREEN_X_PIXELS){
+			rightBound = redSpaceshipOriginX - 1;
+		}
+		else{
+			rightBound = SCREEN_X_PIXELS - 1;
+		}
+		leftBound = redSpaceshipOriginX - PIXELS_PER_MOVE;
+
+		upperBound = redSpaceshipOriginY;
+		lowerBound = redSpaceshipOriginY + TANK_HEIGHT - 1;
+		break;
+
+	}
+	for(x = leftBound; x <= (rightBound); x++){
+		for(y = upperBound; y <= (lowerBound); y++){
+			framePointer0[y*640 + x] = BLACK;
+		}
+	}
 }
 
 
