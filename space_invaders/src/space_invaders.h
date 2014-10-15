@@ -66,6 +66,7 @@
 #define RED_SPACESHIP_HEIGHT ALIEN_HEIGHT
 
 #define NUMBER_HEIGHT 14
+#define NUMBER_WIDTH 14
 
 #define GREEN 0x0000FF00
 #define RED 0x00FF0000
@@ -83,6 +84,11 @@
 #define SPACE_BETWEEN_CHARACTERS 4
 #define SCORETEXT_START_X 0
 #define SCORETEXT_START_Y 0
+#define SCORENUMBERS_START_Y SCORETEXT_START_X + TEXT_WIDTH * 5 + SPACE_BETWEEN_CHARACTERS * 6
+#define SCORENUMBERS_START_X SCORETEXT_START_Y
+#define SCORENUMBERS_COLOR GREEN
+#define SCORETEXT_COLOR WHITE;
+
 
 #define ALIVE_TANK 0
 #define DEAD_TANK1 1
@@ -213,6 +219,14 @@ void initInterrupts();
 int insertDC(int, int);
 int destroyDC();
 int incrementDC(int tics);
+
+//-----------gamestatus.c--------------//
+void addToScore(int);
+void takeLife();
+
+//----------draw.c---------------------//
+void drawScoreNumbers();
+void drawDigit(int, int, int, int);
 
 
 #endif /* SPACE_INVADERS_H_ */

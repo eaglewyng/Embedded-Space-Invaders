@@ -492,7 +492,7 @@ int undrawAliens(int direction){
 int drawAliens(){
 	int row;
 	int col;
-	int* alienBMP;	//MAKE SURE THIS WON'T CREATE MEMORY LEAKS!
+	int* alienBMP;
 
 	for(row = 0; row < ALIEN_ROWS; row++){
 		int y = row * ALIEN_HEIGHT + alienOriginY;
