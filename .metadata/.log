@@ -134,3 +134,12 @@ org.eclipse.core.internal.resources.ResourceException: The project description f
 	at org.eclipse.equinox.launcher.Main.main(Main.java:1384)
 !SUBENTRY 2 org.eclipse.core.resources 4 567 2014-10-13 16:58:28.203
 !MESSAGE The project description file (.project) for 'hello_world_bsp_0' is missing.  This file contains important information about the project.  The project will not function properly until this file is restored.
+!SESSION 2014-10-14 19:09:48.995 -----------------------------------------------
+eclipse.buildId=Release 13.4 Build SDK_O.87xd
+java.version=1.6.0_21
+java.vendor=Sun Microsystems Inc.
+BootLoader constants: OS=win32, ARCH=x86_64, WS=win32, NL=en_US
+Command-line arguments:  -os win32 -ws win32 -arch x86_64
+
+!ENTRY org.eclipse.core.resources 2 10035 2014-10-14 19:10:08.145
+!MESSAGE The workspace exited with unsaved changes in the previous session; refreshing workspace to recover changes.

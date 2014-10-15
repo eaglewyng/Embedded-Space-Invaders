@@ -239,10 +239,10 @@ int moveAlienBullets(){
 				insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
 			}
 			else if(hitCoord.xcoord >= 0 && hitCoord.ycoord >= 0){
-				xil_printf("These are the alien bullet hit coordiantes: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
-				xil_printf("And these are the bullet's x,y coordinates: %d, %d\n\r",bulletArray[i].x, bulletArray[i].y);
-				clearAlienBullet(i);
+				if(DB_ON1) xil_printf("These are the alien bullet hit coordiantes: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
+				if(DB_ON1) xil_printf("And these are the bullet's x,y coordinates: %d, %d\n\r",bulletArray[i].x, bulletArray[i].y);
 				bulletArray[i].type = INACTIVE_BULLET; //deactive the bullet since it's hit either the bunker or the tank
+				clearAlienBullet(i);
 				insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
 			}
 
@@ -518,7 +518,7 @@ int chooseAlienToKill(int x, int y){
 				int myLeftBound = alienOriginX + i%ALIENS_PER_ROW*ALIEN_WIDTH;
 				int myRightBound = alienOriginX + i%ALIENS_PER_ROW*ALIEN_WIDTH+ALIEN_WIDTH;
 				if((x >= (myLeftBound)) && (x < (myRightBound))){
-					xil_printf("You've hit alien %d! Blarg!\n\r",i);
+					if(DB_ON1) xil_printf("You've hit alien %d! Blarg!\n\r",i);
 					alienArray[i] = DEAD_ALIEN;
 					return 1;
 					switch(alienArray[i]){
@@ -529,7 +529,7 @@ int chooseAlienToKill(int x, int y){
 					case LITTLE_SQUID:
 						alienBMP = (alienInOut == 0 ? littleSquidIn :
 						littleSquidOut);
-						xil_printf("We're in the little squid space.\n\r");
+						if(DB_ON1) xil_printf("We're in the little squid space.\n\r");
 						break;
 					case JUMPING_JACK:
 						alienBMP = (alienInOut == 0 ? jumpingJackIn :
@@ -544,7 +544,7 @@ int chooseAlienToKill(int x, int y){
 					int theRow = y / ALIEN_HEIGHT;
 					int theCol = 1<<(ALIEN_WIDTH - 1 - x % ALIEN_WIDTH);
 					if(1 && (alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x)))){
-						xil_printf("You've hit alien %d! Blarg!\n\r",i);
+						if(DB_ON1) xil_printf("You've hit alien %d! Blarg!\n\r",i);
 						alienArray[i] = DEAD_ALIEN;
 						return 1;
 					}
@@ -745,7 +745,7 @@ int moveTankBullet(){
 			clearTankBullet();
 		}
 		else if(hitCoord.xcoord >= 0 && hitCoord.ycoord >= 0){
-			xil_printf("This is oops: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
+		if(DB_ON1) xil_printf("This is oops: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
 			clearTankBullet();
 			tankBullet.type = INACTIVE_BULLET; //bullet has hit something
 

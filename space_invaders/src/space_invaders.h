@@ -82,6 +82,17 @@
 #define DEAD_TANK1 1
 #define DEAD_TANK2 2
 
+#define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 60
+#define TOP_OF_PLAYABLE_AREA 60
+
+#define ALIEN_ORIGIN_X_INITIAL 0
+#define ALIEN_ORIGIN_Y_INITIAL TOP_OF_PLAYABLE_AREA
+#define FARRIGHT_OFFSET_INITIAL 352
+#define ALIEN_DIRECTION_INITIAL 1
+
+#define TANK_X_INITIAL 0
+#define TANK_Y_INITIAL BOTTOM_OF_PLAYABLE_AREA
+
 
 
 typedef struct{
@@ -142,6 +153,8 @@ int damageBunker(int,int);
 int moveAlienBullets();
 int moveTankBullet();
 void updateLocations();
+int chooseAlienToKill(int, int);
+int chooseBunkerBlockToDamage(int,int);
 
 //-------display.c----------//
 int isAlienPixelHere(int,int);
