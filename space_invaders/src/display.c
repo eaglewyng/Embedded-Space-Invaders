@@ -650,7 +650,21 @@ void undrawAlienBullet(){
 		int x, y;
 		for(x = leftBound; x <= (rightBound); x++){
 			for(y = upperBound; y <= (lowerBound); y++){
-				framePointer0[y*640 + x] = BLACK;
+				if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[y*640 + x] = GREEN;
+				}
+				else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[y*640 + x] = GREEN;
+				}
+				else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[y*640 + x] = GREEN;
+				}
+				else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[y*640 + x] = GREEN;
+				}
+				else{
+					framePointer0[y*640 + x] = BLACK;
+				}
 			}
 		}
 	}
