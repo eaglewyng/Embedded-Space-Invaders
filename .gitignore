@@ -12,6 +12,7 @@ tmp/
 *~.nib
 local.properties
 .settings/
+.metadata/
 .loadpath
 
 # External tool builders

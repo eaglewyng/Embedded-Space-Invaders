@@ -68,8 +68,14 @@ extern int tankBulletSymbol[];
 extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int deadAlien[];
+<<<<<<< HEAD
 extern int tankDeath1[];
 extern int tankDeath2[];
+=======
+extern int mothership[];
+extern int redSpaceshipOriginX;
+extern int redSpaceshipOriginY;
+>>>>>>> red_spaceship
 
 
 extern int scoreI[];
@@ -277,38 +283,69 @@ void drawScoreText(){
 
 }
 
-
-
-
-
-//returns 1 if a tank pixel should be drawn here, and 0 if not
-//the row and column should be the current row & column on the screen
-int isTankPixelHere(int row, int col){
-
-	//if the the current row and column is not in the alien "grid", return 0
-	if(col < tankOriginX || col >= (tankOriginX + TANK_WIDTH)){
-		return 0;
+//draw the red spaceship, or the mothership
+void drawRedSpaceship(){
+	int x;
+	int y;
+	for(x = 0; x < RED_SPACESHIP_WIDTH; x++){
+		for(y = 0; y < RED_SPACESHIP_HEIGHT; y++){
+			//make sure the spaceship is in a drawable area and that there should be a red pixel drawn here
+			if(x + redSpaceshipOriginX >= 0 && x + redSpaceshipOriginX < SCREEN_X_PIXELS){
+				if(1 && (mothership[y] & (1<<(RED_SPACESHIP_WIDTH - 1 - x))))
+					framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = RED;
+				else
+					framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = BLACK;
+			}
+		}
 	}
-
-	if(row < tankOriginY || row >= (tankOriginY + TANK_HEIGHT) ){
-		return 0;
-	}
-
-
-
-	int rawIdxX = col - tankOriginX;
-	int rawIdxY = row - tankOriginY;
-
-	int idxIntoTankY = rawIdxY % TANK_HEIGHT;
-	int idxIntoTankX = rawIdxX % TANK_WIDTH;
-
-	return (1 && (tank[idxIntoTankY] & (1<<(TANK_WIDTH - 1 - idxIntoTankX))));
 
 }
 
-int isBunkerPixelHere(int row, int col){
-	return 0;
+void undrawRedSpaceship(int direction){
+	int x;
+	int y;
+	int leftBound;
+	int rightBound;
+	int upperBound;
+	int lowerBound;
+
+	switch(direction){
+	case LEFT:
+		if(redSpaceshipOriginX > 0){
+			leftBound = redSpaceshipOriginX + RED_SPACESHIP_WIDTH;
+
+		}
+		else{
+			leftBound = 0;
+		}
+		rightBound = redSpaceshipOriginX + RED_SPACESHIP_WIDTH + PIXELS_PER_MOVE - 1;
+		upperBound = redSpaceshipOriginY;
+		lowerBound = redSpaceshipOriginY + TANK_HEIGHT - 1;
+		break;
+	default:
+		if(redSpaceshipOriginX < SCREEN_X_PIXELS){
+			rightBound = redSpaceshipOriginX - 1;
+		}
+		else{
+			rightBound = SCREEN_X_PIXELS - 1;
+		}
+		leftBound = redSpaceshipOriginX - PIXELS_PER_MOVE;
+
+		upperBound = redSpaceshipOriginY;
+		lowerBound = redSpaceshipOriginY + TANK_HEIGHT - 1;
+		break;
+
+	}
+	for(x = leftBound; x <= (rightBound); x++){
+		for(y = upperBound; y <= (lowerBound); y++){
+			framePointer0[y*640 + x] = BLACK;
+		}
+	}
 }
+
+
+
+
 
 int undrawTank(int direction){
 	int x;
@@ -712,15 +749,12 @@ void clearAlienBullet(int bulletIndex){
 
 
 
+
 /* #define INACTIVE_BULLET 0
 #define SQUIGGLY_BULLET 1
 #define CROSS_BULLET 2
 #define TANK_BULLET 3
 #define NUM_ALIEN_BULLETS 4*/
-
-
-
-
 void drawAlienBullet(int myIndex){
 	int col;
 	int row;

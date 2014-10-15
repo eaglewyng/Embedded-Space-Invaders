@@ -15,7 +15,11 @@ Bullet bulletArray[NUM_ALIEN_BULLETS];
 Bullet tankBullet;
 int bottomRowAliens[ALIENS_PER_ROW];
 DeltaClock* dcFront;
+<<<<<<< HEAD
 extern int tankState;
+=======
+int redSpaceshipStatus = 0;
+>>>>>>> red_spaceship
 
 int main(){
 	srand(time(NULL));
@@ -39,6 +43,8 @@ void initializeDC(){
 	for(i = 0; i < 4; i++){
 		insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
 	}
+
+	insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
 
 }
 

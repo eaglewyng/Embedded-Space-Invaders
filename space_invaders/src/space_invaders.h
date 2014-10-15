@@ -8,7 +8,7 @@
 #ifndef SPACE_INVADERS_H_
 #define SPACE_INVADERS_H_
 
-#define DB_ON1 0
+#define DB_ON1 0			//debug mode
 #define INPUT_MODE 1 		//0 = keyboard, 1 = buttons
 
 #define BULLET_HEIGHT 10
@@ -60,6 +60,11 @@
 #define ALIEN_BULLETS_PIXELS_PER_MOVE 7
 #define TANK_BULLET_PIXELS_PER_MOVE 7//7
 
+#define RED_SPACESHIP_PIXELS_PER_MOVE 12
+#define RED_SPACESHIP_ORIGIN_Y_INITIAL 30
+#define RED_SPACESHIP_WIDTH 32
+#define RED_SPACESHIP_HEIGHT ALIEN_HEIGHT
+
 #define NUMBER_HEIGHT 14
 
 #define GREEN 0x0000FF00
@@ -70,7 +75,12 @@
 
 #define EVENT_ALIEN_FIRE 1
 #define EVENT_RED_SPACESHIP_APPEAR 2
+<<<<<<< HEAD
 #define MAX_TICS_BETWEEN_ALIEN_FIRE 100
+=======
+#define MAX_TICS_BETWEEN_ALIEN_FIRE 1500
+#define MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR 3000
+>>>>>>> red_spaceship
 
 #define TEXT_WIDTH 10
 #define TEXT_HEIGHT 14
@@ -78,6 +88,7 @@
 #define SCORETEXT_START_X 0
 #define SCORETEXT_START_Y 0
 
+<<<<<<< HEAD
 #define ALIVE_TANK 0
 #define DEAD_TANK1 1
 #define DEAD_TANK2 2
@@ -94,6 +105,12 @@
 #define TANK_Y_INITIAL BOTTOM_OF_PLAYABLE_AREA - 30
 
 #define GREEN_LINE_Y BOTTOM_OF_PLAYABLE_AREA +1
+=======
+#define RED_SPACESHIP_INACTIVE 0
+#define RED_SPACESHIP_DEAD 1
+#define RED_SPACESHIP_ALIVE 2
+
+>>>>>>> red_spaceship
 
 
 
@@ -155,8 +172,12 @@ int damageBunker(int,int);
 int moveAlienBullets();
 int moveTankBullet();
 void updateLocations();
+<<<<<<< HEAD
 int chooseAlienToKill(int, int);
 int chooseBunkerBlockToDamage(int,int);
+=======
+void moveRedSpaceship();
+>>>>>>> red_spaceship
 
 //-------display.c----------//
 int isAlienPixelHere(int,int);
@@ -176,13 +197,19 @@ void clearAlienBullet(int);
 void drawTankBullet();
 void undrawTankBullet();
 void clearTankBullet();
+<<<<<<< HEAD
 void drawGreenLine();
+=======
+void drawRedSpaceship();
+void undrawRedSpaceship(int);
+>>>>>>> red_spaceship
 
 
 //-----gameplay.c---------//
 void killAlien(int);
 int findBottomRowAliens();
 int fireTankBullet();
+void redSpaceshipAppear();
 
 
 //-----input.c----------//

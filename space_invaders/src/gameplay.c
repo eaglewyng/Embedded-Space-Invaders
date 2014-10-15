@@ -30,7 +30,14 @@ extern int alienOriginY;
 extern Bullet tankBullet;
 extern int tankOriginX;
 extern int tankOriginY;
+<<<<<<< HEAD
 int tankState;
+=======
+extern int redSpaceshipStatus;
+extern int redSpaceshipDirection;
+extern int redSpaceshipOriginX;
+extern int redSpaceshipOriginY;
+>>>>>>> red_spaceship
 
 //-----------------------------------------functions related to killing aliens---------------------------------------//
 void killAlien(int alienIndex){
@@ -172,6 +179,19 @@ void fireAlienBullet(){
 
 			//set the bullet x coordinate to the middle of the alien block and the y to the bottom of the alien block
 		}
+	}
+}
+
+void redSpaceshipAppear(){
+	redSpaceshipStatus = RED_SPACESHIP_ALIVE;
+	if(redSpaceshipDirection == LEFT){
+		redSpaceshipDirection = RIGHT;
+		redSpaceshipOriginX = 0 - RED_SPACESHIP_WIDTH;
+
+	}
+	else{
+		redSpaceshipDirection = LEFT;
+		redSpaceshipOriginX = SCREEN_X_PIXELS;
 	}
 }
 

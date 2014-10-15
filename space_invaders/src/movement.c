@@ -30,6 +30,7 @@ extern int* jumpingJackOut;
 extern int* littleSquidIn;
 extern int* littleSquidOut;
 extern int* noAlien;
+extern int redSpaceshipStatus;
 
 int alienOriginX;		//we put the origin on the top left corner
 int alienOriginY;
@@ -37,9 +38,9 @@ int firstColAliveAliens;
 int lastColAliveAliens;
 int alienFarRightOffset;
 int alienDirection;		//see #defines in movement.h for possible directions
-
-
-
+int redSpaceshipOriginX;
+int redSpaceshipOriginY;
+int redSpaceshipDirection;
 int tankOriginX;
 int tankOriginY;
 
@@ -57,6 +58,7 @@ void initializeMovement(){
 	tankOriginY = TANK_Y_INITIAL;
 	alienFarRightOffset = FARRIGHT_OFFSET_INITIAL;
 	alienDirection = ALIEN_DIRECTION_INITIAL;
+	redSpaceshipOriginY = RED_SPACESHIP_ORIGIN_Y_INITIAL;
 
 }
 
@@ -69,10 +71,32 @@ void updateLocations(){
 	moveAlienBullets();
 }
 
+void moveRedSpaceship(){
+	if(redSpaceshipDirection == LEFT){
+		redSpaceshipOriginX -= PIXELS_PER_MOVE;
+		undrawRedSpaceship(LEFT);
+		if(redSpaceshipOriginX + RED_SPACESHIP_WIDTH < 0){
+			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
+			insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
+		}
+	}
+	//redSpaceships are on the right side of the screen
+	else if(redSpaceshipDirection == RIGHT){
+		redSpaceshipOriginX += PIXELS_PER_MOVE;
+		undrawRedSpaceship(RIGHT);
+		if(redSpaceshipOriginX >= SCREEN_X_PIXELS){
+			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
+			insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
+		}
+	}
+
+	drawRedSpaceship();
+
+}
+
 
 //updates the origin location by the predefined amount
 int moveAliens(){
-	//basic implementation, without ups or downs
 
 	//what to do if aliens are on the left side of the screen
 	if(alienDirection == LEFT && (alienOriginX - PIXELS_PER_MOVE < -1*(ALIEN_WIDTH * firstColAliveAliens))){
