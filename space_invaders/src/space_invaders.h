@@ -77,6 +77,8 @@
 
 #define EVENT_ALIEN_FIRE 1
 #define EVENT_RED_SPACESHIP_APPEAR 2
+#define EVENT_TANK_DEATH 3
+#define MAX_TICS_AFTER_TANK_DEATH 200
 #define MAX_TICS_BETWEEN_ALIEN_FIRE 1500
 #define MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR 3000
 
@@ -185,6 +187,7 @@ int isTankPixelHere(int,int);
 int undrawAliens(int);
 int drawAliens();
 int drawTank();
+void clearTank();
 int undrawTank(int);
 void drawBunker(int);
 void drawAlienBullet();
@@ -205,6 +208,9 @@ void killAlien(int);
 int findBottomRowAliens();
 int fireTankBullet();
 void redSpaceshipAppear();
+void tankRevive();
+void tankDeath();
+
 
 
 //-----input.c----------//
@@ -221,6 +227,7 @@ void initInterrupts();
 int insertDC(int, int);
 int destroyDC();
 int incrementDC(int tics);
+void clearDC();
 
 //-----------gamestatus.c--------------//
 void initStatus();

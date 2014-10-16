@@ -281,7 +281,7 @@ int moveAlienBullets(){
 
 
 int destroyRedMothership(int col, int row){
-	if(mothership[row % RED_SPACESHIP_HEIGHT] & (1<<(RED_SPACESHIP_WIDTH))){
+	if(mothership[row % RED_SPACESHIP_HEIGHT] & (1<<(RED_SPACESHIP_WIDTH - 1 - col))){
 		xil_printf("You've hit the mothership! DIE! \n\r");
 		redSpaceshipStatus = RED_SPACESHIP_DEAD;
 		clearRedSpaceship();
@@ -539,7 +539,7 @@ ScreenPoint alienBulletCollision(int i){
 			for(col = 0; col < BULLET_WIDTH; col++){
 				if((bulletBMP[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
 					if(framePointer0[(bulletArray[i].y + row) * 640 + bulletArray[i].x+col] == GREEN){
-						tankState = DEAD_TANK1;
+						tankDeath();
 						myPoint.xcoord = bulletArray[i].x + col;
 						myPoint.ycoord = bulletArray[i].y + row;
 						return myPoint;

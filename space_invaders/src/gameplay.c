@@ -194,4 +194,21 @@ void redSpaceshipAppear(){
 	}
 }
 
+void tankDeath(){
+	tankState = DEAD_TANK1;
+	clearDC();
+	takeLife();
+	insertDC(MAX_TICS_AFTER_TANK_DEATH ,EVENT_TANK_DEATH);
+
+}
+
+void tankRevive(){
+	clearTank();
+	tankOriginX = TANK_X_INITIAL;
+	tankState = 0;
+	initializeDC();
+	drawTank();
+
+}
+
 
