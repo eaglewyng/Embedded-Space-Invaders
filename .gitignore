@@ -2,6 +2,7 @@
 
 ### Eclipse ###
 *.pydevproject
+.project
 .metadata
 .gradle
 bin/
@@ -64,6 +65,9 @@ local.properties
 *.i*86
 *.x86_64
 *.hex
+
+SpaceInvaderTestHW2_hw_platform/
+space_invaders_bsp_0/
 
 
 space_invaders/Debug/
