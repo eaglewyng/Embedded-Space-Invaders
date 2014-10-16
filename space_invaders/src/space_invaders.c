@@ -16,9 +16,14 @@ Bullet tankBullet;
 int bottomRowAliens[ALIENS_PER_ROW];
 DeltaClock* dcFront;
 
+int lastAlienKilled;
+
 extern int tankState;
 int redSpaceshipStatus = 0;
-
+extern int firstColAliveAliens;
+extern int lastColAliveAliens;
+extern int alienOriginX;
+extern int alienOriginY;
 
 int main(){
 	srand(time(NULL));
@@ -51,6 +56,41 @@ void initializeDC(){
 int initializeGame(){
 	initializeLevel();
 	initStatus();
+	return 0;
+}
+
+int reinitializeLevel(){
+	alienOriginX = ALIEN_ORIGIN_X_INITIAL;
+	alienOriginY = ALIEN_ORIGIN_Y_INITIAL;
+
+	int i;
+
+
+	for(i = 0; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
+		int tempAlienRow = getAlienRow(i);
+		alienArray[i] = tempAlienRow == 0 ? LITTLE_SQUID:
+						tempAlienRow < 3 ? JUMPING_JACK:
+						BIG_SQUID;
+	}
+
+	firstColAliveAliens = 0;
+	lastColAliveAliens = ALIENS_PER_ROW - 1;
+
+	tankState = ALIVE_TANK;
+
+	for(i = 0; i < NUM_ALIEN_BULLETS; i++){
+		bulletArray[i].x = -1;
+		bulletArray[i].y = -1;
+		bulletArray[i].type = INACTIVE_BULLET;
+		bulletArray[i].state = 0;
+
+	}
+
+	tankBullet.x = -1;
+	tankBullet.y = -1;
+	tankBullet.type = INACTIVE_BULLET;
+	tankBullet.state = 0;
+
 	return 0;
 }
 
@@ -138,6 +178,7 @@ int initializeLevel(){
 	tankBullet.type = INACTIVE_BULLET;
 	tankBullet.state = 0;
 
+	lastAlienKilled = -1;
 
 	return 0;
 }

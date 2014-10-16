@@ -32,6 +32,8 @@ extern int littleSquidOut[];
 extern int noAlien[];
 extern int mothership[];
 extern int redSpaceshipStatus;
+extern int lastAlienKilled;
+
 
 int alienOriginX;		//we put the origin on the top left corner
 int alienOriginY;
@@ -560,7 +562,6 @@ ScreenPoint alienBulletCollision(int i){
 
 int chooseAlienToKill(int x, int y){
 	int i;
-	int points = 0;
 	int* alienBMP;
 	for(i = 0; i < ALIEN_ROWS*ALIENS_PER_ROW; i++){
 		if(alienArray[i] > DEAD_ALIEN){
@@ -594,12 +595,8 @@ int chooseAlienToKill(int x, int y){
 						break;
 					}
 					alienArray[i] = DEAD_ALIEN;
+					lastAlienKilled = i;
 					return 1;
-					/*					if(1 && (alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x)))){
-						if(DB_ON1) xil_printf("You've hit alien %d! Blarg!\n\r",i);
-						alienArray[i] = DEAD_ALIEN;
-						return 1;
-					}*/
 				}
 			}
 
@@ -792,7 +789,7 @@ int moveTankBullet(){
 		undrawTankBullet();
 		ScreenPoint hitCoord = tankBulletCollision();
 
-		if(tankBullet.y < 0){
+		if(tankBullet.y < RED_SPACESHIP_ORIGIN_Y_INITIAL){
 			tankBullet.type = INACTIVE_BULLET; //bullet has gone offscreen so deactivate the bullet
 			clearTankBullet();
 		}
@@ -800,7 +797,12 @@ int moveTankBullet(){
 			if(DB_ON1) xil_printf("This is oops: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
 			clearTankBullet();
 			tankBullet.type = INACTIVE_BULLET; //bullet has hit something
-
+			if(allAliensDead()){
+				drawAliens();
+				alienArray[lastAlienKilled] = NO_ALIEN;
+				drawAliens();
+				reinitializeLevel();
+			}
 			//chooseBunkerBlockToDamage(hitCoord);
 		}
 		drawTankBullet();

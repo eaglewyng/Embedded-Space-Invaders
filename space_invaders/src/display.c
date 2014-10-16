@@ -43,6 +43,7 @@ extern int noAlien[];
 extern int tankState;
 extern int redSpaceshipStatus;
 extern int score;
+extern int lastAlienKilled;
 
 //bitmaps
 extern int bigSquidIn[];

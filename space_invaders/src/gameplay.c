@@ -211,4 +211,12 @@ void tankRevive(){
 
 }
 
-
+int allAliensDead(){
+	int i;
+	for(i = 0; i < ALIENS_PER_ROW*ALIENS_PER_COL; i++){
+		if(alienArray[i] > DEAD_ALIEN){
+			return 0;
+		}
+	}
+	return 1;
+}
