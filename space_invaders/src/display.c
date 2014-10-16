@@ -216,6 +216,8 @@ int runDisplay()
 	}
 	drawTankBullet();
 	drawGreenLine();
+	drawScoreText();
+	drawScoreNumbers();
 
 	return 0;
 }
@@ -233,7 +235,7 @@ void drawScoreText(){
 	//S
 	for(y = 0; y < TEXT_HEIGHT; y++){
 		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreS[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+			if(scoreS[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y) * 640 + SCORETEXT_START_X + x] = 0xFFFFFFFF;
 			}
 		}
@@ -242,7 +244,7 @@ void drawScoreText(){
 	//C
 	for(y = 0; y < TEXT_HEIGHT; y++){
 		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreC[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+			if(scoreC[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
 				              (SCORETEXT_START_X + TEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = 0xFFFFFFFF;
 			}
@@ -252,7 +254,7 @@ void drawScoreText(){
 	//O
 	for(y = 0; y < TEXT_HEIGHT; y++){
 		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreO[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+			if(scoreO[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
 				              (SCORETEXT_START_X + TEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = 0xFFFFFFFF;
 			}
@@ -261,7 +263,7 @@ void drawScoreText(){
 	//R
 	for(y = 0; y < TEXT_HEIGHT; y++){
 		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreR[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+			if(scoreR[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
 				              (SCORETEXT_START_X + TEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = 0xFFFFFFFF;
 			}
@@ -271,7 +273,7 @@ void drawScoreText(){
 	//E
 	for(y = 0; y < TEXT_HEIGHT; y++){
 		for(x = 0; x < TEXT_WIDTH; x++){
-			if(scoreE[y % TEXT_HEIGHT] & (1<<(TEXT_WIDTH-1-x))){
+			if(scoreE[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(SCORETEXT_START_Y + y )* 640 +
 				              (SCORETEXT_START_X + TEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = 0xFFFFFFFF;
 			}

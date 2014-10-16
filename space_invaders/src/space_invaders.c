@@ -28,6 +28,7 @@ int main(){
 	initializeDisplay();
 	initButtons();
 	initInterrupts();
+
 	runDisplay();
 	while(1);
 	return 0;
@@ -49,6 +50,7 @@ void initializeDC(){
 
 int initializeGame(){
 	initializeLevel();
+	initStatus();
 	return 0;
 }
 
