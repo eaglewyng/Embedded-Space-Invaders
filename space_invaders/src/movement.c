@@ -263,6 +263,8 @@ int moveAlienBullets(){
 			if(bulletArray[i].y >= BOTTOM_OF_PLAYABLE_AREA - BULLET_HEIGHT){
 				bulletArray[i].type = INACTIVE_BULLET; //bullet has gone offscreen so deactivate the bullet
 				clearAlienBullet(i);
+				bulletArray[i].y = -BULLET_HEIGHT; //make sure the tank isn't overwritten by a rogue bullet
+
 
 				//schedule the next bullet fire
 				insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);

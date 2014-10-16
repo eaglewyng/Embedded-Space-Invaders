@@ -696,15 +696,15 @@ int drawAliens(){
 								{
 
 								}
+
 								else{
 									framePointer0[(y+aY) * 640 + x + aX] = BLACK;
 								}
 							}
 						}
 						else{
-							if((x+aX) >= tankBullet.x && x <= (tankBullet.x + BULLET_WIDTH) &&  ((y+aY) >= tankBullet.y) && (y <= (tankBullet.y+BULLET_WIDTH)) && framePointer1[(y+aY) * 640 + x + aX] == WHITE)
-							{
-
+							//don't draw over tank bullet
+							if((x+aX) >= tankBullet.x && x <= (tankBullet.x + BULLET_WIDTH) &&  ((y+aY) >= tankBullet.y) && (y <= (tankBullet.y+BULLET_WIDTH)) && framePointer1[(y+aY) * 640 + x + aX] == WHITE){
 							}
 							else{
 								framePointer0[(y+aY) * 640 + x + aX] = BLACK;
