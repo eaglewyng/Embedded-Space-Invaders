@@ -117,7 +117,7 @@ void drawLivesText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreI[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(LIVES_START_Y + y )* 640 +
-							  (LIVESTEXT_START_X + TEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = STATUSTEXT_COLOR;
+				              (LIVESTEXT_START_X + TEXT_WIDTH + SPACE_BETWEEN_CHARACTERS + x )] = STATUSTEXT_COLOR;
 			}
 		}
 	}
@@ -127,7 +127,7 @@ void drawLivesText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreV[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(LIVES_START_Y + y )* 640 +
-							  (LIVESTEXT_START_X + TEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = STATUSTEXT_COLOR;
+				              (LIVESTEXT_START_X + TEXT_WIDTH*2 + SPACE_BETWEEN_CHARACTERS *2 + x )] = STATUSTEXT_COLOR;
 			}
 		}
 	}
@@ -136,7 +136,7 @@ void drawLivesText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreE[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(LIVES_START_Y + y )* 640 +
-							  (LIVESTEXT_START_X + TEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = STATUSTEXT_COLOR;
+				              (LIVESTEXT_START_X + TEXT_WIDTH*3 + SPACE_BETWEEN_CHARACTERS *3 + x )] = STATUSTEXT_COLOR;
 			}
 		}
 	}
@@ -146,7 +146,24 @@ void drawLivesText(){
 		for(x = 0; x < TEXT_WIDTH; x++){
 			if(scoreS[y] & (1<<(TEXT_WIDTH-1-x))){
 				framePointer0[(LIVES_START_Y + y )* 640 +
-							  (LIVESTEXT_START_X + TEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = STATUSTEXT_COLOR;
+				              (LIVESTEXT_START_X + TEXT_WIDTH*4 + SPACE_BETWEEN_CHARACTERS *4 + x )] = STATUSTEXT_COLOR;
+			}
+		}
+	}
+}
+
+void drawLivesTanks(){
+	int i;
+	for(i = 0; i < lives; i++){
+		int strtY = LIVES_START_Y + (i/TANKLIVES_PER_ROW) * (TANK_HEIGHT) + (i/TANKLIVES_PER_ROW) * SPACE_BETWEEN_TANKLIVES_VERTICAL;
+		int x, y;
+		for(y = 0; y < TANK_HEIGHT; y++){
+			for(x = 0; x < TANK_WIDTH; x++){
+				if(tank[y] & (1<<(TANK_WIDTH-1-x))){
+					framePointer0[(strtY + y )* 640 +
+					              (TANKLIVES_START_X + TANK_WIDTH*(i%TANKLIVES_PER_ROW) +
+					            		  SPACE_BETWEEN_TANKLIVES * (i % TANKLIVES_PER_ROW) + x )] = GREEN;
+				}
 			}
 		}
 	}

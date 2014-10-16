@@ -324,7 +324,9 @@ int runDisplay()
 	drawGreenLine();
 	drawScoreText();
 	drawLivesText();
+	drawLivesTanks();
 	drawScoreNumbers();
+
 
 	return 0;
 }
