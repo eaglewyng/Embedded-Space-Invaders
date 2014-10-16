@@ -293,6 +293,17 @@ int moveAlienBullets(){
 	return 0;
 }
 
+
+int destroyRedMothership(int col, int row){
+	if(mothership[row % RED_SPACESHIP_HEIGHT] & (1<<(RED_SPACESHIP_WIDTH))){
+		xil_printf("You've hit the mothership! DIE! \n\r");
+		redSpaceshipStatus = RED_SPACESHIP_DEAD;
+		clearRedSpaceship();
+		return 1;
+	}
+	return 0;
+}
+
 ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 	ScreenPoint myPoint;
 	myPoint.xcoord = -1;
@@ -317,6 +328,23 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 		}
 	}
 
+	//check if in range of mothership
+	if(((tankBullet.y+BULLET_HEIGHT) >= redSpaceshipOriginY) && (tankBullet.y <= (redSpaceshipOriginY+RED_SPACESHIP_HEIGHT))){
+		int row, col;
+		if((((tankBullet.x+BULLET_WIDTH) >= redSpaceshipOriginX) && (tankBullet.x <= (redSpaceshipOriginX+RED_SPACESHIP_WIDTH)))){
+			for(row = BULLET_HEIGHT-1; row >= 0; row--){
+				for(col = 0; col < BULLET_WIDTH; col++){
+					if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
+						if(destroyRedMothership(tankBullet.x + col, tankBullet.y + row)){
+							myPoint.xcoord = tankBullet.x + col;
+							myPoint.ycoord = tankBullet.y + row;
+							return myPoint;
+						}
+					}
+				}
+			}
+		}
+	}
 
 	//check if in the range of the bunkers
 	if(((tankBullet.y+BULLET_HEIGHT) >= BUNKER_INITIAL_Y) && (tankBullet.y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
@@ -465,10 +493,10 @@ ScreenPoint alienBulletCollision(int i){
 			for(row = 0; row <= BULLET_HEIGHT; row++){
 				for(col = 0; col < BULLET_WIDTH; col++){
 					//if((bulletBMP[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-						if(chooseBunkerBlockToDamage(bulletArray[i].x + col, bulletArray[i].y + row)){
-							myPoint.xcoord = bulletArray[i].x + col;
-							myPoint.ycoord = bulletArray[i].y + row;
-							return myPoint;
+					if(chooseBunkerBlockToDamage(bulletArray[i].x + col, bulletArray[i].y + row)){
+						myPoint.xcoord = bulletArray[i].x + col;
+						myPoint.ycoord = bulletArray[i].y + row;
+						return myPoint;
 						//}
 						/*if(framePointer0[(bulletArray[i].y + row)*640 + (bulletArray[i].x+col)] == GREEN){
 							myPoint.xcoord = bulletArray[i].x + col;
@@ -547,11 +575,6 @@ int chooseAlienToKill(int x, int y){
 	int* alienBMP;
 	for(i = 0; i < ALIEN_ROWS*ALIENS_PER_ROW; i++){
 		if(alienArray[i] > DEAD_ALIEN){
-			if(i >= 0 && i <= 10){
-				int testY = alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT;
-				int testX = alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT+ALIEN_HEIGHT;
-			}
-
 			if((y >= (alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT)) && (y < (alienOriginY + i/ALIENS_PER_ROW*ALIEN_HEIGHT+ALIEN_HEIGHT))){
 				//xil_printf("Made it into checking the alien Y bounds for alien %d.\n\r",i);
 				int myLeftBound = alienOriginX + i%ALIENS_PER_ROW*ALIEN_WIDTH;
@@ -578,10 +601,6 @@ int chooseAlienToKill(int x, int y){
 						alienBMP = noAlien;
 						break;
 					}
-					int myTestInt = alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x));
-					int whatsInTheRow = bigSquidIn[y / ALIEN_HEIGHT];
-					int theRow = y / ALIEN_HEIGHT;
-					int theCol = 1<<(ALIEN_WIDTH - 1 - x % ALIEN_WIDTH);
 					if(1 && (alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x)))){
 						if(DB_ON1) xil_printf("You've hit alien %d! Blarg!\n\r",i);
 						alienArray[i] = DEAD_ALIEN;
@@ -784,7 +803,7 @@ int moveTankBullet(){
 			clearTankBullet();
 		}
 		else if(hitCoord.xcoord >= 0 && hitCoord.ycoord >= 0){
-		if(DB_ON1) xil_printf("This is oops: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
+			if(DB_ON1) xil_printf("This is oops: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
 			clearTankBullet();
 			tankBullet.type = INACTIVE_BULLET; //bullet has hit something
 

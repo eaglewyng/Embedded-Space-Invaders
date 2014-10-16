@@ -41,6 +41,7 @@ extern int alienFarRightOffset;
 extern int alienArray[];
 extern int noAlien[];
 extern int tankState;
+extern int redSpaceshipStatus;
 
 //bitmaps
 extern int bigSquidIn[];
@@ -284,18 +285,33 @@ void drawScoreText(){
 void drawRedSpaceship(){
 	int x;
 	int y;
-	for(x = 0; x < RED_SPACESHIP_WIDTH; x++){
-		for(y = 0; y < RED_SPACESHIP_HEIGHT; y++){
-			//make sure the spaceship is in a drawable area and that there should be a red pixel drawn here
-			if(x + redSpaceshipOriginX >= 0 && x + redSpaceshipOriginX < SCREEN_X_PIXELS){
-				if(1 && (mothership[y] & (1<<(RED_SPACESHIP_WIDTH - 1 - x))))
-					framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = RED;
-				else
-					framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = BLACK;
+	if(redSpaceshipStatus == RED_SPACESHIP_ALIVE){
+		for(x = 0; x < RED_SPACESHIP_WIDTH; x++){
+			for(y = 0; y < RED_SPACESHIP_HEIGHT; y++){
+				//make sure the spaceship is in a drawable area and that there should be a red pixel drawn here
+				if(x + redSpaceshipOriginX >= 0 && x + redSpaceshipOriginX < SCREEN_X_PIXELS){
+					if(1 && (mothership[y] & (1<<(RED_SPACESHIP_WIDTH - 1 - x))))
+						framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = RED;
+					else
+						framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = BLACK;
+				}
 			}
 		}
 	}
 
+}
+
+void clearRedSpaceship(){
+	int x;
+	int y;
+	for(x = 0; x < RED_SPACESHIP_WIDTH; x++){
+		for(y = 0; y < RED_SPACESHIP_HEIGHT; y++){
+			//make sure the spaceship is in a drawable area and that there should be a red pixel drawn here
+			framePointer0[(y+redSpaceshipOriginY) * 640 + redSpaceshipOriginX + x] = BLACK;
+		}
+	}
+	redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
+	insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
 }
 
 void undrawRedSpaceship(int direction){
@@ -526,6 +542,7 @@ int drawAliens(){
 				break;
 			}
 
+
 			//draw the actual alien
 			int aX;
 			int aY;
@@ -536,32 +553,36 @@ int drawAliens(){
 						framePointer0[(y+aY) * 640 + x + aX] = WHITE;
 					}
 					else{
-						if(((y+aY) >= BUNKER_INITIAL_Y) && (y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
-							if((((x+aX) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
-							}
-							else if((((x+aX) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
-							}
-							else if((((x+aX) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
-							}
-							else if((((x+aX) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+						if(alienType != NOTHING){
+							if(((y+aY) >= BUNKER_INITIAL_Y) && (y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
+								if((((x+aX) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+								}
+								else if((((x+aX) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+								}
+								else if((((x+aX) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+								}
+								else if((((x+aX) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+								}
+								else{
+									framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+								}
 							}
 							else{
 								framePointer0[(y+aY) * 640 + x + aX] = BLACK;
 							}
 						}
-						else{
-							framePointer0[(y+aY) * 640 + x + aX] = BLACK;
-						}
-
 					}
 				}
 			}
 			if(alienBMP == deadAlien){
 				alienArray[row * ALIENS_PER_ROW + col] = NO_ALIEN;
+			}
+			else if(alienBMP == noAlien){
+				alienArray[row * ALIENS_PER_ROW + col] = NOTHING;
 			}
 		}
 	}
