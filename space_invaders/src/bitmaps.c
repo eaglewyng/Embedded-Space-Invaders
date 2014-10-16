@@ -535,7 +535,7 @@ const int tankDeath2[TANK_HEIGHT] =
 
 };
 
-const int score0[NUMBER_HEIGHT] =
+const int score_digit_0[NUMBER_HEIGHT] =
 {
 	packWord14(0,0,0,0,0,0,0,0,0,0,0,0,0,0),
 	packWord14(0,0,0,0,0,0,0,0,0,0,0,0,0,0),

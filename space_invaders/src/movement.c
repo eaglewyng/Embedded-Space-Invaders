@@ -7,14 +7,14 @@
 #include "space_invaders.h"
 #include "movement.h"
 #include <stdlib.h>
-
+#include "gamestatus.h"
 
 extern Bunker bunkerArray[];
 extern Bullet bulletArray[];
 extern Bullet tankBullet;
 extern int alienInOut;
 extern int tankState;
-extern int framePointer0[];
+extern int* framePointer0;
 extern int lightningBullet_state1[];
 extern int lightningBullet_state2[];
 extern int lightningBullet_state3[];
@@ -558,6 +558,7 @@ ScreenPoint alienBulletCollision(int i){
 
 int chooseAlienToKill(int x, int y){
 	int i;
+	int points = 0;
 	int* alienBMP;
 	for(i = 0; i < ALIEN_ROWS*ALIENS_PER_ROW; i++){
 		if(alienArray[i] > DEAD_ALIEN){
@@ -566,32 +567,39 @@ int chooseAlienToKill(int x, int y){
 				int myLeftBound = alienOriginX + i%ALIENS_PER_ROW*ALIEN_WIDTH;
 				int myRightBound = alienOriginX + i%ALIENS_PER_ROW*ALIEN_WIDTH+ALIEN_WIDTH;
 				if((x >= (myLeftBound)) && (x < (myRightBound))){
-					if(DB_ON1) xil_printf("You've hit alien %d! Blarg!\n\r",i);
-					alienArray[i] = DEAD_ALIEN;
-					return 1;
+					if(DB_ON1){ xil_printf("You've hit alien %d! Blarg!\n\r",i);}
+					/*alienArray[i] = DEAD_ALIEN;
+					return 1;*/
 					switch(alienArray[i]){
 					case BIG_SQUID:
 						alienBMP = (alienInOut == 0 ? bigSquidIn :
 						bigSquidOut);
+						addToScore(HIT_BIG_SQUID);
 						break;
 					case LITTLE_SQUID:
 						alienBMP = (alienInOut == 0 ? littleSquidIn :
 						littleSquidOut);
+						addToScore(HIT_SMALL_SQUID);
 						if(DB_ON1) xil_printf("We're in the little squid space.\n\r");
 						break;
 					case JUMPING_JACK:
 						alienBMP = (alienInOut == 0 ? jumpingJackIn :
 						jumpingJackOut);
+						addToScore(HIT_JUMPING_JACK);
 						break;
 					default:
 						alienBMP = noAlien;
 						break;
 					}
-					if(1 && (alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x)))){
+					alienArray[i] = DEAD_ALIEN;
+					firstColAliveAliens = findFirstAliveColumn();
+					lastColAliveAliens = findLastAliveColumn();
+					return 1;
+/*					if(1 && (alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x)))){
 						if(DB_ON1) xil_printf("You've hit alien %d! Blarg!\n\r",i);
 						alienArray[i] = DEAD_ALIEN;
 						return 1;
-					}
+					}*/
 				}
 			}
 

@@ -34,6 +34,7 @@ void addToScore(int scoringcode){
 	else if(scoringcode == HIT_RED_SPACESHIP){
 		score += getRedSpaceshipScore();
 	}
+	drawScoreNumbers();
 }
 
 int getRedSpaceshipScore(){
