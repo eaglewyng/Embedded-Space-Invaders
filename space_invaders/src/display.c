@@ -611,7 +611,7 @@ void drawTankBullet(){
 			case TANK_BULLET:
 				if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
 					framePointer0[(tankBullet.y + row)*640 + (tankBullet.x+col)] = WHITE;
-					if(tankBullet.y + row < BUNKER_INITIAL_Y){
+					if(!(((tankBullet.y+row) >= BUNKER_INITIAL_Y) && (tankBullet.y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3)) && ((((tankBullet.x+col) >= BUNKER0_INITIAL_X) && (tankBullet.x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(tankBullet.y+row) * 640 + tankBullet.x+col] == GREEN)) || (((tankBullet.x+col) >= BUNKER1_INITIAL_X) && (tankBullet.x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(tankBullet.y+row) * 640 + tankBullet.x+col] == GREEN) || (((tankBullet.x+col) >= BUNKER2_INITIAL_X) && (tankBullet.x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(tankBullet.y+row) * 640 + tankBullet.x+col] == GREEN) || (((tankBullet.x+col) >= BUNKER3_INITIAL_X) && (tankBullet.x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(tankBullet.y+row) * 640 + tankBullet.x+col] == GREEN))){
 						framePointer1[(tankBullet.y + row)*640 + (tankBullet.x+col)] = WHITE;
 					}
 				}
