@@ -24,9 +24,11 @@ u32 const TICS_PER_TANK_LOC_UPDATE = 2;
 u32 const TICS_PER_BULLET_LOC_UPDATE = 2;
 u32 const TICS_PER_SCREEN_UPDATE = 2;
 u32 const TICS_PER_RED_SPACESHIP_LOC_UPDATE = 10;
+u32 const TICS_BETWEEN_DEAD_TANK_OSCILLATION = 10;
 
 extern int alienInOut;
 extern int redSpaceshipStatus;
+extern int tankState;
 
 
 u32 fitcounter;
@@ -61,19 +63,26 @@ void timer_interrupt_handler(){
 	int haveDrawnBullets = 0;
 
 	//is it time to update the location?
-	if(fitcounter % TICS_PER_ALIEN_LOC_UPDATE == 0){
-		moveAliens();
-		alienInOut = !alienInOut;
+	if(tankState ==  0){
+		if(fitcounter % TICS_PER_ALIEN_LOC_UPDATE == 0){
+			moveAliens();
+			alienInOut = !alienInOut;
+		}
+		if(fitcounter % TICS_PER_TANK_LOC_UPDATE == 0){
+			getButtonInput();
+		}
+		if(fitcounter % TICS_PER_BULLET_LOC_UPDATE == 0){
+			moveAlienBullets();
+			moveTankBullet();
+		}
+		if(redSpaceshipStatus == RED_SPACESHIP_ALIVE && fitcounter % TICS_PER_RED_SPACESHIP_LOC_UPDATE == 0){
+			moveRedSpaceship();
+		}
 	}
-	if(fitcounter % TICS_PER_TANK_LOC_UPDATE == 0){
-		getButtonInput();
-	}
-	if(fitcounter % TICS_PER_BULLET_LOC_UPDATE == 0){
-		moveAlienBullets();
-		moveTankBullet();
-	}
-	if(redSpaceshipStatus == RED_SPACESHIP_ALIVE && fitcounter % TICS_PER_RED_SPACESHIP_LOC_UPDATE == 0){
-		moveRedSpaceship();
+	else{
+		if(fitcounter % TICS_BETWEEN_DEAD_TANK_OSCILLATION == 0){
+			drawTank();
+		}
 	}
 
 

@@ -65,6 +65,9 @@ int incrementDC(int tics){
 			else if(prevClk->evnum == EVENT_RED_SPACESHIP_APPEAR){
 				redSpaceshipAppear();
 			}
+			else if(prevClk->evnum == EVENT_TANK_DEATH){
+				tankRevive();
+			}
 			retcode = currClk->evnum;
 			currClk = currClk->next;
 
@@ -122,6 +125,10 @@ int insertDC(int tics, int evnum){
 
 
 	return 1;
+}
+
+void clearDC(){
+	dcFront = 0;
 }
 
 

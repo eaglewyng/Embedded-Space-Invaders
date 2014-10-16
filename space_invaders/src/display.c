@@ -359,6 +359,23 @@ void undrawRedSpaceship(int direction){
 }
 
 
+void clearTank(){
+	int leftBound;
+	int rightBound;
+	int upperBound;
+	int lowerBound;
+	leftBound = tankOriginX;
+	rightBound = tankOriginX + TANK_WIDTH - 1;
+	upperBound = tankOriginY;
+	lowerBound = tankOriginY + TANK_HEIGHT - 1;
+
+	int x, y;
+	for(x = leftBound; x <= (rightBound); x++){
+		for(y = upperBound; y <= (lowerBound); y++){
+			framePointer0[y*640 + x] = BLACK;
+		}
+	}
+}
 
 
 
