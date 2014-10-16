@@ -625,6 +625,7 @@ int undrawAliens(int direction){
 			//framePointer0[y*640 + x] = BLACK;
 		}
 	}
+
 	return 0;
 }
 
@@ -717,7 +718,6 @@ int drawAliens(){
 			}
 		}
 	}
-
 
 	return 0;
 }

@@ -122,7 +122,9 @@ int moveAliens(){
 		drawBunker(in);
 	}
 	drawAliens();
-
+	firstColAliveAliens = findFirstAliveColumn();
+	lastColAliveAliens = findLastAliveColumn();
+	drawAliens();
 	return 0;
 }
 
@@ -592,10 +594,8 @@ int chooseAlienToKill(int x, int y){
 						break;
 					}
 					alienArray[i] = DEAD_ALIEN;
-					firstColAliveAliens = findFirstAliveColumn();
-					lastColAliveAliens = findLastAliveColumn();
 					return 1;
-/*					if(1 && (alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x)))){
+					/*					if(1 && (alienBMP[y % ALIEN_HEIGHT] & (1<<(ALIEN_WIDTH - 1 - x)))){
 						if(DB_ON1) xil_printf("You've hit alien %d! Blarg!\n\r",i);
 						alienArray[i] = DEAD_ALIEN;
 						return 1;
