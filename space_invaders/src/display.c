@@ -553,36 +553,44 @@ int drawAliens(){
 						framePointer0[(y+aY) * 640 + x + aX] = WHITE;
 					}
 					else{
-						if(alienType != NOTHING){
-							if(((y+aY) >= BUNKER_INITIAL_Y) && (y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
-								if((((x+aX) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
-								}
-								else if((((x+aX) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
-								}
-								else if((((x+aX) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
-								}
-								else if((((x+aX) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
-									framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+						if(((y+aY) >= BUNKER_INITIAL_Y) && (y <= (BUNKER_INITIAL_Y+BUNKER_HEIGHT*3))){
+							if((((x+aX) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else if((((x+aX) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else if((((x+aX) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else if((((x+aX) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+							}
+							else{
+								if((x+aX) >= tankBullet.x && x <= (tankBullet.x + BULLET_WIDTH) &&  ((y+aY) >= tankBullet.y) && (y <= (tankBullet.y+BULLET_WIDTH)) && framePointer1[(y+aY) * 640 + x + aX] == WHITE)
+								{
+
 								}
 								else{
 									framePointer0[(y+aY) * 640 + x + aX] = BLACK;
 								}
 							}
+						}
+						else{
+							if((x+aX) >= tankBullet.x && x <= (tankBullet.x + BULLET_WIDTH) &&  ((y+aY) >= tankBullet.y) && (y <= (tankBullet.y+BULLET_WIDTH)) && framePointer1[(y+aY) * 640 + x + aX] == WHITE)
+							{
+
+							}
 							else{
 								framePointer0[(y+aY) * 640 + x + aX] = BLACK;
 							}
+
 						}
 					}
 				}
 			}
 			if(alienBMP == deadAlien){
 				alienArray[row * ALIENS_PER_ROW + col] = NO_ALIEN;
-			}
-			else if(alienBMP == noAlien){
-				alienArray[row * ALIENS_PER_ROW + col] = NOTHING;
 			}
 		}
 	}
@@ -601,6 +609,9 @@ void drawTankBullet(){
 			case TANK_BULLET:
 				if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
 					framePointer0[(tankBullet.y + row)*640 + (tankBullet.x+col)] = WHITE;
+					if(tankBullet.y + row < BUNKER_INITIAL_Y){
+						framePointer1[(tankBullet.y + row)*640 + (tankBullet.x+col)] = WHITE;
+					}
 				}
 				break;
 			default:
@@ -639,6 +650,7 @@ void undrawTankBullet(){
 			}
 			else{
 				framePointer0[y*640 + x] = BLACK;
+				framePointer1[y*640 + x] = BLACK;
 			}
 			//framePointer0[y*640 + x] = BLACK;
 		}
@@ -681,7 +693,9 @@ void clearTankBullet(){
 			}
 			else{
 				framePointer0[y*640 + x] = BLACK;
+				framePointer1[y*640 + x] = BLACK;
 			}
+
 			//framePointer0[y*640 + x] = BLACK;
 		}
 	}
