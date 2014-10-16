@@ -45,7 +45,21 @@ int getRedSpaceshipScore(){
 	return ssScore;
 }
 
+
 void takeLife(){
+
+}
+
+void addLife(){
+
+}
+
+
+//runs the game over routine--this should be invoked under only two conditions:
+//1. The user has won, and a simple level reset is needed, or
+//2. The loser has lost (either run out of lives or the aliens have reached the bottom)
+//and the whole game needs to be reset.
+void runGameOver(int userHasWon){
 
 }
 

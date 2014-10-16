@@ -131,7 +131,7 @@ void drawScoreNumbers(){
 		drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, digArr[count], SCORENUMBERS_COLOR);
 	}
 
-	drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
+
 }
 
 
@@ -323,6 +323,7 @@ int runDisplay()
 	drawTankBullet();
 	drawGreenLine();
 	drawScoreText();
+	drawLivesText();
 	drawScoreNumbers();
 
 	return 0;
