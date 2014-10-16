@@ -127,7 +127,7 @@ int moveAliens(){
 	firstColAliveAliens = findFirstAliveColumn();
 	lastColAliveAliens = findLastAliveColumn();
 	lastRowAliveAliens = findLastAliveRow();
-	drawAliens();
+	//drawAliens();
 	return 0;
 }
 
@@ -598,6 +598,7 @@ int chooseAlienToKill(int x, int y){
 						break;
 					}
 					alienArray[i] = DEAD_ALIEN;
+					drawAliens();
 					lastAlienKilled = i;
 					return 1;
 				}
