@@ -30,6 +30,7 @@ extern int jumpingJackOut[];
 extern int littleSquidIn[];
 extern int littleSquidOut[];
 extern int noAlien[];
+extern int mothership[];
 extern int redSpaceshipStatus;
 
 int alienOriginX;		//we put the origin on the top left corner
