@@ -33,7 +33,7 @@ extern int noAlien[];
 extern int mothership[];
 extern int redSpaceshipStatus;
 extern int lastAlienKilled;
-
+extern int lastRowAliveAliens;
 
 int alienOriginX;		//we put the origin on the top left corner
 int alienOriginY;
@@ -126,6 +126,7 @@ int moveAliens(){
 	drawAliens();
 	firstColAliveAliens = findFirstAliveColumn();
 	lastColAliveAliens = findLastAliveColumn();
+	lastRowAliveAliens = findLastAliveRow();
 	drawAliens();
 	return 0;
 }

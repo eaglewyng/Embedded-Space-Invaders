@@ -283,6 +283,7 @@ void drawGreenLine(){
 	int y = GREEN_LINE_Y;
 	for(x = 0; x < SCREEN_X_PIXELS; x++){
 		framePointer0[y*640 + x] = GREEN;
+		framePointer1[y*640 + x] = GREEN;
 	}
 }
 
@@ -478,6 +479,7 @@ void clearTank(){
 	for(x = leftBound; x <= (rightBound); x++){
 		for(y = upperBound; y <= (lowerBound); y++){
 			framePointer0[y*640 + x] = BLACK;
+			framePointer1[y*640 + x] = BLACK;
 		}
 	}
 }
@@ -516,6 +518,7 @@ int undrawTank(int direction){
 	for(x = leftBound; x <= (rightBound); x++){
 		for(y = upperBound; y <= (lowerBound); y++){
 			framePointer0[y*640 + x] = BLACK;
+			framePointer1[y*640 + x] = BLACK;
 		}
 	}
 	return 0;
@@ -534,27 +537,33 @@ int drawTank(){
 				if(1 && (tank[aY] & (1<<(TANK_WIDTH - 1 - aX)))){
 
 					framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+					framePointer1[(y+aY) * 640 + x + aX] = GREEN;
 				}
 				else{
 					framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+					framePointer1[(y+aY) * 640 + x + aX] = BLACK;
 				}
 			}
 			else if(tankState == DEAD_TANK1){
 				if(1 && (tankDeath1[aY] & (1<<(TANK_WIDTH - 1 - aX)))){
 
 					framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+					framePointer1[(y+aY) * 640 + x + aX] = GREEN;
 				}
 				else{
 					framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+					framePointer1[(y+aY) * 640 + x + aX] = BLACK;
 				}
 			}
 			else if(tankState == DEAD_TANK2){
 				if(1 && (tankDeath2[aY] & (1<<(TANK_WIDTH - 1 - aX)))){
 
 					framePointer0[(y+aY) * 640 + x + aX] = GREEN;
+					framePointer1[(y+aY) * 640 + x + aX] = GREEN;
 				}
 				else{
 					framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+					framePointer1[(y+aY) * 640 + x + aX] = BLACK;
 				}
 			}
 		}
@@ -615,11 +624,20 @@ int undrawAliens(int direction){
 					framePointer0[(y) * 640 + x] = GREEN;
 				}
 				else{
-					framePointer0[(y) * 640 + x] = BLACK;
+					framePointer0[(y) * 640 + x] = BLACK; //BLACK
+				}
+			}
+			else if(((y) >= tankOriginY)){
+				if((framePointer1[(y) * 640 + x] == GREEN)){
+					framePointer0[(y) * 640 + x] = GREEN;//ORANGE
+
+				}
+				else{
+					framePointer0[(y) * 640 + x] = BLACK;//PURPLE;
 				}
 			}
 			else{
-				framePointer0[(y) * 640 + x] = BLACK;
+				framePointer0[(y) * 640 + x] = BLACK; //BLACK
 			}
 
 
@@ -696,18 +714,31 @@ int drawAliens(){
 								{
 
 								}
-
 								else{
-									framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+									framePointer0[(y+aY) * 640 + x + aX] = BLACK; //BLACK
+
 								}
+							}
+						}
+						else if((x+aX) >= tankOriginX && x <= (tankOriginX + TANK_WIDTH) &&  ((y+aY) >= tankOriginY) && (y <= (tankOriginY+TANK_WIDTH))){
+							if((framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+								framePointer0[(y+aY) * 640 + x + aX] = GREEN;//ORANGE
+							}
+							else{
+								framePointer0[(y+aY) * 640 + x + aX] = BLACK;//BLUE;
 							}
 						}
 						else{
 							//don't draw over tank bullet
-							if((x+aX) >= tankBullet.x && x <= (tankBullet.x + BULLET_WIDTH) &&  ((y+aY) >= tankBullet.y) && (y <= (tankBullet.y+BULLET_WIDTH)) && framePointer1[(y+aY) * 640 + x + aX] == WHITE){
+							if((x+aX) >= tankBullet.x && x <= (tankBullet.x + BULLET_WIDTH) &&  ((y+aY) >= tankBullet.y) && (y <= (tankBullet.y+BULLET_HEIGHT)) && framePointer1[(y+aY) * 640 + x + aX] == WHITE){
+							}
+							else if(((y) >= tankOriginY) && (framePointer1[(y+aY) * 640 + x + aX] == GREEN)){
+
 							}
 							else{
-								framePointer0[(y+aY) * 640 + x + aX] = BLACK;
+
+								framePointer0[(y+aY) * 640 + x + aX] = BLACK; //GRAY
+
 							}
 
 						}
@@ -762,15 +793,19 @@ void undrawTankBullet(){
 		for(y = upperBound; y <= (lowerBound); y++){
 			if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
 				framePointer0[y*640 + x] = GREEN;
+				framePointer1[y*640 + x] = GREEN;
 			}
 			else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
 				framePointer0[y*640 + x] = GREEN;
+				framePointer1[y*640 + x] = GREEN;
 			}
 			else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
 				framePointer0[y*640 + x] = GREEN;
+				framePointer1[y*640 + x] = GREEN;
 			}
 			else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
 				framePointer0[y*640 + x] = GREEN;
+				framePointer1[y*640 + x] = GREEN;
 			}
 			else{
 				framePointer0[y*640 + x] = BLACK;

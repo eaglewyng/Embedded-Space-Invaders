@@ -82,6 +82,19 @@ int findLastAliveColumn(){
 	return -1;
 }
 
+/*Algorithm to find the last row with alive aliens.*/
+int findLastAliveRow(){
+	int row, col;
+	for(row = ALIEN_ROWS-1; row >= 0; row--){
+		for(col = ALIENS_PER_ROW-1; col >= 0 ; col --){
+			if(alienArray[row*ALIENS_PER_ROW+col] > DEAD_ALIEN){
+				return row;
+			}
+		}
+	 }
+	return -1;
+}
+
 
 //--------------------------------------------functions related to tank bullets----------------------------------------//
 int fireTankBullet(){

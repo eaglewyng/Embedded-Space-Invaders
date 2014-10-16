@@ -20,6 +20,7 @@ int lastAlienKilled;
 
 extern int tankState;
 int redSpaceshipStatus = 0;
+int lastRowAliveAliens;
 extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int alienOriginX;
@@ -180,6 +181,7 @@ int initializeLevel(){
 
 	lastAlienKilled = -1;
 
+	lastRowAliveAliens = findLastAliveRow();
 	return 0;
 }
 
