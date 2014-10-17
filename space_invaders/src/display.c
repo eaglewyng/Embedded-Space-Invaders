@@ -141,8 +141,7 @@ void drawRedSpaceshipScore(int color){
 	int count = 0;
 	int tempScore = redSpaceshipScore;
 	int numDigits = (int)(log10((double)redSpaceshipScore) + 1.0);
-	int digArr[numDigits];#define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 30
-#define TOP_OF_PLAYABLE_AREA 60
+	int digArr[numDigits];
 	int countDown = numDigits - 1;
 	while(countDown >= 0){
 		int digit = tempScore % 10;
