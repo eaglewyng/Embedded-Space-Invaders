@@ -143,9 +143,9 @@ int moveAliens(){
 	}
 	//drawAliens();
 
-/*	if(alienOriginY >= 320){
+	if((alienOriginY + lastRowAliveAliens * ALIEN_HEIGHT)  >= (BUNKER_INITIAL_Y + 3*BUNKER_HEIGHT)){
 		drawGameOver();
-	}*/
+	}
 	return 0;
 }
 

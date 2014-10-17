@@ -32,7 +32,7 @@ extern int redSpaceshipStatus;
 extern int tankState;
 extern int clearRedSpaceshipScoreFlag;
 
-int timerHandlerCounter = 0;
+volatile int timerHandlerCounter = 0;
 
 u32 fitcounter;
 
@@ -51,6 +51,7 @@ void initInterrupts(){
 
 //main interrupt handler--calls the appropriate ISR
 void interrupt_handler_dispatcher(){
+	timerHandlerCounter++;
 	int intc_status = XIntc_GetIntrStatus(XPAR_INTC_0_BASEADDR);
 	// Check the FIT interrupt first.
 	if (intc_status & XPAR_FIT_TIMER_0_INTERRUPT_MASK){
@@ -60,9 +61,10 @@ void interrupt_handler_dispatcher(){
 }
 
 void timer_interrupt_handler(){
+
 	incrementDC(1);
 
-	timerHandlerCounter++;
+
 
 	int haveDrawnAliens = 0;
 	int haveDrawnBullets = 0;
@@ -92,9 +94,6 @@ void timer_interrupt_handler(){
 			drawTank();
 		}
 	}
-
-
-
 
 	if(fitcounter == FITCOUNTER_MAX){
 		fitcounter = 0;

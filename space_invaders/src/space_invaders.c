@@ -27,6 +27,7 @@ extern int alienOriginX;
 extern int alienOriginY;
 int idleCounter = 0;
 extern int timerHandlerCounter;
+extern int fitcounter;
 
 int main(){
 	srand(time(NULL));
@@ -41,8 +42,8 @@ int main(){
 	while(1)
 	{
 		idleCounter++;
-		if(idleCounter == 10000000){
-			xil_printf("Adam said to print the idle counter, which is %d, and the timerHandlerCounter, which is %d\n\r",idleCounter,timerHandlerCounter);
+		if(idleCounter % 10000 == 0){
+			xil_printf("Adam said to print the idle counter, which is %d, and the timerHandlerCounter, which is %d, and los FIT Tima, vhich iz %d\n\r",idleCounter,timerHandlerCounter,fitcounter);
 		}
 	}
 	;
