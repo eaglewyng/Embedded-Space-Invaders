@@ -352,7 +352,6 @@ int runDisplay()
 	drawGreenLine();
 	drawScoreText();
 	drawScoreNumbers();
-
 	return 0;
 }
 

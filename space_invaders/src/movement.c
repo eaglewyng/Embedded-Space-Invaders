@@ -72,16 +72,13 @@ void updateLocations(){
 	moveAliens();
 	moveTankBullet();
 	moveAlienBullets();
-	if(clearRedSpaceshipScoreFlag){
-		clearRedSpaceshipScore();
-	}
 }
 
 void clearRedSpaceshipScore(){
 	int row, col;
 	for(row = 0; row < TEXT_HEIGHT; row++){
 		for(col = 0; col < (TEXT_WIDTH+SPACE_BETWEEN_CHARACTERS)*3; col++){
-			framePointer0[(row + redSpaceshipOriginY) * 640 + col +redSpaceshipOriginX];
+			framePointer0[(row + redSpaceshipOriginY) * 640 + col +redSpaceshipOriginX] = BLACK;
 		}
 	}
 	clearRedSpaceshipScoreFlag = 0;

@@ -25,11 +25,12 @@ u32 const TICS_PER_BULLET_LOC_UPDATE = 2;
 u32 const TICS_PER_SCREEN_UPDATE = 2;
 u32 const TICS_PER_RED_SPACESHIP_LOC_UPDATE = 10;
 u32 const TICS_BETWEEN_DEAD_TANK_OSCILLATION = 10;
+u32 const TICS_PER_RED_SPACESHIP_SCORE_CLEAR = 100;
 
 extern int alienInOut;
 extern int redSpaceshipStatus;
 extern int tankState;
-
+extern int clearRedSpaceshipScoreFlag;
 
 u32 fitcounter;
 
@@ -77,6 +78,9 @@ void timer_interrupt_handler(){
 		}
 		if(redSpaceshipStatus == RED_SPACESHIP_ALIVE && fitcounter % TICS_PER_RED_SPACESHIP_LOC_UPDATE == 0){
 			moveRedSpaceship();
+		}
+		if(fitcounter % TICS_PER_RED_SPACESHIP_SCORE_CLEAR == 0 && clearRedSpaceshipScoreFlag){
+			clearRedSpaceshipScore();
 		}
 	}
 	else{
