@@ -14,10 +14,12 @@
 int score;
 int lives;
 int redSpaceshipScore = 0;
+int gameOver;
 
 void initStatus(){
 	score = INITIAL_SCORE;
 	lives = INITIAL_LIVES;
+	gameOver = 0;
 }
 
 
@@ -68,11 +70,15 @@ void addLife(){
 //and the whole game needs to be reset.
 void runGameOver(int userHasWon){
 	if(userHasWon){
+		clearGameDC();
 		lives++;
+		initializeNextLevel();
 		drawLivesTanks();
 	}
 	else{
-
+		clearGameDC();
+		clearScreen();
+		gameOver = 1;
 	}
 }
 
