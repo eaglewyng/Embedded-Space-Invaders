@@ -106,6 +106,10 @@ int initializeLevel(){
 						BIG_SQUID;
 	}
 
+	for(i = 11; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
+		alienArray[i] = NO_ALIEN;
+	}
+
 	/*int damageStateTopLeft;
 	int damageStateBlockTopLeft;
 	int damageStateBlockTopRight;

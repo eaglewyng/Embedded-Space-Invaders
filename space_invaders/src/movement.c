@@ -46,7 +46,7 @@ int redSpaceshipOriginY;
 int redSpaceshipDirection;
 int tankOriginX;
 int tankOriginY;
-
+int clearRedSpaceshipScoreFlag = 0;
 
 
 
@@ -72,6 +72,19 @@ void updateLocations(){
 	moveAliens();
 	moveTankBullet();
 	moveAlienBullets();
+	if(clearRedSpaceshipScoreFlag){
+		clearRedSpaceshipScore();
+	}
+}
+
+void clearRedSpaceshipScore(){
+	int row, col;
+	for(row = 0; row < TEXT_HEIGHT; row++){
+		for(col = 0; col < (TEXT_WIDTH+SPACE_BETWEEN_CHARACTERS)*3; col++){
+			framePointer0[(row + redSpaceshipOriginY) * 640 + col +redSpaceshipOriginX];
+		}
+	}
+	clearRedSpaceshipScoreFlag = 0;
 }
 
 void moveRedSpaceship(){
@@ -127,6 +140,10 @@ int moveAliens(){
 	firstColAliveAliens = findFirstAliveColumn();
 	lastColAliveAliens = findLastAliveColumn();
 	lastRowAliveAliens = findLastAliveRow();
+	int j;
+	for(j = 0; j < NUM_ALIEN_BULLETS; j++){
+		drawAlienBullet(j);
+	}
 	//drawAliens();
 	return 0;
 }
@@ -329,6 +346,8 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 				for(col = 0; col < BULLET_WIDTH; col++){
 					if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
 						if(destroyRedMothership(tankBullet.x + col, tankBullet.y + row)){
+							addToScore(HIT_RED_SPACESHIP);
+							drawRedSpaceshipScore(YELLOW);
 							myPoint.xcoord = tankBullet.x + col;
 							myPoint.ycoord = tankBullet.y + row;
 							return myPoint;
@@ -597,7 +616,7 @@ int chooseAlienToKill(int x, int y){
 						alienBMP = noAlien;
 						break;
 					}
-					alienArray[i] = DEAD_ALIEN;
+					alienArray[i] = DEAD_ALIEN;   //i like boys
 					drawAliens();
 					lastAlienKilled = i;
 					return 1;

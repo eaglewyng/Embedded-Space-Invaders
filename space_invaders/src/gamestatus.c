@@ -13,6 +13,7 @@
 
 int score;
 int lives;
+int redSpaceshipScore = 0;
 
 void initStatus(){
 	score = INITIAL_SCORE;
@@ -32,7 +33,8 @@ void addToScore(int scoringcode){
 		score += POINTS_FOR_JUMPING_JACK;
 	}
 	else if(scoringcode == HIT_RED_SPACESHIP){
-		score += getRedSpaceshipScore();
+		redSpaceshipScore = getRedSpaceshipScore();
+		score += redSpaceshipScore;
 	}
 	drawScoreNumbers();
 }

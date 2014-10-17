@@ -44,6 +44,8 @@ extern int tankState;
 extern int redSpaceshipStatus;
 extern int score;
 extern int lastAlienKilled;
+extern int redSpaceshipScore;
+extern int clearRedSpaceshipScoreFlag;
 
 //bitmaps
 extern int bigSquidIn[];
@@ -131,7 +133,29 @@ void drawScoreNumbers(){
 		drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, digArr[count], SCORENUMBERS_COLOR);
 	}
 
-	drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
+	//drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
+}
+
+
+void drawRedSpaceshipScore(int color){
+	int count = 0;
+	int tempScore = redSpaceshipScore;
+	int numDigits = (int)(log10((double)redSpaceshipScore) + 1.0);
+	int digArr[numDigits];
+	int countDown = numDigits - 1;
+	while(countDown >= 0){
+		int digit = tempScore % 10;
+		digArr[countDown] = digit;
+		countDown--;
+		tempScore /= 10;
+	}
+
+	for(count = 0; count < numDigits; count++){
+		drawDigit(redSpaceshipOriginX + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  redSpaceshipOriginY, digArr[count], color);
+	}
+
+	clearRedSpaceshipScoreFlag = 1;
+	//drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
 }
 
 
@@ -322,6 +346,9 @@ int runDisplay()
 		drawBunker(in);
 	}
 	drawTankBullet();
+	for(in = 0; in < NUM_ALIEN_BULLETS; in++){
+		drawAlienBullet(in);
+	}
 	drawGreenLine();
 	drawScoreText();
 	drawScoreNumbers();
@@ -652,6 +679,8 @@ int drawAliens(){
 	int row;
 	int col;
 	int* alienBMP;
+
+	int holdThis = 0;
 
 	for(row = 0; row < ALIEN_ROWS; row++){
 		int y = row * ALIEN_HEIGHT + alienOriginY;
