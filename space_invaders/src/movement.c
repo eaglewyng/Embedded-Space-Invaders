@@ -809,7 +809,7 @@ int moveTankBullet(){
 		undrawTankBullet();
 		ScreenPoint hitCoord = tankBulletCollision();
 
-		if(tankBullet.y < RED_SPACESHIP_ORIGIN_Y_INITIAL){
+		if(tankBullet.y <= TOP_OF_PLAYABLE_AREA ){
 			tankBullet.type = INACTIVE_BULLET; //bullet has gone offscreen so deactivate the bullet
 			clearTankBullet();
 		}

@@ -21,7 +21,8 @@
 #define SCORE_INCREMENTS_FOR_RED_ALIEN 50
 
 #define INITIAL_SCORE 0
-#define INITIAL_LIVES 3
+#define INITIAL_LIVES 6
+#define MAX_LIVES 6
 
 int getRedSpaceshipScore();
 
