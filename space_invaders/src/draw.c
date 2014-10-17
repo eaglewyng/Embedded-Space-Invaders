@@ -83,6 +83,9 @@ extern int scoreO[];
 extern int scoreR[];
 extern int scoreC[];
 extern int scoreE[];
+extern int scoreG[];
+extern int scoreA[];
+extern int scoreM[];
 extern int score1[];
 extern int score2[];
 extern int score3[];
@@ -168,6 +171,85 @@ void drawLivesTanks(){
 					              (TANKLIVES_START_X + TANK_WIDTH*(i%TANKLIVES_PER_ROW) +
 					            		  SPACE_BETWEEN_TANKLIVES * (i % TANKLIVES_PER_ROW) + x )] = BLACK;
 				}
+			}
+		}
+	}
+}
+
+void drawGameOver(){
+	int x, y;
+
+	//G
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreG[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + x] = ORANGE;
+			}
+		}
+	}
+
+	//A
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreA[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + SPACE_BETWEEN_CHARACTERS + TEXT_WIDTH + x] = ORANGE;
+			}
+		}
+	}
+
+	//M
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreM[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + 2*SPACE_BETWEEN_CHARACTERS + 2*TEXT_WIDTH + x] = ORANGE;
+			}
+		}
+	}
+
+	//E
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreE[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + 3*SPACE_BETWEEN_CHARACTERS + 3*TEXT_WIDTH + x] = ORANGE;
+			}
+		}
+	}
+
+	//SPACE
+
+
+	//O
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreO[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + 5*SPACE_BETWEEN_CHARACTERS + 5*TEXT_WIDTH + x] = ORANGE;
+			}
+		}
+	}
+
+	//V
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreV[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + 6*SPACE_BETWEEN_CHARACTERS + 6*TEXT_WIDTH + x] = ORANGE;
+			}
+		}
+	}
+
+	//E
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreE[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + 7*SPACE_BETWEEN_CHARACTERS + 7*TEXT_WIDTH + x] = ORANGE;
+			}
+		}
+	}
+
+	//R
+	for(y = 0; y < TEXT_HEIGHT; y++){
+		for(x = 0; x < TEXT_WIDTH; x++){
+			if(scoreR[y] & (1<<(TEXT_WIDTH-1-x))){
+				framePointer0[(GAME_OVERTEXT_START_Y + y) * 640 + GAME_OVERTEXT_START_X + 8*SPACE_BETWEEN_CHARACTERS + 8*TEXT_WIDTH + x] = ORANGE;
 			}
 		}
 	}

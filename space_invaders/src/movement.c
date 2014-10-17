@@ -142,6 +142,10 @@ int moveAliens(){
 		drawAlienBullet(j);
 	}
 	//drawAliens();
+
+/*	if(alienOriginY >= 320){
+		drawGameOver();
+	}*/
 	return 0;
 }
 
@@ -303,7 +307,7 @@ int moveAlienBullets(){
 
 int destroyRedMothership(int col, int row){
 	if(mothership[row % RED_SPACESHIP_HEIGHT] & (1<<(RED_SPACESHIP_WIDTH - 1 - col))){
-		xil_printf("You've hit the mothership! DIE! \n\r");
+		if(DB_ON1){xil_printf("You've hit the mothership! DIE! \n\r");}
 		redSpaceshipStatus = RED_SPACESHIP_DEAD;
 		clearRedSpaceship();
 		return 1;

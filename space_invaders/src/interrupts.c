@@ -32,6 +32,8 @@ extern int redSpaceshipStatus;
 extern int tankState;
 extern int clearRedSpaceshipScoreFlag;
 
+int timerHandlerCounter = 0;
+
 u32 fitcounter;
 
 
@@ -59,6 +61,8 @@ void interrupt_handler_dispatcher(){
 
 void timer_interrupt_handler(){
 	incrementDC(1);
+
+	timerHandlerCounter++;
 
 	int haveDrawnAliens = 0;
 	int haveDrawnBullets = 0;

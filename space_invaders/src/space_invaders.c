@@ -25,6 +25,8 @@ extern int firstColAliveAliens;
 extern int lastColAliveAliens;
 extern int alienOriginX;
 extern int alienOriginY;
+int idleCounter = 0;
+extern int timerHandlerCounter;
 
 int main(){
 	srand(time(NULL));
@@ -36,7 +38,14 @@ int main(){
 	initInterrupts();
 
 	runDisplay();
-	while(1);
+	while(1)
+	{
+		idleCounter++;
+		if(idleCounter == 10000000){
+			xil_printf("Adam said to print the idle counter, which is %d, and the timerHandlerCounter, which is %d\n\r",idleCounter,timerHandlerCounter);
+		}
+	}
+	;
 	return 0;
 
 }
@@ -70,8 +79,8 @@ int reinitializeLevel(){
 	for(i = 0; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
 		int tempAlienRow = getAlienRow(i);
 		alienArray[i] = tempAlienRow == 0 ? LITTLE_SQUID:
-						tempAlienRow < 3 ? JUMPING_JACK:
-						BIG_SQUID;
+		tempAlienRow < 3 ? JUMPING_JACK:
+		BIG_SQUID;
 	}
 
 	firstColAliveAliens = 0;
@@ -102,13 +111,13 @@ int initializeLevel(){
 	for(i = 0; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
 		int tempAlienRow = getAlienRow(i);
 		alienArray[i] = tempAlienRow == 0 ? LITTLE_SQUID:
-						tempAlienRow < 3 ? JUMPING_JACK:
-						BIG_SQUID;
+		tempAlienRow < 3 ? JUMPING_JACK:
+		BIG_SQUID;
 	}
 
-	for(i = 11; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
+/*	for(i = 11; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
 		alienArray[i] = NO_ALIEN;
-	}
+	}*/
 
 	/*int damageStateTopLeft;
 	int damageStateBlockTopLeft;
