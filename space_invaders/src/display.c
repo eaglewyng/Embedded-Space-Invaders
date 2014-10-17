@@ -133,7 +133,7 @@ void drawScoreNumbers(){
 		drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, digArr[count], SCORENUMBERS_COLOR);
 	}
 
-	//drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
+
 }
 
 
@@ -141,7 +141,8 @@ void drawRedSpaceshipScore(int color){
 	int count = 0;
 	int tempScore = redSpaceshipScore;
 	int numDigits = (int)(log10((double)redSpaceshipScore) + 1.0);
-	int digArr[numDigits];
+	int digArr[numDigits];#define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 30
+#define TOP_OF_PLAYABLE_AREA 60
 	int countDown = numDigits - 1;
 	while(countDown >= 0){
 		int digit = tempScore % 10;
@@ -351,7 +352,10 @@ int runDisplay()
 	}
 	drawGreenLine();
 	drawScoreText();
+	drawLivesText();
+	drawLivesTanks();
 	drawScoreNumbers();
+
 
 	return 0;
 }
