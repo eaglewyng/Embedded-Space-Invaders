@@ -352,6 +352,8 @@ int runDisplay()
 	drawGreenLine();
 	drawScoreText();
 	drawScoreNumbers();
+	drawLivesText();
+	drawLivesTanks();
 	return 0;
 }
 
