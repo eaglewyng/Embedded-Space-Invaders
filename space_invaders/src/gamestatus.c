@@ -47,11 +47,16 @@ int getRedSpaceshipScore(){
 
 
 void takeLife(){
-
+	lives--;
+	if(lives == 0){
+		runGameOver(0);
+	}
+	drawLivesTanks();
 }
 
 void addLife(){
-
+	lives++;
+	drawLivesTanks();
 }
 
 
@@ -60,7 +65,13 @@ void addLife(){
 //2. The loser has lost (either run out of lives or the aliens have reached the bottom)
 //and the whole game needs to be reset.
 void runGameOver(int userHasWon){
+	if(userHasWon){
+		lives++;
+		drawLivesTanks();
+	}
+	else{
 
+	}
 }
 
 

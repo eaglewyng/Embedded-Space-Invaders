@@ -4,8 +4,6 @@
  *  Created on: Oct 15, 2014
  *      Author: superman
  */
-
-#include "space_invaders.h"
 #include <stdlib.h>
 #include <math.h>
 #include "space_invaders.h"
@@ -20,6 +18,7 @@
 #include <xuartlite_l.h>
 #include <xparameters.h>
 #include <stdlib.h>
+#import "gamestatus.h"
 
 
 #define FRAME_BUFFER_0_ADDR 0xC1000000  // Starting location in DDR where we will store the images that we display.
@@ -154,15 +153,20 @@ void drawLivesText(){
 
 void drawLivesTanks(){
 	int i;
-	for(i = 0; i < lives; i++){
+	for(i = 0; i < MAX_LIVES; i++){
 		int strtY = LIVES_START_Y + (i/TANKLIVES_PER_ROW) * (TANK_HEIGHT) + (i/TANKLIVES_PER_ROW) * SPACE_BETWEEN_TANKLIVES_VERTICAL;
 		int x, y;
 		for(y = 0; y < TANK_HEIGHT; y++){
 			for(x = 0; x < TANK_WIDTH; x++){
-				if(tank[y] & (1<<(TANK_WIDTH-1-x))){
+				if(i < lives && tank[y] & (1<<(TANK_WIDTH-1-x))){
 					framePointer0[(strtY + y )* 640 +
 					              (TANKLIVES_START_X + TANK_WIDTH*(i%TANKLIVES_PER_ROW) +
 					            		  SPACE_BETWEEN_TANKLIVES * (i % TANKLIVES_PER_ROW) + x )] = GREEN;
+				}
+				else{
+					framePointer0[(strtY + y )* 640 +
+					              (TANKLIVES_START_X + TANK_WIDTH*(i%TANKLIVES_PER_ROW) +
+					            		  SPACE_BETWEEN_TANKLIVES * (i % TANKLIVES_PER_ROW) + x )] = BLACK;
 				}
 			}
 		}

@@ -61,8 +61,11 @@
 #define ALIEN_BULLETS_PIXELS_PER_MOVE 7
 #define TANK_BULLET_PIXELS_PER_MOVE 7
 
+#define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 30
+#define TOP_OF_PLAYABLE_AREA 60
+
 #define RED_SPACESHIP_PIXELS_PER_MOVE 12
-#define RED_SPACESHIP_ORIGIN_Y_INITIAL 30
+#define RED_SPACESHIP_ORIGIN_Y_INITIAL TOP_OF_PLAYABLE_AREA + 2
 #define RED_SPACESHIP_WIDTH 32
 #define RED_SPACESHIP_HEIGHT 14
 
@@ -107,11 +110,10 @@
 #define DEAD_TANK1 1
 #define DEAD_TANK2 2
 
-#define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 30
-#define TOP_OF_PLAYABLE_AREA 60
+
 
 #define ALIEN_ORIGIN_X_INITIAL 0
-#define ALIEN_ORIGIN_Y_INITIAL TOP_OF_PLAYABLE_AREA
+#define ALIEN_ORIGIN_Y_INITIAL TOP_OF_PLAYABLE_AREA + 30
 #define FARRIGHT_OFFSET_INITIAL 352
 #define ALIEN_DIRECTION_INITIAL 1
 
@@ -122,6 +124,7 @@
 #define RED_SPACESHIP_INACTIVE 0
 #define RED_SPACESHIP_DEAD 1
 #define RED_SPACESHIP_ALIVE 2
+
 
 
 
@@ -220,6 +223,7 @@ int fireTankBullet();
 void redSpaceshipAppear();
 void tankRevive();
 void tankDeath();
+int allAliensDead();
 
 
 
@@ -243,6 +247,7 @@ void clearDC();
 void initStatus();
 void addToScore(int);
 void takeLife();
+void runGameOver(int);
 
 //----------draw.c---------------------//
 void drawScoreNumbers();
