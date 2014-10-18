@@ -58,8 +58,8 @@
 #define NUM_ALIEN_BULLETS 4
 #define BULLET_HEIGHT 10
 #define BULLET_WIDTH 6
-#define ALIEN_BULLETS_PIXELS_PER_MOVE 7
-#define TANK_BULLET_PIXELS_PER_MOVE 7
+#define ALIEN_BULLETS_PIXELS_PER_MOVE 12
+#define TANK_BULLET_PIXELS_PER_MOVE 12
 
 #define BOTTOM_OF_PLAYABLE_AREA SCREEN_Y_PIXELS - 30
 #define TOP_OF_PLAYABLE_AREA 60
@@ -267,7 +267,9 @@ void drawScoreNumbers();
 void drawDigit(int, int, int, int);
 void drawScoreText();
 void drawLivesTanks();
+void drawGameOver();
 void drawLivesText();
+void clearScreen();
 
 
 #endif /* SPACE_INVADERS_H_ */

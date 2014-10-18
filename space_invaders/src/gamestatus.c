@@ -78,6 +78,7 @@ void runGameOver(int userHasWon){
 	else{
 		clearGameDC();
 		clearScreen();
+		drawGameOver();
 		gameOver = 1;
 	}
 }
