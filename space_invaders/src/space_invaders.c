@@ -62,7 +62,21 @@ void initializeDC(){
 
 }
 
+void intermediateInitializeDC(){
+	int i;
+
+	//insert the alien bullet fires into the delta clock
+	for(i = 0; i < 4; i++){
+		if(bulletArray[i].type == INACTIVE_BULLET){
+			insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
+		}
+	}
+	if(redSpaceshipStatus == RED_SPACESHIP_INACTIVE)
+		insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
+}
+
 int initializeGame(){
+	clearScreen();
 	initializeLevel();
 	initStatus();
 	initializeMovement();
@@ -72,6 +86,9 @@ int initializeGame(){
 
 void initializeNextLevel(){
 	initializeDC();
+	initializeMovement();
+
+
 	alienOriginX = ALIEN_ORIGIN_X_INITIAL;
 	alienOriginY = ALIEN_ORIGIN_Y_INITIAL;
 
@@ -98,10 +115,15 @@ void initializeNextLevel(){
 
 	}
 
+	lastAlienKilled = -1;
+
+	lastRowAliveAliens = findLastAliveRow();
+
 	tankBullet.x = -1;
 	tankBullet.y = -1;
 	tankBullet.type = INACTIVE_BULLET;
 	tankBullet.state = 0;
+
 }
 
 int initializeLevel(){
@@ -116,20 +138,7 @@ int initializeLevel(){
 		BIG_SQUID;
 	}
 
-/*	for(i = 11; i < ALIEN_ROWS * ALIENS_PER_ROW; i++){
-		alienArray[i] = NO_ALIEN;
-	}*/
 
-	/*int damageStateTopLeft;
-	int damageStateBlockTopLeft;
-	int damageStateBlockTopRight;
-	int damageStateTopRight;
-	int damageStateBlockLeftSide;
-	int damageStateBottomLeft;
-	int damageStateBottomRight;
-	int damageStateBlockRightSide;
-	int damageStateBlockBottomLeft;
-	int damageStateBlockBottomRight;*/
 	bunkerArray[0].damageStateTopLeft = BUNKER_INITIAL_DAMAGE;
 	bunkerArray[0].damageStateBlockTopLeft = BUNKER_INITIAL_DAMAGE;
 	bunkerArray[0].damageStateBlockTopRight = BUNKER_INITIAL_DAMAGE;

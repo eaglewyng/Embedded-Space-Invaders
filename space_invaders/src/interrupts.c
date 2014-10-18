@@ -19,9 +19,9 @@ u32 const SECONDS_PER_MINUTE = 60;
 u32 const MINUTES_PER_HOUR = 60;
 u32 const HOURS_PER_DAY = 24;
 u32 const FITCOUNTER_MAX = 999999;
-u32 const TICS_PER_ALIEN_LOC_UPDATE = 30;			//1/2 a second before every location update
-u32 const TICS_PER_TANK_LOC_UPDATE = 5;
-u32 const TICS_PER_BULLET_LOC_UPDATE = 2;
+u32 const TICS_PER_ALIEN_LOC_UPDATE = 60;			//1/2 a second before every location update
+u32 const TICS_PER_TANK_LOC_UPDATE = 2;
+u32 const TICS_PER_BULLET_LOC_UPDATE = 4;
 u32 const TICS_PER_SCREEN_UPDATE = 2;
 u32 const TICS_PER_RED_SPACESHIP_LOC_UPDATE = 10;
 u32 const TICS_BETWEEN_DEAD_TANK_OSCILLATION = 10;
@@ -63,8 +63,17 @@ void interrupt_handler_dispatcher(){
 
 void timer_interrupt_handler(){
 
-	incrementDC(1);
-
+	int evnum = incrementDC(1);
+	//execute the event which has just happened
+	if(evnum == EVENT_ALIEN_FIRE){
+		fireAlienBullet();
+	}
+	else if(evnum == EVENT_RED_SPACESHIP_APPEAR){
+		redSpaceshipAppear();
+	}
+	else if(evnum == EVENT_TANK_DEATH){
+		tankRevive();
+	}
 
 
 	int haveDrawnAliens = 0;

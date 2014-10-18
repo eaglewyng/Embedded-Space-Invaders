@@ -215,7 +215,17 @@ void tankDeath(){
 		tankState = DEAD_TANK1;
 		clearGameDC();
 		insertDC(MAX_TICS_AFTER_TANK_DEATH ,EVENT_TANK_DEATH);
+		int i;
+		for(i = 0; i < NUM_ALIEN_BULLETS; i++){
+			bulletArray[i].type = INACTIVE_BULLET;
+			clearAlienBullet(i);
+		}
+		redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
+		clearRedSpaceship();
+
 	}
+
+
 
 }
 

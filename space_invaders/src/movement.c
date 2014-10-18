@@ -68,12 +68,7 @@ void initializeMovement(){
 
 
 //updates the locations of the aliens and bullets between every interval of time
-void updateLocations(){
-	alienInOut = !alienInOut;
-	moveAliens();
-	moveTankBullet();
-	moveAlienBullets();
-}
+
 
 void clearRedSpaceshipScore(){
 	int row, col;
@@ -144,8 +139,8 @@ int moveAliens(){
 	}
 	//drawAliens();
 
-	if((alienOriginY + lastRowAliveAliens * ALIEN_HEIGHT)  >= (BUNKER_INITIAL_Y + 3*BUNKER_HEIGHT)){
-		drawGameOver();
+	if((alienOriginY + (lastRowAliveAliens+1) * ALIEN_HEIGHT)  >= (BUNKER_INITIAL_Y + 3*BUNKER_HEIGHT)){
+		runGameOver(0);
 	}
 	return 0;
 }
@@ -154,8 +149,8 @@ int moveAliens(){
 int moveTank(int direction){
 	if(tankState == ALIVE_TANK){
 		if(direction == LEFT){
-			if(!(tankOriginX - PIXELS_PER_MOVE < 0)){
-				tankOriginX -= PIXELS_PER_MOVE;
+			if(!(tankOriginX - TANK_PIXELS_PER_MOVE < 0)){
+				tankOriginX -= TANK_PIXELS_PER_MOVE;
 			}
 			else{
 				tankOriginX = 0;
@@ -163,8 +158,8 @@ int moveTank(int direction){
 
 		}
 		else{
-			if(!(tankOriginX + PIXELS_PER_MOVE + TANK_WIDTH >= SCREEN_X_PIXELS )){
-				tankOriginX += PIXELS_PER_MOVE;
+			if(!(tankOriginX + TANK_PIXELS_PER_MOVE + TANK_WIDTH >= SCREEN_X_PIXELS )){
+				tankOriginX += TANK_PIXELS_PER_MOVE;
 			}
 			else{
 				tankOriginX = SCREEN_X_PIXELS - 1 - TANK_WIDTH;

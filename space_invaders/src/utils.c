@@ -42,7 +42,7 @@ int destroyDC(DeltaClock* dc){
 }
 
 int incrementDC(int tics){
-	int retcode = 0;
+	int retcode = -1;
 	int rem = tics;
 	DeltaClock* currClk = dcFront;
 	int finished = 0;
@@ -58,22 +58,14 @@ int incrementDC(int tics){
 			//free this clock and decrement the next one
 			rem = currClk->tics * -1;
 			DeltaClock* prevClk = currClk;
-
-			if(prevClk->evnum == EVENT_ALIEN_FIRE){
-				fireAlienBullet();
-			}
-			else if(prevClk->evnum == EVENT_RED_SPACESHIP_APPEAR){
-				redSpaceshipAppear();
-			}
-			else if(prevClk->evnum == EVENT_TANK_DEATH){
-				tankRevive();
-			}
-
 			retcode = currClk->evnum;
 			currClk = currClk->next;
-
 			//advance the front of the clock
 			dcFront = currClk;
+
+
+
+
 			free(prevClk);
 
 		}

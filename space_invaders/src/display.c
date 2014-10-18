@@ -978,38 +978,21 @@ void clearAlienBullet(int bulletIndex){
 	int x, y;
 	for(x = leftBound; x <= (rightBound); x++){
 		for(y = upperBound; y <= (lowerBound); y++){
-			//the following code makes sure this function isn't overwriting something that
-			//it collided with before drawing the colors, and if it is, it draws the colors
-			//that should be there.
-			if(y >= BUNKER0_INITIAL_Y && y < BUNKER0_INITIAL_Y + BUNKER_HEIGHT){
-				if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
-					framePointer0[y*640 + x] = GREEN;
-				}
-				else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
-					framePointer0[y*640 + x] = GREEN;
-				}
-				else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
-					framePointer0[y*640 + x] = GREEN;
-				}
-				else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
-					framePointer0[y*640 + x] = GREEN;
-				}
-				else{
-					framePointer0[y*640 + x] = BLACK;
-				}
+			if((((x) >= BUNKER0_INITIAL_X) && (x <= (BUNKER0_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
 			}
-			else if(y >= TANK_ORIGIN_Y && y < TANK_ORIGIN_Y + TANK_HEIGHT){
-				if(((x >= TANK_ORIGIN_X) && (x <= (TANK_ORIGIN_X+TANK_WIDTH)))){
-					framePointer0[y*640 + x] = ((tank[y - TANK_ORIGIN_Y] & (1<<(TANK_WIDTH - 1 - x - TANK_ORIGIN_X)))) ? GREEN : BLACK;
-				}
-				else{
-					framePointer0[y*640 + x] = BLACK;
-				}
+			else if((((x) >= BUNKER1_INITIAL_X) && (x <= (BUNKER1_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER2_INITIAL_X) && (x <= (BUNKER2_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
+			}
+			else if((((x) >= BUNKER3_INITIAL_X) && (x <= (BUNKER3_INITIAL_X+4*BUNKER_WIDTH))) && (framePointer1[(y) * 640 + x] == GREEN)){
+				framePointer0[y*640 + x] = GREEN;
 			}
 			else{
 				framePointer0[y*640 + x] = BLACK;
 			}
-
 		}
 	}
 }

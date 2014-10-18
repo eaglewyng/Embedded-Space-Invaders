@@ -49,7 +49,8 @@
 #define DOWN 0
 #define RIGHT 1
 #define LEFT 2
-#define PIXELS_PER_MOVE 7
+#define PIXELS_PER_MOVE 12
+#define TANK_PIXELS_PER_MOVE 5
 
 #define INACTIVE_BULLET 0
 #define SQUIGGLY_BULLET 1
@@ -90,7 +91,7 @@
 #define EVENT_RED_SPACESHIP_APPEAR 2
 #define EVENT_TANK_DEATH 3
 #define MAX_TICS_AFTER_TANK_DEATH 200
-#define MAX_TICS_BETWEEN_ALIEN_FIRE 100 //1500
+#define MAX_TICS_BETWEEN_ALIEN_FIRE 1500 //1500
 #define MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR 3000
 #define MAX_TICS_BETWEEN_LEVELS 200
 
@@ -181,6 +182,7 @@ int initializeLevel();
 int playGame();
 int initializeGame();
 void initializeDC();
+void intermediateInitializeDC();
 
 
 //--------utils.c--------//
@@ -225,6 +227,8 @@ void drawGreenLine();
 void drawRedSpaceship();
 void undrawRedSpaceship(int);
 void drawScoreText();
+void clearRedSpaceshipScore();
+void clearRedSpaceship();
 
 
 //-----gameplay.c---------//

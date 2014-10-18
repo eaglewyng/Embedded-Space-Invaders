@@ -15,6 +15,7 @@ int score;
 int lives;
 int redSpaceshipScore = 0;
 int gameOver;
+extern int tankState;
 
 void initStatus(){
 	score = INITIAL_SCORE;
@@ -69,16 +70,17 @@ void addLife(){
 //2. The loser has lost (either run out of lives or the aliens have reached the bottom)
 //and the whole game needs to be reset.
 void runGameOver(int userHasWon){
+	clearGameDC();
 	if(userHasWon){
-		clearGameDC();
 		lives++;
 		initializeNextLevel();
+		clearTank();
 		drawLivesTanks();
 	}
 	else{
-		clearGameDC();
-		clearScreen();
 		drawGameOver();
+		tankState = DEAD_TANK1;
+		drawTank();
 		gameOver = 1;
 	}
 }
