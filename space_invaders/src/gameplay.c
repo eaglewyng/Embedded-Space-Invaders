@@ -34,6 +34,8 @@ extern int redSpaceshipStatus;
 extern int redSpaceshipDirection;
 extern int redSpaceshipOriginX;
 extern int redSpaceshipOriginY;
+extern int gameOver;
+
 
 int tankState;
 
@@ -208,10 +210,12 @@ void redSpaceshipAppear(){
 }
 
 void tankDeath(){
-	tankState = DEAD_TANK1;
-	clearDC();
 	takeLife();
-	insertDC(MAX_TICS_AFTER_TANK_DEATH ,EVENT_TANK_DEATH);
+	if(!gameOver){
+		tankState = DEAD_TANK1;
+		clearGameDC();
+		insertDC(MAX_TICS_AFTER_TANK_DEATH ,EVENT_TANK_DEATH);
+	}
 
 }
 

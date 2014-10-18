@@ -92,6 +92,7 @@
 #define MAX_TICS_AFTER_TANK_DEATH 200
 #define MAX_TICS_BETWEEN_ALIEN_FIRE 100 //1500
 #define MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR 3000
+#define MAX_TICS_BETWEEN_LEVELS 200
 
 #define TEXT_WIDTH 14
 #define TEXT_HEIGHT 14
@@ -204,6 +205,7 @@ void moveRedSpaceship();
 int isAlienPixelHere(int,int);
 int initializeDisplay();
 int runDisplay();
+void drawAll();
 void updateFrame();
 int isTankPixelHere(int,int);
 int undrawAliens(int);
@@ -233,6 +235,7 @@ void redSpaceshipAppear();
 void tankRevive();
 void tankDeath();
 int allAliensDead();
+void initializeNextLevel();
 
 
 
@@ -240,6 +243,7 @@ int allAliensDead();
 void getKeyboardInput();
 void getButtonInput();
 void initButtons();
+void getButtonInputGameOver();
 
 
 //------interrupts.c-----------//
@@ -250,7 +254,7 @@ void initInterrupts();
 int insertDC(int, int);
 int destroyDC();
 int incrementDC(int tics);
-void clearDC();
+void clearGameDC();
 
 //-----------gamestatus.c--------------//
 void initStatus();

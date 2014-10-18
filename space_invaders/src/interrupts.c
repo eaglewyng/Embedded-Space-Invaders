@@ -31,6 +31,7 @@ extern int alienInOut;
 extern int redSpaceshipStatus;
 extern int tankState;
 extern int clearRedSpaceshipScoreFlag;
+extern int gameOver;
 
 volatile int timerHandlerCounter = 0;
 
@@ -68,9 +69,11 @@ void timer_interrupt_handler(){
 
 	int haveDrawnAliens = 0;
 	int haveDrawnBullets = 0;
-
+	if(gameOver){
+		getButtonInputGameOver();
+	}
 	//is it time to update the location?
-	if(tankState ==  0){
+	else if(tankState ==  0){
 		if(fitcounter % TICS_PER_ALIEN_LOC_UPDATE == 0){
 			moveAliens();
 			alienInOut = !alienInOut;

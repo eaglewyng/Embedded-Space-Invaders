@@ -47,6 +47,7 @@ int redSpaceshipDirection;
 int tankOriginX;
 int tankOriginY;
 int clearRedSpaceshipScoreFlag = 0;
+int tankDeathOccurred;
 
 
 
@@ -273,6 +274,7 @@ int damageBunker(int bunkerNum, int bunkerBlock){
 
 int moveAlienBullets(){
 	int i;
+	tankDeathOccurred = 0;
 	for(i = 0; i < NUM_ALIEN_BULLETS; i++){
 		if(bulletArray[i].type != INACTIVE_BULLET){ //bullet is active
 			bulletArray[i].y += ALIEN_BULLETS_PIXELS_PER_MOVE;
@@ -286,14 +288,21 @@ int moveAlienBullets(){
 
 
 				//schedule the next bullet fire
-				insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
+				if(tankDeathOccurred)
+					tankDeath();
+
+				else
+					insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
 			}
 			else if(hitCoord.xcoord >= 0 && hitCoord.ycoord >= 0){
 				if(DB_ON1) xil_printf("These are the alien bullet hit coordiantes: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
 				if(DB_ON1) xil_printf("And these are the bullet's x,y coordinates: %d, %d\n\r",bulletArray[i].x, bulletArray[i].y);
 				bulletArray[i].type = INACTIVE_BULLET; //deactive the bullet since it's hit either the bunker or the tank
 				clearAlienBullet(i);
-				insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
+				if(tankDeathOccurred)
+					tankDeath();
+				else
+					insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
 			}
 
 		}
@@ -566,7 +575,7 @@ ScreenPoint alienBulletCollision(int i){
 			for(col = 0; col < BULLET_WIDTH; col++){
 				if((bulletBMP[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
 					if(framePointer0[(bulletArray[i].y + row) * 640 + bulletArray[i].x+col] == GREEN){
-						tankDeath();
+						tankDeathOccurred = 1;
 						myPoint.xcoord = bulletArray[i].x + col;
 						myPoint.ycoord = bulletArray[i].y + row;
 						return myPoint;
@@ -825,7 +834,7 @@ int moveTankBullet(){
 				drawAliens();
 				alienArray[lastAlienKilled] = NO_ALIEN;
 				drawAliens();
-				reinitializeLevel();
+				runGameOver(1);
 			}
 			//chooseBunkerBlockToDamage(hitCoord);
 		}

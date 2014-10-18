@@ -357,6 +357,35 @@ int runDisplay()
 	return 0;
 }
 
+void clearScreen(){
+	int x, y;
+	for(y = 0; y < SCREEN_Y_PIXELS; y++){
+		for(x = 0; x < SCREEN_X_PIXELS; x++){
+			framePointer0[y*SCREEN_X_PIXELS + x] = BLACK;
+		}
+	}
+}
+
+
+//draw EVERYTHING
+void drawAll(){
+	drawAliens();
+	drawTank();
+	int in;
+	for(in = 0; in < NUM_BUNKERS; in++){
+		drawBunker(in);
+	}
+	drawTankBullet();
+	for(in = 0; in < NUM_ALIEN_BULLETS; in++){
+		drawAlienBullet(in);
+	}
+	drawGreenLine();
+	drawScoreText();
+	drawScoreNumbers();
+	drawLivesText();
+	drawLivesTanks();
+}
+
 void updateScreen(){
 	int frameIndex = 0;
 	if (XST_FAILURE == XAxiVdma_StartParking(&videoDMAController, frameIndex,  XAXIVDMA_READ)) {

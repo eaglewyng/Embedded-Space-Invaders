@@ -31,13 +31,11 @@ extern int fitcounter;
 
 int main(){
 	srand(time(NULL));
-	initializeDC();
-	initializeGame();
-	initializeMovement();
+
 	initializeDisplay();
 	initButtons();
 	initInterrupts();
-
+	initializeGame();
 	runDisplay();
 	while(1)
 	{
@@ -67,10 +65,13 @@ void initializeDC(){
 int initializeGame(){
 	initializeLevel();
 	initStatus();
+	initializeMovement();
+	drawAll();
 	return 0;
 }
 
-int reinitializeLevel(){
+void initializeNextLevel(){
+	initializeDC();
 	alienOriginX = ALIEN_ORIGIN_X_INITIAL;
 	alienOriginY = ALIEN_ORIGIN_Y_INITIAL;
 
@@ -101,11 +102,10 @@ int reinitializeLevel(){
 	tankBullet.y = -1;
 	tankBullet.type = INACTIVE_BULLET;
 	tankBullet.state = 0;
-
-	return 0;
 }
 
 int initializeLevel(){
+	initializeDC();
 	int i;
 
 
