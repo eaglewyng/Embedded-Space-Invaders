@@ -162,10 +162,10 @@ void getButtonInput(){
 	/*	 for(ioa = 0; ioa < NUM_BUNKERS; ioa ++){
 		 drawBunker(ioa);
 	 }*/
-	drawAliens();
+	//drawAliens();
 	drawTank();
-	drawAlienBullet(-1);
-	drawTankBullet();
+	//drawAlienBullet(-1);
+	//drawTankBullet();
 
 }
 

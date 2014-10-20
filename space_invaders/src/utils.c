@@ -63,7 +63,7 @@ int incrementDC(int tics){
 			rem = currClk->tics * -1;
 			DeltaClock* prevClk = currClk;
 			if(dcResult.numEntries < DC_MAX_FIRES){
-				dcResult.triggeredEvents[res.numEntries] = currClk->evnum;
+				dcResult.triggeredEvents[dcResult.numEntries] = currClk->evnum;
 				dcResult.numEntries++;
 			}
 			currClk = currClk->next;

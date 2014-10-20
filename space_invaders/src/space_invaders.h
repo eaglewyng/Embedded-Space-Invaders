@@ -247,6 +247,7 @@ void tankRevive();
 void tankDeath();
 int allAliensDead();
 void initializeNextLevel();
+void deactivateActiveComponents();
 
 
 

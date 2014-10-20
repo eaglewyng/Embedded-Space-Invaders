@@ -16,6 +16,8 @@ int lives;
 int redSpaceshipScore = 0;
 int gameOver;
 extern int tankState;
+extern Bullet bulletArray[];
+extern Bullet tankBullet;
 
 void initStatus(){
 	score = INITIAL_SCORE;
@@ -73,16 +75,27 @@ void runGameOver(int userHasWon){
 	clearGameDC();
 	if(userHasWon){
 		lives++;
+		clearScreen();
 		initializeNextLevel();
-		clearTank();
+		drawScoreText();
+		drawScoreNumbers();
+		drawLivesText();
+		int i;
+		for(i = 0; i < 4; i++){
+			drawBunker(i);
+		}
+		drawGreenLine();
 		drawLivesTanks();
 	}
 	else{
 		drawGameOver();
 		tankState = DEAD_TANK1;
 		drawTank();
+		deactivateActiveComponents();
 		gameOver = 1;
 	}
 }
+
+
 
 

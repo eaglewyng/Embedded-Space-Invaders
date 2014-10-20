@@ -81,17 +81,11 @@ void timer_interrupt_handler(){
 	}
 
 
-	int haveDrawnAliens = 0;
-	int haveDrawnBullets = 0;
 	if(gameOver){
 		getButtonInputGameOver();
 	}
 	//is it time to update the location?
 	else if(tankState ==  0){
-		if(fitcounter % TICS_PER_ALIEN_LOC_UPDATE == 0){
-			moveAliens();
-			alienInOut = !alienInOut;
-		}
 		if(fitcounter % TICS_PER_TANK_LOC_UPDATE == 0){
 			getButtonInput();
 		}
@@ -104,6 +98,10 @@ void timer_interrupt_handler(){
 		}
 		if(fitcounter % TICS_PER_RED_SPACESHIP_SCORE_CLEAR == 0 && clearRedSpaceshipScoreFlag){
 			clearRedSpaceshipScore();
+		}
+		if(fitcounter % TICS_PER_ALIEN_LOC_UPDATE == 0){
+			alienInOut = !alienInOut;
+			moveAliens();
 		}
 	}
 	else{

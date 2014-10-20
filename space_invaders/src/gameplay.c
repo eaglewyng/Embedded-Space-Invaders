@@ -215,13 +215,7 @@ void tankDeath(){
 		tankState = DEAD_TANK1;
 		clearGameDC();
 		insertDC(MAX_TICS_AFTER_TANK_DEATH ,EVENT_TANK_DEATH);
-		int i;
-		for(i = 0; i < NUM_ALIEN_BULLETS; i++){
-			bulletArray[i].type = INACTIVE_BULLET;
-			clearAlienBullet(i);
-		}
-		redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
-		clearRedSpaceship();
+		deactivateActiveComponents();
 
 	}
 
@@ -246,4 +240,19 @@ int allAliensDead(){
 		}
 	}
 	return 1;
+}
+
+//Deactivates the tankbullets, alienbullets, and red spaceship.
+//DOES NOT ADD THEM BACK INTO THE DELTA CLOCK, NOR DOES IT CLEAR THE DELTA CLOCK
+void deactivateActiveComponents(){
+	int i;
+	for(i = 0; i < NUM_ALIEN_BULLETS; i++){
+		bulletArray[i].type = INACTIVE_BULLET;
+		clearAlienBullet(i);
+	}
+	tankBullet.type = INACTIVE_BULLET;
+	clearTankBullet();
+	redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
+	clearRedSpaceship();
+
 }
