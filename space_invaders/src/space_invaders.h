@@ -264,7 +264,7 @@ void initInterrupts();
 //------utils.c--------------//
 int insertDC(int, int);
 int destroyDC();
-DCResult incrementDC(int tics);
+int incrementDC(int tics);
 void clearGameDC();
 
 //-----------gamestatus.c--------------//

@@ -32,6 +32,7 @@ extern int redSpaceshipStatus;
 extern int tankState;
 extern int clearRedSpaceshipScoreFlag;
 extern int gameOver;
+extern DCResult dcResult;
 
 volatile int timerHandlerCounter = 0;
 
@@ -63,10 +64,10 @@ void interrupt_handler_dispatcher(){
 
 void timer_interrupt_handler(){
 
-	DCResult res = incrementDC(1);
+	incrementDC(1);
 	int i;
-	for(i=0; i < res.numEntries; i++){
-		int evnum = res.triggeredEvents[i];
+	for(i=0; i < dcResult.numEntries; i++){
+		int evnum = dcResult.triggeredEvents[i];
 		//execute the event which has just happened
 		if(evnum == EVENT_ALIEN_FIRE){
 			fireAlienBullet();

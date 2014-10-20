@@ -9,6 +9,7 @@
 #include <stdlib.h>
 
 extern DeltaClock* dcFront;
+DCResult dcResult;
 
 
 
@@ -41,9 +42,9 @@ int destroyDC(DeltaClock* dc){
 	return 1;
 }
 
-DCResult incrementDC(int tics){
-	DCResult res;
-	res.numEntries = 0;
+int incrementDC(int tics){
+	
+	dcResult.numEntries = 0;
 	
 	int retcode = -1;
 	int rem = tics;
@@ -61,14 +62,13 @@ DCResult incrementDC(int tics){
 			//free this clock and decrement the next one
 			rem = currClk->tics * -1;
 			DeltaClock* prevClk = currClk;
-			if(res.numEntries < DC_MAX_FIRES){
-				res.triggeredEvents[res.numEntries] = currClk->evnum;
-				res.numEntries++;
+			if(dcResult.numEntries < DC_MAX_FIRES){
+				dcResult.triggeredEvents[res.numEntries] = currClk->evnum;
+				dcResult.numEntries++;
 			}
 			currClk = currClk->next;
 			//advance the front of the clock
 			dcFront = currClk;
-
 
 
 
@@ -80,7 +80,7 @@ DCResult incrementDC(int tics){
 			finished = 1;
 		}
 	}
-	return res;
+	return dcResult.numEntries;
 }
 
 int insertDC(int tics, int evnum){
