@@ -41,7 +41,10 @@ int destroyDC(DeltaClock* dc){
 	return 1;
 }
 
-int incrementDC(int tics){
+DCResult incrementDC(int tics){
+	DCResult res;
+	res.numEntries = 0;
+	
 	int retcode = -1;
 	int rem = tics;
 	DeltaClock* currClk = dcFront;
@@ -58,7 +61,10 @@ int incrementDC(int tics){
 			//free this clock and decrement the next one
 			rem = currClk->tics * -1;
 			DeltaClock* prevClk = currClk;
-			retcode = currClk->evnum;
+			if(res.numEntries < DC_MAX_FIRES){
+				res.triggeredEvents[res.numEntries] = currClk->evnum;
+				res.numEntries++;
+			}
 			currClk = currClk->next;
 			//advance the front of the clock
 			dcFront = currClk;
@@ -74,7 +80,7 @@ int incrementDC(int tics){
 			finished = 1;
 		}
 	}
-	return retcode;
+	return res;
 }
 
 int insertDC(int tics, int evnum){

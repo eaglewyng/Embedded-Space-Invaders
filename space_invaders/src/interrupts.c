@@ -63,16 +63,20 @@ void interrupt_handler_dispatcher(){
 
 void timer_interrupt_handler(){
 
-	int evnum = incrementDC(1);
-	//execute the event which has just happened
-	if(evnum == EVENT_ALIEN_FIRE){
-		fireAlienBullet();
-	}
-	else if(evnum == EVENT_RED_SPACESHIP_APPEAR){
-		redSpaceshipAppear();
-	}
-	else if(evnum == EVENT_TANK_DEATH){
-		tankRevive();
+	DCResult res = incrementDC(1);
+	int i;
+	for(i=0; i < res.numEntries; i++){
+		int evnum = res.triggeredEvents[i];
+		//execute the event which has just happened
+		if(evnum == EVENT_ALIEN_FIRE){
+			fireAlienBullet();
+		}
+		else if(evnum == EVENT_RED_SPACESHIP_APPEAR){
+			redSpaceshipAppear();
+		}
+		else if(evnum == EVENT_TANK_DEATH){
+			tankRevive();
+		}
 	}
 
 

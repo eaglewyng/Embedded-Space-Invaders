@@ -137,6 +137,8 @@
 #define GAME_OVERTEXT_START_X 240
 #define GAME_OVERTEXT_START_Y 180
 
+#define DC_MAX_FIRES 10
+
 
 
 
@@ -146,6 +148,11 @@ typedef struct{
 	int type;
 	int state;
 } Bullet;
+
+typedef struct{
+	int numEntries;
+	int triggeredEvents[DC_MAX_FIRES];
+} DCResult;
 
 typedef struct {
 	int xcoord;
@@ -257,7 +264,7 @@ void initInterrupts();
 //------utils.c--------------//
 int insertDC(int, int);
 int destroyDC();
-int incrementDC(int tics);
+DCResult incrementDC(int tics);
 void clearGameDC();
 
 //-----------gamestatus.c--------------//
