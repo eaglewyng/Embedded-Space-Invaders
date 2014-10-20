@@ -81,8 +81,10 @@ void clearRedSpaceshipScore(){
 }
 
 void moveRedSpaceship(){
+	if(!redSpaceshipStatus == RED_SPACESHIP_ALIVE)
+		return;
 	if(redSpaceshipDirection == LEFT){
-		redSpaceshipOriginX -= PIXELS_PER_MOVE;
+		redSpaceshipOriginX -= RED_SPACESHIP_PIXELS_PER_MOVE;
 		undrawRedSpaceship(LEFT);
 		if(redSpaceshipOriginX + RED_SPACESHIP_WIDTH < 0){
 			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
@@ -91,7 +93,7 @@ void moveRedSpaceship(){
 	}
 	//redSpaceships are on the right side of the screen
 	else if(redSpaceshipDirection == RIGHT){
-		redSpaceshipOriginX += PIXELS_PER_MOVE;
+		redSpaceshipOriginX += RED_SPACESHIP_PIXELS_PER_MOVE;
 		undrawRedSpaceship(RIGHT);
 		if(redSpaceshipOriginX >= SCREEN_X_PIXELS){
 			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;

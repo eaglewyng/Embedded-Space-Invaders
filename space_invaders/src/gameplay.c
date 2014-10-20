@@ -197,6 +197,10 @@ void fireAlienBullet(){
 }
 
 void redSpaceshipAppear(){
+	//make sure the spaceship can't appear twice
+	if(redSpaceshipStatus == RED_SPACESHIP_ALIVE){
+		return;
+	}
 	redSpaceshipStatus = RED_SPACESHIP_ALIVE;
 	if(redSpaceshipDirection == LEFT){
 		redSpaceshipDirection = RIGHT;

@@ -496,9 +496,9 @@ void undrawRedSpaceship(int direction){
 		else{
 			leftBound = 0;
 		}
-		rightBound = redSpaceshipOriginX + RED_SPACESHIP_WIDTH + PIXELS_PER_MOVE - 1;
+		rightBound = redSpaceshipOriginX + RED_SPACESHIP_WIDTH + RED_SPACESHIP_PIXELS_PER_MOVE - 1;
 		upperBound = redSpaceshipOriginY;
-		lowerBound = redSpaceshipOriginY + TANK_HEIGHT - 1;
+		lowerBound = redSpaceshipOriginY + RED_SPACESHIP_HEIGHT - 1;
 		break;
 	default:
 		if(redSpaceshipOriginX < SCREEN_X_PIXELS){
@@ -507,10 +507,10 @@ void undrawRedSpaceship(int direction){
 		else{
 			rightBound = SCREEN_X_PIXELS - 1;
 		}
-		leftBound = redSpaceshipOriginX - PIXELS_PER_MOVE;
+		leftBound = redSpaceshipOriginX - RED_SPACESHIP_PIXELS_PER_MOVE;
 
 		upperBound = redSpaceshipOriginY;
-		lowerBound = redSpaceshipOriginY + TANK_HEIGHT - 1;
+		lowerBound = redSpaceshipOriginY + RED_SPACESHIP_HEIGHT - 1;
 		break;
 
 	}

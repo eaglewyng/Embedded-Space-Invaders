@@ -31,17 +31,19 @@ extern int fitcounter;
 
 int main(){
 	srand(time(NULL));
-
 	initializeDisplay();
 	initButtons();
 	initInterrupts();
 	initializeGame();
 	runDisplay();
+	time_t initialTime;
+	time(&initialTime);
+
 	while(1)
 	{
 		idleCounter++;
 		if(idleCounter % 10000 == 0){
-			xil_printf("Adam said to print the idle counter, which is %d, and the timerHandlerCounter, which is %d, and los FIT Tima, vhich iz %d\n\r",idleCounter,timerHandlerCounter,fitcounter);
+			xil_printf("Adam said to print the idle counter, which is %d\r",idleCounter);
 		}
 	}
 	;
