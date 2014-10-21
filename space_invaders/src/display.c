@@ -44,8 +44,8 @@ extern int tankState;
 extern int redSpaceshipStatus;
 extern int score;
 extern int lastAlienKilled;
-extern int redSpaceshipScore;
-extern int clearRedSpaceshipScoreFlag;
+
+
 
 //bitmaps
 extern int bigSquidIn[];
@@ -111,119 +111,7 @@ XAxiVdma_DmaSetup myFrameBuffer;
 int spot = 0;
 
 
-//manages the drawing of all of the numbers
-void drawScoreNumbers(){
-	int tempScore = score;
-	int count = 0;
-	if(score == 0){
-		drawDigit(SCORENUMBERS_START_X,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
-		return;
-	}
-	int numDigits = (int)(log10((double)score) + 1.0);
-	int digArr[numDigits];
-	int countDown = numDigits - 1;
-	while(countDown >= 0){
-		int digit = tempScore % 10;
-		digArr[countDown] = digit;
-		countDown--;
-		tempScore /= 10;
-	}
 
-	for(count = 0; count < numDigits; count++){
-		drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, digArr[count], SCORENUMBERS_COLOR);
-	}
-
-	//drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
-}
-
-
-void drawRedSpaceshipScore(int color){
-	int count = 0;
-	int tempScore = redSpaceshipScore;
-	int numDigits = (int)(log10((double)redSpaceshipScore) + 1.0);
-	int digArr[numDigits];
-	int countDown = numDigits - 1;
-	while(countDown >= 0){
-		int digit = tempScore % 10;
-		digArr[countDown] = digit;
-		countDown--;
-		tempScore /= 10;
-	}
-
-	for(count = 0; count < numDigits; count++){
-		drawDigit(redSpaceshipOriginX + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  redSpaceshipOriginY, digArr[count], color);
-	}
-
-	clearRedSpaceshipScoreFlag = 1;
-	//drawDigit(SCORENUMBERS_START_X + NUMBER_WIDTH * count + SPACE_BETWEEN_CHARACTERS * count,  SCORENUMBERS_START_Y, 0, SCORENUMBERS_COLOR);
-}
-
-
-//draws a single digit in the specified location with the specified color
-void drawDigit(int x, int y, int digit, int color){
-
-	int* digitDrawBMP;
-	switch(digit){
-	case 0:
-		digitDrawBMP = score_digit_0;
-		break;
-	case 1:
-		digitDrawBMP = score1;
-		break;
-	case 2:
-		digitDrawBMP = score2;
-		break;
-	case 3:
-		digitDrawBMP = score3;
-		break;
-	case 4:
-		digitDrawBMP = score4;
-		break;
-	case 5:
-		digitDrawBMP = score5;
-		break;
-	case 6:
-		digitDrawBMP = score6;
-		break;
-	case 7:
-		digitDrawBMP = score7;
-		break;
-	case 8:
-		digitDrawBMP = score8;
-		break;
-	default:
-		digitDrawBMP = score9;
-		break;
-	}
-
-
-	int currX = 0;
-	int currY = 0;
-	for(currX = 0; currX < NUMBER_WIDTH; currX++){
-		for(currY = 0; currY < NUMBER_HEIGHT; currY++){
-			if(digitDrawBMP[currY] & (1 << (NUMBER_WIDTH - 1 - currX)))
-				framePointer0[(y + currY) * SCREEN_X_PIXELS + currX + x] = RED;
-			else{
-				framePointer1[(y + currY) * SCREEN_X_PIXELS + currX + x] = BLACK;
-			}
-		}
-	}
-
-	int aX;
-	int aY;
-	for(aX = 0; aX < NUMBER_WIDTH; aX++){
-		for(aY = 0; aY < NUMBER_HEIGHT; aY++){
-			if(1 && (digitDrawBMP[aY] & (1<<(NUMBER_WIDTH - 1 - aX)))){
-
-				framePointer0[(y+aY) * 640 + x + aX] = color;
-			}
-			else{
-				framePointer0[(y+aY) * 640 + x + aX] = BLACK;
-			}
-		}
-	}
-
-}
 
 
 //returns 0 if successful, else returns -1.

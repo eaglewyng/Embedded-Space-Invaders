@@ -114,7 +114,7 @@ int fireTankBullet(){
 //Algorithm to find the aliens in the bottom of their column
    //The max number of bottom row aliens is 11
    //Perhaps the best way to get all the bottom row aliens is to go back through the array starting from the last alien and add until either we have 11 aliens or we went through all the spots
-int findBottomRowAliens(){
+void findBottomRowAliens(){
 	int o;
 	for(o = 0; o < ALIENS_PER_ROW; o++){
 		bottomRowAliens[o] = -1;

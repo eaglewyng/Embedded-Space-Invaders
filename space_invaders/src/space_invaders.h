@@ -188,6 +188,7 @@ void initializeGame();
 void initializeLevel();
 void initializeDC();
 void intermediateInitializeDC();
+void initializeNextLevel();
 
 
 //--------utils.c--------//
@@ -211,22 +212,18 @@ void moveTankBullet();
 //-------display.c----------//
 int initializeDisplay();
 int runDisplay();
-void drawAll();
-void updateFrame();
-int isTankPixelHere(int,int);
 void clearScreen();
 
 
 //-----gameplay.c---------//
 void killAlien(int);
-int findBottomRowAliens();
+void findBottomRowAliens();
 int findLastAliveRow();
 int fireTankBullet();
 void redSpaceshipAppear();
 void tankRevive();
 void tankDeath();
 int allAliensDead();
-void initializeNextLevel();
 void deactivateActiveComponents();
 void fireAlienBullet();
 
@@ -240,7 +237,6 @@ void getButtonInputGameOver();
 
 //------interrupts.c-----------//
 void initInterrupts();
-void printTime();
 
 
 //------utils.c--------------//
@@ -270,6 +266,7 @@ void drawGreenLine();
 void drawRedSpaceship();
 void drawAlienBullet();
 void drawScoreText();
+void drawAll();
 
 //-------------undraw.c--------------//
 int undrawTank(int);
