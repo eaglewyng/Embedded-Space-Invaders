@@ -107,7 +107,7 @@ void moveRedSpaceship(){
 
 
 //updates the origin location by the predefined amount
-int moveAliens(){
+void moveAliens(){
 
 	//what to do if aliens are on the left side of the screen
 	if(alienDirection == LEFT && (alienOriginX - PIXELS_PER_MOVE < -1*(ALIEN_WIDTH * firstColAliveAliens))){
@@ -144,11 +144,10 @@ int moveAliens(){
 	if((alienOriginY + (lastRowAliveAliens+1) * ALIEN_HEIGHT)  >= (BUNKER_INITIAL_Y + 3*BUNKER_HEIGHT)){
 		runGameOver(0);
 	}
-	return 0;
 }
 
 //updates the position of the tank
-int moveTank(int direction){
+void moveTank(int direction){
 	if(tankState == ALIVE_TANK){
 		if(direction == LEFT){
 			if(!(tankOriginX - TANK_PIXELS_PER_MOVE < 0)){
@@ -173,12 +172,11 @@ int moveTank(int direction){
 	drawTank();
 
 
-	return 0;
 }
 
 
 
-int damageBunker(int bunkerNum, int bunkerBlock){
+void damageBunker(int bunkerNum, int bunkerBlock){
 	switch(bunkerBlock){
 	case 0:
 		if(bunkerArray[bunkerNum].damageStateTopLeft < 5){
@@ -266,10 +264,9 @@ int damageBunker(int bunkerNum, int bunkerBlock){
 
 	drawBunker(bunkerNum);
 
-	return 0;
 }
 
-int moveAlienBullets(){
+void moveAlienBullets(){
 	int i;
 	tankDeathOccurred = 0;
 	for(i = 0; i < NUM_ALIEN_BULLETS; i++){
@@ -307,7 +304,6 @@ int moveAlienBullets(){
 
 
 	drawAlienBullet(-1);
-	return 0;
 }
 
 
@@ -813,7 +809,7 @@ int chooseBunkerBlockToDamage(int x, int y){
 
 
 
-int moveTankBullet(){
+void moveTankBullet(){
 	if(tankBullet.type != INACTIVE_BULLET){ //bullet is active
 		tankBullet.y -= TANK_BULLET_PIXELS_PER_MOVE;
 		undrawTankBullet();
@@ -838,7 +834,6 @@ int moveTankBullet(){
 		drawTankBullet();
 	}
 
-	return 0;
 }
 
 

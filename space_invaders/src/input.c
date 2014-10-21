@@ -123,7 +123,6 @@ void getKeyboardInput(){
 		else{
 			int myIndex = b-ASCII_OFFSET;
 			damageBunker(myIndex, 0);
-			//xil_printf("The index is: %d\n\r", myIndex);
 		}
 
 
@@ -155,18 +154,7 @@ void getButtonInput(){
 	if(currentButtonState & RIGHT_BUTTON_MASK){
 		moveTank(RIGHT);
 	}
-
-
-	//update the screen
-	int ioa;
-	/*	 for(ioa = 0; ioa < NUM_BUNKERS; ioa ++){
-		 drawBunker(ioa);
-	 }*/
-	//drawAliens();
 	drawTank();
-	//drawAlienBullet(-1);
-	//drawTankBullet();
-
 }
 
 void getButtonInputGameOver(){
@@ -178,7 +166,7 @@ void getButtonInputGameOver(){
 }
 
 void initButtons(){
-	int success = XGpio_Initialize(&gpPB, XPAR_PUSH_BUTTONS_5BITS_DEVICE_ID);
+	XGpio_Initialize(&gpPB, XPAR_PUSH_BUTTONS_5BITS_DEVICE_ID);
 	// Set the push button peripheral to be inputs.
 	XGpio_SetDataDirection(&gpPB, 1, 0x0000001F);
 }

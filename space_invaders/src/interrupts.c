@@ -11,6 +11,7 @@
 #include "xintc_l.h"        // Provides handy macros for the interrupt controller.
 #include "space_invaders.h"
 #include "interrupts.h"
+#include "time.h"
 
 u32 const TICS_UNTIL_DEBOUNCED = 5;		//the number of ticks needed from the timer for the switches to be debounced
 u32 const MS_PER_TIC = 10;
@@ -33,6 +34,11 @@ extern int tankState;
 extern int clearRedSpaceshipScoreFlag;
 extern int gameOver;
 extern DCResult dcResult;
+
+double best_case_time = 10000000;
+double worst_case_time = 0;
+double total_time = 0;
+int num_times_entered = 0;
 
 volatile int timerHandlerCounter = 0;
 
@@ -63,6 +69,9 @@ void interrupt_handler_dispatcher(){
 }
 
 void timer_interrupt_handler(){
+	//get the initial time
+	time_t prev_time;
+	time(&prev_time);
 
 	incrementDC(1);
 	int i;
@@ -116,5 +125,7 @@ void timer_interrupt_handler(){
 	else{
 		fitcounter++;
 	}
+
+
 
 }

@@ -43,7 +43,7 @@ int main(){
 	{
 		idleCounter++;
 		if(idleCounter % 10000 == 0){
-			xil_printf("Adam said to print the idle counter, which is %d\r",idleCounter);
+			//xil_printf("Adam said to print the idle counter, which is %d\r",idleCounter);
 		}
 	}
 	;
@@ -77,13 +77,12 @@ void intermediateInitializeDC(){
 		insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
 }
 
-int initializeGame(){
+void initializeGame(){
 	clearScreen();
 	initializeLevel();
 	initStatus();
 	initializeMovement();
 	drawAll();
-	return 0;
 }
 
 void initializeNextLevel(){
@@ -128,7 +127,7 @@ void initializeNextLevel(){
 
 }
 
-int initializeLevel(){
+void initializeLevel(){
 	initializeDC();
 	int i;
 
@@ -207,6 +206,5 @@ int initializeLevel(){
 	lastAlienKilled = -1;
 
 	lastRowAliveAliens = findLastAliveRow();
-	return 0;
 }
 

@@ -184,10 +184,8 @@ typedef struct deltaclock
 
 //--------space_invaders.c--------//
 //the main game routines
-int initializeGame();
-int initializeLevel();
-int playGame();
-int initializeGame();
+void initializeGame();
+void initializeLevel();
 void initializeDC();
 void intermediateInitializeDC();
 
@@ -199,48 +197,30 @@ int getAlienArrLoc(int,int);
 
 
 //-------movement.c---------//
-int moveAliens();
+void moveAliens();
 void initializeMovement();
-int moveTank();
-int damageBunker(int,int);
-int moveAlienBullets();
-int moveTankBullet();
-void updateLocations();
+void moveTank();
+void damageBunker(int,int);
+void moveAlienBullets();
+void moveTankBullet();
 int chooseAlienToKill(int, int);
 int chooseBunkerBlockToDamage(int,int);
 void moveRedSpaceship();
+void moveTankBullet();
 
 //-------display.c----------//
-int isAlienPixelHere(int,int);
 int initializeDisplay();
 int runDisplay();
 void drawAll();
 void updateFrame();
 int isTankPixelHere(int,int);
-int undrawAliens(int);
-int drawAliens();
-int drawTank();
-void clearTank();
-int undrawTank(int);
-void drawBunker(int);
-void drawAlienBullet();
-void fireAlienBullet();
-void undrawAlienBullet();
-void clearAlienBullet(int);
-void drawTankBullet();
-void undrawTankBullet();
-void clearTankBullet();
-void drawGreenLine();
-void drawRedSpaceship();
-void undrawRedSpaceship(int);
-void drawScoreText();
-void clearRedSpaceshipScore();
-void clearRedSpaceship();
+void clearScreen();
 
 
 //-----gameplay.c---------//
 void killAlien(int);
 int findBottomRowAliens();
+int findLastAliveRow();
 int fireTankBullet();
 void redSpaceshipAppear();
 void tankRevive();
@@ -248,7 +228,7 @@ void tankDeath();
 int allAliensDead();
 void initializeNextLevel();
 void deactivateActiveComponents();
-
+void fireAlienBullet();
 
 
 //-----input.c----------//
@@ -260,6 +240,7 @@ void getButtonInputGameOver();
 
 //------interrupts.c-----------//
 void initInterrupts();
+void printTime();
 
 
 //------utils.c--------------//
@@ -281,7 +262,26 @@ void drawScoreText();
 void drawLivesTanks();
 void drawGameOver();
 void drawLivesText();
-void clearScreen();
+void drawBunker(int);
+void drawTankBullet();
+int drawTank();
+int drawAliens();
+void drawGreenLine();
+void drawRedSpaceship();
+void drawAlienBullet();
+void drawScoreText();
+
+//-------------undraw.c--------------//
+int undrawTank(int);
+int undrawAliens(int);
+void clearTank();
+void undrawTankBullet();
+void clearTankBullet();
+void undrawRedSpaceship(int);
+void undrawAlienBullet();
+void clearAlienBullet(int);
+void clearRedSpaceshipScore();
+void clearRedSpaceship();
 
 
 #endif /* SPACE_INVADERS_H_ */
