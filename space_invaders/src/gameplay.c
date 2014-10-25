@@ -101,6 +101,9 @@ int findLastAliveRow(){
 //--------------------------------------------functions related to tank bullets----------------------------------------//
 int fireTankBullet(){
 	if(tankBullet.type == INACTIVE_BULLET && tankState == 0){
+		//call the sound for when the tank bullet fires
+		fireTankBulletSound();
+
 		tankBullet.type = TANK_BULLET;
 		tankBullet.x = tankOriginX + TANK_WIDTH / 2 - 3;
 		tankBullet.y = tankOriginY - BULLET_HEIGHT;
@@ -214,6 +217,9 @@ void redSpaceshipAppear(){
 }
 
 void tankDeath(){
+	//make the sound when the tank dies
+	tankDeathSound();
+
 	takeLife();
 	if(!gameOver){
 		tankState = DEAD_TANK1;

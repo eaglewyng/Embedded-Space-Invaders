@@ -8,6 +8,7 @@
 #include "movement.h"
 #include <stdlib.h>
 #include "gamestatus.h"
+#include "sound.h"
 
 extern Bunker bunkerArray[];
 extern Bullet bulletArray[];
@@ -81,6 +82,9 @@ void clearRedSpaceshipScore(){
 }
 
 void moveRedSpaceship(){
+	//call red spaceship sound
+	moveRedSpaceshipSound();
+
 	if(!redSpaceshipStatus == RED_SPACESHIP_ALIVE)
 		return;
 	if(redSpaceshipDirection == LEFT){
@@ -108,6 +112,8 @@ void moveRedSpaceship(){
 
 //updates the origin location by the predefined amount
 void moveAliens(){
+	//call move aliens sound
+	moveAliensSound();
 
 	//what to do if aliens are on the left side of the screen
 	if(alienDirection == LEFT && (alienOriginX - PIXELS_PER_MOVE < -1*(ALIEN_WIDTH * firstColAliveAliens))){
@@ -349,6 +355,9 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 				for(col = 0; col < BULLET_WIDTH; col++){
 					if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
 						if(destroyRedMothership(tankBullet.x + col, tankBullet.y + row)){
+							//call the sound for the red spaceship death
+							destroyRedMothershipSound();
+
 							addToScore(HIT_RED_SPACESHIP);
 							drawRedSpaceshipScore(YELLOW);
 							myPoint.xcoord = tankBullet.x + col;
@@ -810,6 +819,7 @@ int chooseBunkerBlockToDamage(int x, int y){
 
 
 void moveTankBullet(){
+
 	if(tankBullet.type != INACTIVE_BULLET){ //bullet is active
 		tankBullet.y -= TANK_BULLET_PIXELS_PER_MOVE;
 		undrawTankBullet();

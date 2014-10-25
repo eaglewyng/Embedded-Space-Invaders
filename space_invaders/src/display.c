@@ -18,6 +18,8 @@
 #include <xparameters.h>
 #include <stdlib.h>
 #include "math.h"
+#include "xac97_l.h"
+#include "xparameters.h"
 
 #define FRAME_BUFFER_0_ADDR 0xC1000000  // Starting location in DDR where we will store the images that we display.
 #define MAX_SILLY_TIMER 500000;
@@ -98,6 +100,7 @@ extern int scoreE[];
 
 extern Bullet tankBullet;
 
+extern int volumeAttenuation;
 
 int Status;
 XAxiVdma videoDMAController;
@@ -117,7 +120,6 @@ int spot = 0;
 //returns 0 if successful, else returns -1.
 int initializeDisplay(){
 	alienInOut = 0;
-
 
 	init_platform();                   // Necessary for all programs.
 	int Status;                        // Keep track of success/failure of system function calls.
@@ -140,6 +142,17 @@ int initializeDisplay(){
 	// Setup the frame counter. We want two read frames. We don't need any write frames but the
 	// function generates an error if you set the write frame count to 0. We set it to 2
 	// but ignore it because we don't need a write channel at all.
+
+	//Initialize the AC97 Sound Chip
+	XAC97_HardReset(XPAR_AXI_AC97_0_BASEADDR);
+	XAC97_mSetControl(XPAR_AXI_AC97_0_BASEADDR, AC97_CLEAR_IN_FIFO | AC97_CLEAR_OUT_FIFO);
+	XAC97_AwaitCodecReady(XPAR_AXI_AC97_0_BASEADDR);
+	XAC97_InitAudio(XPAR_AXI_AC97_0_BASEADDR, AC97_GP_ADC_DAC_LOOPBACK);
+	XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_MasterVol, volumeAttenuation);
+	XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_ExtendedAudioStat, 0x1);
+	XAC97_mSetControl(XPAR_AXI_AC97_0_BASEADDR, AC97_ENABLE_IN_FIFO_INTERRUPT);
+
+
 
 	myFrameConfig.ReadFrameCount = 2;
 	myFrameConfig.ReadDelayTimerCount = 10;

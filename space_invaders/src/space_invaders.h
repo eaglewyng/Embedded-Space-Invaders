@@ -139,8 +139,9 @@
 
 #define DC_MAX_FIRES 10
 
-
-
+#define AUDIO_BUFFER_BASE_ADDRESS_IN_DDR 0x02000000
+#define VOLUME_UP 0x0
+#define VOLUME_DOWN 0x1
 
 typedef struct{
 	int x;

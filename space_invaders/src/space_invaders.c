@@ -8,6 +8,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "time.h"
+#include "xac97_l.h"
+
 
 int alienArray[55];	//1 denotes the alien is alive, 0 denotes the alien is dead
 Bunker bunkerArray[NUM_BUNKERS];
@@ -28,6 +30,8 @@ extern int alienOriginY;
 int idleCounter = 0;
 extern int timerHandlerCounter;
 extern int fitcounter;
+
+
 
 int main(){
 	srand(time(NULL));

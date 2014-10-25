@@ -19,6 +19,7 @@
 #include <stdlib.h>
 #include "xgpio.h"          // Provides access to PB GPIO driver.
 #include "mb_interface.h"   // provides the microblaze interrupt enables, etc.
+#include "sound.h"
 #define ASCII_OFFSET 48
 
 extern int alienInOut;
@@ -153,6 +154,12 @@ void getButtonInput(){
 	}
 	if(currentButtonState & RIGHT_BUTTON_MASK){
 		moveTank(RIGHT);
+	}
+	if(currentButtonState & UP_BUTTON_MASK){
+		adjustVolume(VOLUME_UP);
+	}
+	if(currentButtonState & DOWN_BUTTON_MASK){
+		adjustVolume(VOLUME_DOWN);
 	}
 	drawTank();
 }
