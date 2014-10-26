@@ -149,8 +149,6 @@ int initializeDisplay(){
 	XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_AuxOutVol, AC97_VOL_MID);
 
 
-
-
 	myFrameConfig.ReadFrameCount = 2;
 	myFrameConfig.ReadDelayTimerCount = 10;
 	myFrameConfig.WriteFrameCount =2;

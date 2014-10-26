@@ -16,7 +16,12 @@ int volumeAttenuation = AC97_VOL_ATTN_46_0_DB;
 extern int redSpaceship_soundData[];
 extern int redSpaceship_numberOfSamples;
 extern int redSpaceship_sampleRate;
-
+extern int redSpaceshipLeave_soundData[];
+extern int redSpaceshipLeave_numberOfSamples;
+extern int redSpaceshipLeave_sampleRate;
+extern int tankFireBullet_soundData[];
+extern int tankFireBullet_numberOfSamples;
+extern int tankFireBullet_sampleRate;
 
 void moveAliensSound(){
 
@@ -39,13 +44,11 @@ void moveRedSpaceshipSound(){
 void fireTankBulletSound(){
 	int i = 0;
 	int j = 0;
-	if(!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)){
-
-		int sample = redSpaceship_soundData[i];
-		int numberOfSamples = redSpaceship_numberOfSamples;
-		XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, AC97_PCM_RATE_11025_HZ); //AC97_PCM_RATE_8000_HZ
-
-		while(i < numberOfSamples*2){
+	int counter = 0;
+	while(counter < 10*44100){ //length of the loop: 1000000  sample rate: 44100
+		while(!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)){
+			int sample = tankFireBullet_soundData[i]; //redSpaceship_soundData[i];
+			int numberOfSamples = tankFireBullet_numberOfSamples;//redSpaceshipLeave_numberOfSamples;
 			if(i >= numberOfSamples){
 				sample = 0;
 			}
@@ -60,7 +63,35 @@ void fireTankBulletSound(){
 				}
 			}
 		}
+		counter++;
 	}
+	XAC97_ClearFifos(XPAR_AXI_AC97_0_BASEADDR);
+/*	int i = 0;
+	int j = 0;
+	while(1){
+		while(!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)){
+
+			int sample = redSpaceship_soundData[i];
+			int numberOfSamples = redSpaceship_numberOfSamples;
+			//XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate1, 10); //AC97_PCM_RATE_8000_HZ
+
+			while(i < numberOfSamples*2){
+				if(i >= numberOfSamples){
+					sample = 0;
+				}
+				XAC97_mSetInFifoData(XPAR_AXI_AC97_0_BASEADDR, sample | (sample<<16));
+				j++;
+				if(j == 4){
+					j=0;
+					i++;
+
+					if(i > numberOfSamples*4){
+						i = 0;
+					}
+				}
+			}
+		}
+	}*/
 
 }
 
@@ -71,6 +102,31 @@ void tankDeathSound(){
 
 
 void destroyRedMothershipSound(){
+	int i = 0;
+	int j = 0;
+	int counter = 0;
+	while(counter < 500000){
+		while(!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)){
+			int sample = redSpaceshipLeave_soundData[i];
+			int numberOfSamples = redSpaceship_numberOfSamples;
+			if(i >= numberOfSamples){
+				sample = 0;
+			}
+			XAC97_mSetInFifoData(XPAR_AXI_AC97_0_BASEADDR, sample | (sample<<16));
+			j++;
+			if(j == 4){
+				j=0;
+				i++;
+
+				if(i > numberOfSamples*2){
+					i = 0;
+				}
+			}
+		}
+		counter++;
+	}
+	XAC97_ClearFifos(XPAR_AXI_AC97_0_BASEADDR);
+
 
 }
 
