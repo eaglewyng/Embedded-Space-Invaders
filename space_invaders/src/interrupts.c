@@ -70,13 +70,13 @@ void interrupt_handler_dispatcher(){
 		timer_interrupt_handler();
 	}
 	if (intc_status & XPAR_AXI_AC97_0_INTERRUPT_MASK){
-		XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_AXI_AC97_0_INTERRUPT_MASK);
 		sound_interrupt_handler();
 	}
 }
 
 void sound_interrupt_handler(){
 	fillFIFO();
+	XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_AXI_AC97_0_INTERRUPT_MASK);
 }
 
 void timer_interrupt_handler(){
