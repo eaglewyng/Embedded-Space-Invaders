@@ -23,11 +23,23 @@ void moveAliensSound();
 
 void moveRedSpaceshipSound();
 
+void deactiveRedSpaceshipOnScreenSound();
+
+void activeInvaderDieSound();
+
 void fireTankBulletSound();
 
 void tankDeathSound();
 
 void destroyRedMothershipSound();
+
+void deactiveDestroyRedMothershipSound();
+
+void deactiveInvaderDieSound();
+
+void activeInvaderKilledSound();
+
+void deactiveInvaderKilledSound();
 
 void adjustVolume(int volume_direction);
 

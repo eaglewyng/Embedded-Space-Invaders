@@ -317,6 +317,9 @@ int destroyRedMothership(int col, int row){
 	if(mothership[row % RED_SPACESHIP_HEIGHT] & (1<<(RED_SPACESHIP_WIDTH - 1 - col))){
 		if(DB_ON1){xil_printf("You've hit the mothership! DIE! \n\r");}
 		redSpaceshipStatus = RED_SPACESHIP_DEAD;
+		//call the sound for the red spaceship death
+		deactiveRedSpaceshipOnScreenSound();
+		destroyRedMothershipSound();
 		clearRedSpaceship();
 		return 1;
 	}
@@ -355,9 +358,6 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 				for(col = 0; col < BULLET_WIDTH; col++){
 					if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
 						if(destroyRedMothership(tankBullet.x + col, tankBullet.y + row)){
-							//call the sound for the red spaceship death
-							destroyRedMothershipSound();
-
 							addToScore(HIT_RED_SPACESHIP);
 							drawRedSpaceshipScore(YELLOW);
 							myPoint.xcoord = tankBullet.x + col;

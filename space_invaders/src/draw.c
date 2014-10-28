@@ -19,6 +19,7 @@
 #include <xparameters.h>
 #include <stdlib.h>
 #import "gamestatus.h"
+#include "sound.h"
 
 
 #define FRAME_BUFFER_0_ADDR 0xC1000000  // Starting location in DDR where we will store the images that we display.
