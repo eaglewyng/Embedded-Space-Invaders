@@ -629,8 +629,10 @@ int chooseAlienToKill(int x, int y){
 						break;
 					}
 					alienArray[i] = DEAD_ALIEN;   //i like boys
+					activeInvaderDieSound();
 					drawAliens();
 					lastAlienKilled = i;
+
 					return 1;
 				}
 			}

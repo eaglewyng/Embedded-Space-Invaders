@@ -415,6 +415,7 @@ int drawAliens(){
 			}
 			if(alienBMP == deadAlien){
 				alienArray[row * ALIENS_PER_ROW + col] = NO_ALIEN;
+				deactiveInvaderDieSound();
 			}
 		}
 	}
@@ -1485,6 +1486,7 @@ void drawRedSpaceship(){
 				}
 			}
 		}
+
 	}
 
 }

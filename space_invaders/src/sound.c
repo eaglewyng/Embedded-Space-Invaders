@@ -81,10 +81,12 @@ void deactiveRedSpaceshipOnScreenSound(){
 
 void activeInvaderDieSound(){
 	invaderDieSound.state = ACTIVE;
+	xil_printf("Dangnabbers, we Actived invaderDieSound!\n\r");
 }
 
 void deactiveInvaderDieSound(){
 	invaderDieSound.state = INACTIVE;
+	xil_printf("We deactived invaderDieSound.\n\r");
 }
 
 void activeInvaderKilledSound(){
@@ -130,6 +132,9 @@ void tankDeathSound(){
 	tankExplodeSound.state = ACTIVE;
 }
 
+void deactiveTankDeathSound(){
+	tankExplodeSound.state = INACTIVE;
+}
 
 void destroyRedMothershipSound(){
 	redSpaceshipLeaveSound.state = ACTIVE;
@@ -142,11 +147,11 @@ void deactiveDestroyRedMothershipSound(){
 
 
 void adjustVolume(int volume_direction){
-	if(volume_direction == VOLUME_UP && volumeAttenuation <= AC97_VOL_ATTN_46_0_DB){
+	if(volume_direction == VOLUME_UP && volumeAttenuation <= AC97_VOL_ATTN_46_0_DB && volumeAttenuation > AC97_VOL_ATTN_0_DB){
 		volumeAttenuation -= SOUND_INCR;
 		//volumeAttenuation = AC97_VOL_ATTN_0_DB;
 	}
-	else if(volume_direction == VOLUME_DOWN && volumeAttenuation >= AC97_VOL_ATTN_0_DB){
+	else if(volume_direction == VOLUME_DOWN && volumeAttenuation >= AC97_VOL_ATTN_0_DB && volumeAttenuation < AC97_VOL_ATTN_46_0_DB){
 		volumeAttenuation += SOUND_INCR;
 		//volumeAttenuation = AC97_VOL_ATTN_46_0_DB;
 	}

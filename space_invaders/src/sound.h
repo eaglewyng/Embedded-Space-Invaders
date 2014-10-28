@@ -31,6 +31,8 @@ void fireTankBulletSound();
 
 void tankDeathSound();
 
+void deactiveTankDeathSound();
+
 void destroyRedMothershipSound();
 
 void deactiveDestroyRedMothershipSound();
