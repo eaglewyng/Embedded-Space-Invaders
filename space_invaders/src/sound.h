@@ -16,6 +16,9 @@
 
 #endif /* SOUND_H_ */
 
+
+
+
 void moveAliensSound();
 
 void moveRedSpaceshipSound();
@@ -27,3 +30,7 @@ void tankDeathSound();
 void destroyRedMothershipSound();
 
 void adjustVolume(int volume_direction);
+
+void fillFIFO();
+
+void updateSoundStates();

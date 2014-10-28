@@ -146,6 +146,8 @@ int initializeDisplay(){
 	//Initialize the AC97 Sound Chip
 	XAC97_HardReset(XPAR_AXI_AC97_0_BASEADDR);
 	XAC97_AwaitCodecReady(XPAR_AXI_AC97_0_BASEADDR);
+	XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_ExtendedAudioStat, 1);
+	XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, AC97_PCM_RATE_22050_HZ);
 	XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_AuxOutVol, AC97_VOL_MID);
 
 

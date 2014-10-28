@@ -30,6 +30,16 @@ extern int alienOriginY;
 int idleCounter = 0;
 extern int timerHandlerCounter;
 extern int fitcounter;
+extern GameSound invaderDieSound;
+extern GameSound invaderKilledSound;
+extern GameSound invaderMove1Sound;
+extern GameSound invaderMove2Sound;
+extern GameSound invaderMove3Sound;
+extern GameSound invaderMove4Sound;
+extern GameSound redSpaceshipLeaveSound;
+extern GameSound redSpaceshipOnScreenSound;
+extern GameSound tankFireBulletSound;
+extern GameSound tankExplodeSound;
 
 
 
@@ -210,5 +220,26 @@ void initializeLevel(){
 	lastAlienKilled = -1;
 
 	lastRowAliveAliens = findLastAliveRow();
+
+	invaderDieSound.state = INACTIVE;
+	invaderDieSound.currentIndex = 0;
+	invaderKilledSound.state = INACTIVE;
+	invaderKilledSound.currentIndex = 0;
+	invaderMove1Sound.state = INACTIVE;
+	invaderMove1Sound.currentIndex = 0;
+	invaderMove2Sound.state = INACTIVE;
+	invaderMove2Sound.currentIndex = 0;
+	invaderMove3Sound.state = INACTIVE;
+	invaderMove3Sound.currentIndex = 0;
+	invaderMove4Sound.state = INACTIVE;
+	invaderMove4Sound.currentIndex = 0;
+	redSpaceshipLeaveSound.state = INACTIVE;
+	redSpaceshipLeaveSound.currentIndex = 0;
+	redSpaceshipOnScreenSound.state = INACTIVE;
+	redSpaceshipOnScreenSound.currentIndex = 0;
+	tankFireBulletSound.state = INACTIVE;
+	tankFireBulletSound.currentIndex = 0;
+	tankExplodeSound.state = INACTIVE;
+	tankExplodeSound.currentIndex = 0;
 }
 

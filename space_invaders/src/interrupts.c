@@ -12,6 +12,7 @@
 #include "space_invaders.h"
 #include "interrupts.h"
 #include "time.h"
+#include "sound.h"
 
 u32 const TICS_UNTIL_DEBOUNCED = 5;		//the number of ticks needed from the timer for the switches to be debounced
 u32 const MS_PER_TIC = 10;
@@ -34,6 +35,8 @@ extern int tankState;
 extern int clearRedSpaceshipScoreFlag;
 extern int gameOver;
 extern DCResult dcResult;
+extern int activeSound;
+
 
 double best_case_time = 10000000;
 double worst_case_time = 0;
@@ -50,10 +53,10 @@ XGpio gpPB;   // This is a handle for the push-button GPIO block.
 void initInterrupts(){
 	//register interrupts
 	microblaze_register_handler(interrupt_handler_dispatcher, NULL);
-	XIntc_EnableIntr(XPAR_INTC_0_BASEADDR,
-			(XPAR_FIT_TIMER_0_INTERRUPT_MASK));
+	XIntc_EnableIntr(XPAR_INTC_0_BASEADDR, (XPAR_FIT_TIMER_0_INTERRUPT_MASK | XPAR_AXI_AC97_0_INTERRUPT_MASK));
 	XIntc_MasterEnable(XPAR_INTC_0_BASEADDR);
 	microblaze_enable_interrupts();
+
 }
 
 
@@ -66,6 +69,14 @@ void interrupt_handler_dispatcher(){
 		XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_FIT_TIMER_0_INTERRUPT_MASK);
 		timer_interrupt_handler();
 	}
+	if (intc_status & XPAR_AXI_AC97_0_INTERRUPT_MASK){
+		XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_AXI_AC97_0_INTERRUPT_MASK);
+		sound_interrupt_handler();
+	}
+}
+
+void sound_interrupt_handler(){
+	fillFIFO();
 }
 
 void timer_interrupt_handler(){

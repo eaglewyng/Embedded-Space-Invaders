@@ -87,6 +87,7 @@
 #define PINK   0x00FFC0CB
 
 
+
 #define EVENT_ALIEN_FIRE 1
 #define EVENT_RED_SPACESHIP_APPEAR 2
 #define EVENT_TANK_DEATH 3
@@ -143,6 +144,20 @@
 #define VOLUME_UP 0x0
 #define VOLUME_DOWN 0x1
 
+#define INACTIVE 0x0
+#define ACTIVE 0x1
+#define TANK_BULLET_SOUND 0xA
+#define TANK_EXPLODE_SOUND 0x9
+#define INVADER_MOVE_1_SOUND 0x4
+#define INVADER_MOVE_2_SOUND 0x3
+#define INVADER_MOVE_3_SOUND 0x2
+#define INVADER_MOVE_4_SOUND 0x1
+#define INVADER_DIE_SOUND 0x8
+#define INVADER_KILLED_SOUND 0x7
+#define REDSPACESHIP_LEAVE_SOUND 0x6
+#define REDSPACESHIP_ONSCREEN_SOUND 0x5
+#define NO_SOUND 0x0
+
 typedef struct{
 	int x;
 	int y;
@@ -182,6 +197,12 @@ typedef struct deltaclock
 	int evnum;
 	int tics;
 } DeltaClock;
+
+typedef struct
+{
+	int state;
+	int currentIndex;
+} GameSound;
 
 //--------space_invaders.c--------//
 //the main game routines
