@@ -318,7 +318,7 @@ int destroyRedMothership(int col, int row){
 		if(DB_ON1){xil_printf("You've hit the mothership! DIE! \n\r");}
 		redSpaceshipStatus = RED_SPACESHIP_DEAD;
 		//call the sound for the red spaceship death
-		deactiveRedSpaceshipOnScreenSound();
+		//deactiveRedSpaceshipOnScreenSound();
 		destroyRedMothershipSound();
 		clearRedSpaceship();
 		return 1;

@@ -118,7 +118,7 @@ void timer_interrupt_handler(){
 		}
 		if(fitcounter % TICS_PER_RED_SPACESHIP_SCORE_CLEAR == 0 && clearRedSpaceshipScoreFlag){
 			clearRedSpaceshipScore();
-			deactiveDestroyRedMothershipSound();
+			//deactiveDestroyRedMothershipSound();
 		}
 		if(fitcounter % TICS_PER_ALIEN_LOC_UPDATE == 0){
 			alienInOut = !alienInOut;

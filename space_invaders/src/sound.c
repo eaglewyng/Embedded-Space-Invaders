@@ -75,25 +75,25 @@ void moveRedSpaceshipSound(){
 	redSpaceshipOnScreenSound.state = ACTIVE;
 }
 
-void deactiveRedSpaceshipOnScreenSound(){
+void deactiveRedSpaceshipOnScreenSound(){ //some of these we shouldn't need this because it should deactive itself after it writes all its samples
 	redSpaceshipOnScreenSound.state = INACTIVE;
 }
 
 void activeInvaderDieSound(){
 	invaderDieSound.state = ACTIVE;
-	xil_printf("Dangnabbers, we Actived invaderDieSound!\n\r");
+	//xil_printf("Dangnabbers, we Actived invaderDieSound!\n\r");
 }
 
-void deactiveInvaderDieSound(){
+void deactiveInvaderDieSound(){ //some of these we shouldn't need this because it should deactive itself after it writes all its samples
 	invaderDieSound.state = INACTIVE;
-	xil_printf("We deactived invaderDieSound.\n\r");
+	//xil_printf("We deactived invaderDieSound.\n\r");
 }
 
 void activeInvaderKilledSound(){
 	invaderKilledSound.state = ACTIVE;
 }
 
-void deactiveInvaderKilledSound(){
+void deactiveInvaderKilledSound(){ //some of these we shouldn't need this because it should deactive itself after it writes all its samples
 	invaderKilledSound.state = INACTIVE;
 }
 
@@ -129,10 +129,11 @@ void fireTankBulletSound(){
 
 
 void tankDeathSound(){
+	xil_printf("Huh, we do active tankExplodeSound.\n\r");
 	tankExplodeSound.state = ACTIVE;
 }
 
-void deactiveTankDeathSound(){
+void deactiveTankDeathSound(){ //some of these we shouldn't need this because it should deactive itself after it writes all its samples
 	tankExplodeSound.state = INACTIVE;
 }
 
@@ -140,7 +141,7 @@ void destroyRedMothershipSound(){
 	redSpaceshipLeaveSound.state = ACTIVE;
 }
 
-void deactiveDestroyRedMothershipSound(){
+void deactiveDestroyRedMothershipSound(){//some of these we shouldn't need this because it should deactive itself after it writes all its samples
 	redSpaceshipLeaveSound.state = INACTIVE;
 }
 
@@ -177,48 +178,48 @@ void fillFIFO(){
 		}
 		else if(tankExplodeSound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, tankExplode_sampleRate);
-			sample = tankExplode_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = tankExplode_soundData[tankExplodeSound.currentIndex];
+			tankExplodeSound.currentIndex++;
 		}
 		else if(invaderDieSound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderDie_sampleRate);
-			sample = invaderDie_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = invaderDie_soundData[invaderDieSound.currentIndex];
+			invaderDieSound.currentIndex++;
 		}
 		else if(invaderKilledSound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderKilled_sampleRate);
-			sample = invaderKilled_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = invaderKilled_soundData[invaderKilledSound.currentIndex];
+			invaderKilledSound.currentIndex++;
 		}
 		else if(redSpaceshipLeaveSound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, redSpaceshipLeave_sampleRate);
-			sample = redSpaceshipLeave_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = redSpaceshipLeave_soundData[redSpaceshipLeaveSound.currentIndex];
+			redSpaceshipLeaveSound.currentIndex++;
 		}
 		else if(redSpaceshipOnScreenSound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, redSpaceshipOnScreen_sampleRate);
-			sample = redSpaceshipOnScreen_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = redSpaceshipOnScreen_soundData[redSpaceshipOnScreenSound.currentIndex];
+			redSpaceshipOnScreenSound.currentIndex++;
 		}
 		/*else if(invaderMove1Sound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove1_sampleRate);
-			sample = invaderMove1_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = invaderMove1_soundData[invaderMove1Sound.currentIndex];
+			invaderMove1Sound.currentIndex++;
 		}
 		else if(invaderMove2Sound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove2_sampleRate);
-			sample = invaderMove2_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = invaderMove2_soundData[invaderMove2Sound.currentIndex];
+			invaderMove2Sound.currentIndex++;
 		}
 		else if(invaderMove3Sound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove3_sampleRate);
-			sample = invaderMove3_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = invaderMove3_soundData[invaderMove3Sound.currentIndex];
+			invaderMove3Sound.currentIndex++;
 		}
 		else if(invaderMove4Sound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove4_sampleRate);
-			sample = invaderMove4_soundData[tankFireBulletSound.currentIndex];
-			tankFireBulletSound.currentIndex++;
+			sample = invaderMove4_soundData[invaderMove4Sound.currentIndex];
+			invaderMove4Sound.currentIndex++;
 		}*/
 		else{
 			//xil_printf("Well, the NO_SOUND is successfully being put in the FIFO.\n\r");
@@ -238,6 +239,7 @@ void updateSoundStates(){
 		tankFireBulletSound.currentIndex = 0;
 	}
 	if(tankExplodeSound.currentIndex >= tankExplode_numberOfSamples){
+		//xil_printf("Well, we do deactive tankExplodeSound.\n\r");
 		tankFireBulletSound.state = INACTIVE;
 		tankFireBulletSound.currentIndex = 0;
 	}
