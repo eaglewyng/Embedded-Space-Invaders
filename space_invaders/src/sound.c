@@ -133,16 +133,18 @@ void updateSoundSampleRate(){
 
 void fillFIFO(){
 	int sample = 0;
+	int counter = 0;
 	//xil_printf("Well, we got into fillFIFO.\n\r");
-	xil_printf("The state of tankFireBulletSound is %d\n\r",tankFireBulletSound.state);
-	while(!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)){
+	//xil_printf("The state of tankFireBulletSound is %d\n\r",tankFireBulletSound.state);
+	while(counter < 250){//!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)
 		if(tankFireBulletSound.state == ACTIVE){
-			xil_printf("Well, we got into tankFireBulletSound.\n\r");
+			//xil_printf("Well, we got into tankFireBulletSound.\n\r");
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, tankFireBullet_sampleRate);
 			sample = tankFireBullet_soundData[tankFireBulletSound.currentIndex];
 			tankFireBulletSound.currentIndex++;
+			//xil_printf("This is tankFireBulletSound's currentIndex: %d.\n\r", tankFireBulletSound.currentIndex);
 		}
-		else if(tankExplodeSound.state == ACTIVE){
+/*		else if(tankExplodeSound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, tankExplode_sampleRate);
 			sample = tankExplode_soundData[tankFireBulletSound.currentIndex];
 			tankFireBulletSound.currentIndex++;
@@ -186,7 +188,7 @@ void fillFIFO(){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove4_sampleRate);
 			sample = invaderMove4_soundData[tankFireBulletSound.currentIndex];
 			tankFireBulletSound.currentIndex++;
-		}
+		}*/
 		else{
 			//xil_printf("Well, the NO_SOUND is successfully being put in the FIFO.\n\r");
 			sample = 0;
@@ -194,7 +196,9 @@ void fillFIFO(){
 
 		updateSoundStates();
 		XAC97_mSetInFifoData(XPAR_AXI_AC97_0_BASEADDR, sample | (sample<<16));
+		counter++;
 	}
+	return;
 }
 
 void updateSoundStates(){
