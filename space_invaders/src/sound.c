@@ -101,18 +101,18 @@ void fireTankBulletSound(){
 
 	}
 	XAC97_ClearFifos(XPAR_AXI_AC97_0_BASEADDR);*/
-
-	tankFireBulletSound.state == ACTIVE;
+	//xil_printf("The tankFireBulletSound.state is now ACTIVE.\n\r");
+	tankFireBulletSound.state = ACTIVE;
 }
 
 
 void tankDeathSound(){
-	tankExplodeSound.state == ACTIVE;
+	tankExplodeSound.state = ACTIVE;
 }
 
 
 void destroyRedMothershipSound(){
-	redSpaceshipLeaveSound.state == ACTIVE;
+	redSpaceshipLeaveSound.state = ACTIVE;
 }
 
 void adjustVolume(int volume_direction){
@@ -134,6 +134,7 @@ void updateSoundSampleRate(){
 void fillFIFO(){
 	int sample = 0;
 	//xil_printf("Well, we got into fillFIFO.\n\r");
+	xil_printf("The state of tankFireBulletSound is %d\n\r",tankFireBulletSound.state);
 	while(!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)){
 		if(tankFireBulletSound.state == ACTIVE){
 			xil_printf("Well, we got into tankFireBulletSound.\n\r");
@@ -187,7 +188,7 @@ void fillFIFO(){
 			tankFireBulletSound.currentIndex++;
 		}
 		else{
-			xil_printf("Well, the NO_SOUND is successfully being put in the FIFO.\n\r");
+			//xil_printf("Well, the NO_SOUND is successfully being put in the FIFO.\n\r");
 			sample = 0;
 		}
 
