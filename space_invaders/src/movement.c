@@ -82,17 +82,20 @@ void clearRedSpaceshipScore(){
 }
 
 void moveRedSpaceship(){
-	//call red spaceship sound
-	moveRedSpaceshipSound();
 
 	if(!redSpaceshipStatus == RED_SPACESHIP_ALIVE)
 		return;
+	//call red spaceship sound
+	moveRedSpaceshipSound();
+
 	if(redSpaceshipDirection == LEFT){
 		redSpaceshipOriginX -= RED_SPACESHIP_PIXELS_PER_MOVE;
 		undrawRedSpaceship(LEFT);
 		if(redSpaceshipOriginX + RED_SPACESHIP_WIDTH < 0){
 			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
 			insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
+			deactiveRedSpaceshipOnScreenSound();
+			//TODO add spaceshipleavescreen sound sometime
 		}
 	}
 	//redSpaceships are on the right side of the screen
@@ -102,6 +105,8 @@ void moveRedSpaceship(){
 		if(redSpaceshipOriginX >= SCREEN_X_PIXELS){
 			redSpaceshipStatus = RED_SPACESHIP_INACTIVE;
 			insertDC(rand() % MAX_TICS_BETWEEN_RED_SPACESHIP_APPEAR, EVENT_RED_SPACESHIP_APPEAR);
+			deactiveRedSpaceshipOnScreenSound();
+			//TODO add spaceshipleavescreen sound sometime
 		}
 	}
 
@@ -113,7 +118,7 @@ void moveRedSpaceship(){
 //updates the origin location by the predefined amount
 void moveAliens(){
 	//call move aliens sound
-	moveAliensSound();
+	moveInvadersSound();
 
 	//what to do if aliens are on the left side of the screen
 	if(alienDirection == LEFT && (alienOriginX - PIXELS_PER_MOVE < -1*(ALIEN_WIDTH * firstColAliveAliens))){
@@ -313,12 +318,12 @@ void moveAlienBullets(){
 }
 
 
-int destroyRedMothership(int col, int row){
+int destroyRedSpaceship(int col, int row){
 	if(mothership[row % RED_SPACESHIP_HEIGHT] & (1<<(RED_SPACESHIP_WIDTH - 1 - col))){
 		if(DB_ON1){xil_printf("You've hit the mothership! DIE! \n\r");}
 		redSpaceshipStatus = RED_SPACESHIP_DEAD;
 		//call the sound for the red spaceship death
-		//deactiveRedSpaceshipOnScreenSound();
+		deactiveRedSpaceshipOnScreenSound();
 		destroyRedMothershipSound();
 		clearRedSpaceship();
 		return 1;
@@ -357,7 +362,7 @@ ScreenPoint tankBulletCollision(){//returns the number of the bunker you hit
 			for(row = BULLET_HEIGHT-1; row >= 0; row--){
 				for(col = 0; col < BULLET_WIDTH; col++){
 					if((tankBulletSymbol[row % BULLET_HEIGHT] & (1<<(BULLET_WIDTH-1-col)))){
-						if(destroyRedMothership(tankBullet.x + col, tankBullet.y + row)){
+						if(destroyRedSpaceship(tankBullet.x + col, tankBullet.y + row)){
 							addToScore(HIT_RED_SPACESHIP);
 							drawRedSpaceshipScore(YELLOW);
 							myPoint.xcoord = tankBullet.x + col;

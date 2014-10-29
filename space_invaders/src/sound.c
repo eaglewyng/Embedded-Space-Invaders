@@ -63,10 +63,16 @@ extern int tankExplode_numberOfSamples;
 extern int tankExplode_sampleRate;
 //int activeSound = 0;
 
+int aliensSoundState;
+
+void initSound(){
+	aliensSoundState = ALIENS_BEGINNING_SOUNDSTATE;
+}
 
 
 
-void moveAliensSound(){
+
+void moveInvadersSound(){
 	invaderMove1Sound.state = ACTIVE;
 
 }
@@ -138,13 +144,46 @@ void deactiveTankDeathSound(){ //some of these we shouldn't need this because it
 }
 
 void destroyRedMothershipSound(){
-	redSpaceshipLeaveSound.state = ACTIVE;
+	//TODO replace this with the actual mothership sound
+	invaderKilledSound.state = ACTIVE;
 }
 
 void deactiveDestroyRedMothershipSound(){//some of these we shouldn't need this because it should deactive itself after it writes all its samples
 	redSpaceshipLeaveSound.state = INACTIVE;
 }
 
+
+void activeInvaderMoveSound(){
+	//assign everything so there isn't the possibility of two of these running
+	//at once
+	switch(aliensSoundState){
+		case 1:
+			invaderMove1Sound.state = ACTIVE;
+			invaderMove2Sound.state = INACTIVE;
+			invaderMove3Sound.state = INACTIVE;
+			invaderMove4Sound.state = INACTIVE;
+			break;
+		case 2:
+			invaderMove1Sound.state = INACTIVE;
+			invaderMove2Sound.state = ACTIVE;
+			invaderMove3Sound.state = INACTIVE;
+			invaderMove4Sound.state = INACTIVE;
+			break;
+		case 3:
+			invaderMove1Sound.state = INACTIVE;
+			invaderMove2Sound.state = INACTIVE;
+			invaderMove3Sound.state = ACTIVE;
+			invaderMove4Sound.state = INACTIVE;
+			break;
+		default:
+			invaderMove1Sound.state = INACTIVE;
+			invaderMove2Sound.state = INACTIVE;
+			invaderMove3Sound.state = INACTIVE;
+			invaderMove4Sound.state = ACTIVE;
+			break;
+	}
+
+}
 
 
 void adjustVolume(int volume_direction){
@@ -201,7 +240,7 @@ void fillFIFO(){
 			sample = redSpaceshipOnScreen_soundData[redSpaceshipOnScreenSound.currentIndex];
 			redSpaceshipOnScreenSound.currentIndex++;
 		}
-		/*else if(invaderMove1Sound.state == ACTIVE){
+		else if(invaderMove1Sound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove1_sampleRate);
 			sample = invaderMove1_soundData[invaderMove1Sound.currentIndex];
 			invaderMove1Sound.currentIndex++;
@@ -220,7 +259,7 @@ void fillFIFO(){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove4_sampleRate);
 			sample = invaderMove4_soundData[invaderMove4Sound.currentIndex];
 			invaderMove4Sound.currentIndex++;
-		}*/
+		}
 		else{
 			//xil_printf("Well, the NO_SOUND is successfully being put in the FIFO.\n\r");
 			sample = 0;
@@ -239,40 +278,44 @@ void updateSoundStates(){
 		tankFireBulletSound.currentIndex = 0;
 	}
 	if(tankExplodeSound.currentIndex >= tankExplode_numberOfSamples){
-		//xil_printf("Well, we do deactive tankExplodeSound.\n\r");
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		xil_printf("Well, we do deactive tankExplodeSound.\n\r");
+		tankExplodeSound.state = INACTIVE;
+		tankExplodeSound.currentIndex = 0;
 	}
 	if(invaderDieSound.currentIndex >= invaderDie_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		invaderDieSound.state = INACTIVE;
+		invaderDieSound.currentIndex = 0;
 	}
 	if(invaderKilledSound.currentIndex >= invaderKilled_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		invaderKilledSound.state = INACTIVE;
+		invaderKilledSound.currentIndex = 0;
 	}
 	if(redSpaceshipLeaveSound.currentIndex >= redSpaceshipLeave_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		redSpaceshipLeaveSound.state = INACTIVE;
+		redSpaceshipLeaveSound.currentIndex = 0;
 	}
 	if(redSpaceshipOnScreenSound.currentIndex >= redSpaceshipOnScreen_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		redSpaceshipOnScreenSound.state = INACTIVE;
+		redSpaceshipOnScreenSound.currentIndex = 0;
 	}
 	if(invaderMove1Sound.currentIndex >= invaderMove1_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		invaderMove1Sound.state = INACTIVE;
+		aliensSoundState = 2;
+		invaderMove1Sound.currentIndex = 0;
 	}
 	if(invaderMove2Sound.currentIndex >= invaderMove2_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		invaderMove2Sound.state = INACTIVE;
+		aliensSoundState = 3;
+		invaderMove2Sound.currentIndex = 0;
 	}
 	if(invaderMove3Sound.currentIndex >= invaderMove3_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		invaderMove3Sound.state = INACTIVE;
+		aliensSoundState =  4;
+		invaderMove3Sound.currentIndex = 0;
 	}
 	if(invaderMove4Sound.currentIndex >= invaderMove4_numberOfSamples){
-		tankFireBulletSound.state = INACTIVE;
-		tankFireBulletSound.currentIndex = 0;
+		invaderMove4Sound.state = INACTIVE;
+		aliensSoundState = 1;
+		invaderMove4Sound.currentIndex = 0;
 	}
 }

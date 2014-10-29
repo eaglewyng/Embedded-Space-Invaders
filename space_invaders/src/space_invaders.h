@@ -302,6 +302,9 @@ void clearAlienBullet(int);
 void clearRedSpaceshipScore();
 void clearRedSpaceship();
 
+//------------sounds.c----------------//
+void deactiveRedSpaceshipOnScreenSound();
+
 
 #endif /* SPACE_INVADERS_H_ */
 

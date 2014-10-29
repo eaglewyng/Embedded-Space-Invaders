@@ -12,14 +12,10 @@
 
 #define MAX_SOUND 0x1F1F
 #define MIN_SOUND 0x0
-#define SOUND_INCR 0x0101;
+#define SOUND_INCR 0x0101
+#define ALIENS_BEGINNING_SOUNDSTATE 1
 
-#endif /* SOUND_H_ */
-
-
-
-
-void moveAliensSound();
+void moveInvadersSound();
 
 void moveRedSpaceshipSound();
 
@@ -48,3 +44,12 @@ void adjustVolume(int volume_direction);
 void fillFIFO();
 
 void updateSoundStates();
+
+
+
+#endif /* SOUND_H_ */
+
+
+
+
+
