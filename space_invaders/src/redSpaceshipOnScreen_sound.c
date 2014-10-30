@@ -2502,4 +2502,4 @@ int redSpaceshipOnScreen_soundData[] = {247, 249, 250, 251, 253, 254, 255, 1, 2,
 	250, 250, 251, 252, 252, 253, 254, 255, 255, 0, 1, 1, 2, 2, 3, 3, 4, 5, 6, 6, 6, 8, 8, 9, 10, 11, 11, 11, 12, 13, 
 	12, 13, 15, 15, 16, 17, 18, 18, 18, 19, 20, 20, 21, 22, 22, 23, 24, 25, 25, 25, 26, 26, 27, 28, 28, };
 int redSpaceshipOnScreen_numberOfSamples = 75085;
-int redSpaceshipOnScreen_sampleRate = 44100;
+int redSpaceshipOnScreen_sampleRate = 2*44100;
