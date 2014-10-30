@@ -18,9 +18,9 @@ int volumeAttenuation = AC97_VOL_ATTN_46_0_DB;
 extern int redSpaceship_soundData[];
 extern int redSpaceship_numberOfSamples;
 extern int redSpaceship_sampleRate;
-extern int tankFireSoundRate;
-extern int tankFireSoundFrames;
-extern int tankFireSound[];
+extern int tankFire_sampleRate;
+extern int tankFire_numberOfSamples;
+extern int tankFire[];
 GameSound invaderDieSound;
 extern int invaderDie_soundData[];
 extern int invaderDie_numberOfSamples;
@@ -54,19 +54,31 @@ extern int redSpaceshipOnScreen_soundData[];
 extern int redSpaceshipOnScreen_numberOfSamples;
 extern int redSpaceshipOnScreen_sampleRate;
 GameSound tankFireBulletSound;
-extern int tankFireBullet_soundData[];
-extern int tankFireBullet_numberOfSamples;
-extern int tankFireBullet_sampleRate;
+extern int tankFire_soundData[];
+extern int tankFire_numberOfSamples;
+extern int tankFire_sampleRate;
 GameSound tankExplodeSound;
 extern int tankExplode_soundData[];
 extern int tankExplode_numberOfSamples;
 extern int tankExplode_sampleRate;
+GameSound redSpaceshipHitSound;
+extern int redSpaceshipHit_soundData[];
+extern int redSpaceshipHit_numberOfSamples[];
+extern int redSpaceshipHit_sampleRate;
 //int activeSound = 0;
 
 int aliensSoundState;
 
 void initSound(){
 	aliensSoundState = ALIENS_BEGINNING_SOUNDSTATE;
+}
+
+void activeRedSpaceshipHitSound(){
+	redSpaceshipHitSound.state = ACTIVE;
+}
+
+void deactiveRedSpaceshipHitSound(){
+	redSpaceshipHitSound.state = INACTIVE;
 }
 
 
@@ -106,11 +118,11 @@ void deactiveInvaderKilledSound(){ //some of these we shouldn't need this becaus
 void fireTankBulletSound(){
 /*	int i = 0;
 	int j = 0;
-	int numberOfSamples = tankFireSoundFrames;
+	int numberOfSamples = tankFire_numberOfSamples;
 	while(1){
 		while(!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)){//!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)
-			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, tankFireSoundRate);
-			int sample = tankFireSound[i];
+			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, tankFire_sampleRate);
+			int sample = tankFire[i];
 
 			if(i >= numberOfSamples){
 				sample = 0;
@@ -145,11 +157,11 @@ void deactiveTankDeathSound(){ //some of these we shouldn't need this because it
 
 void destroyRedMothershipSound(){
 	//TODO replace this with the actual mothership sound
-	invaderKilledSound.state = ACTIVE;
+	redSpaceshipHitSound.state = ACTIVE;
 }
 
 void deactiveDestroyRedMothershipSound(){//some of these we shouldn't need this because it should deactive itself after it writes all its samples
-	redSpaceshipLeaveSound.state = INACTIVE;
+	redSpaceshipHitSound.state = INACTIVE;
 }
 
 
@@ -208,10 +220,20 @@ void fillFIFO(){
 	//xil_printf("Well, we got into fillFIFO.\n\r");
 	//xil_printf("The state of tankFireBulletSound is %d\n\r",tankFireBulletSound.state);
 	while(counter < 250){//!XAC97_isInFIFOFull(XPAR_AXI_AC97_0_BASEADDR)
-		if(tankFireBulletSound.state == ACTIVE){
+		if(redSpaceshipOnScreenSound.state == ACTIVE){
+			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, redSpaceshipOnScreen_sampleRate);
+			sample = redSpaceshipOnScreen_soundData[redSpaceshipOnScreenSound.currentIndex];
+			redSpaceshipOnScreenSound.currentIndex++;
+		}
+		if(redSpaceshipHitSound.state == ACTIVE){
+			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, redSpaceshipHit_sampleRate);
+			sample = redSpaceshipHit_soundData[redSpaceshipHitSound.currentIndex];
+			redSpaceshipHitSound.currentIndex++;
+		}
+		else if(tankFireBulletSound.state == ACTIVE){
 			//xil_printf("Well, we got into tankFireBulletSound.\n\r");
-			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, tankFireBullet_sampleRate);
-			sample = tankFireBullet_soundData[tankFireBulletSound.currentIndex];
+			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, tankFire_sampleRate);
+			sample = tankFire_soundData[tankFireBulletSound.currentIndex];
 			tankFireBulletSound.currentIndex++;
 			//xil_printf("This is tankFireBulletSound's currentIndex: %d.\n\r", tankFireBulletSound.currentIndex);
 		}
@@ -235,11 +257,7 @@ void fillFIFO(){
 			sample = redSpaceshipLeave_soundData[redSpaceshipLeaveSound.currentIndex];
 			redSpaceshipLeaveSound.currentIndex++;
 		}
-		else if(redSpaceshipOnScreenSound.state == ACTIVE){
-			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, redSpaceshipOnScreen_sampleRate);
-			sample = redSpaceshipOnScreen_soundData[redSpaceshipOnScreenSound.currentIndex];
-			redSpaceshipOnScreenSound.currentIndex++;
-		}
+
 		else if(invaderMove1Sound.state == ACTIVE){
 			XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, invaderMove1_sampleRate);
 			sample = invaderMove1_soundData[invaderMove1Sound.currentIndex];
@@ -260,20 +278,17 @@ void fillFIFO(){
 			sample = invaderMove4_soundData[invaderMove4Sound.currentIndex];
 			invaderMove4Sound.currentIndex++;
 		}
-		else{
-			//xil_printf("Well, the NO_SOUND is successfully being put in the FIFO.\n\r");
-			sample = 0;
-		}
 
 		updateSoundStates();
-		XAC97_mSetInFifoData(XPAR_AXI_AC97_0_BASEADDR, sample | (sample<<16));
+		sample = sample | (sample<<16);
+		XAC97_mSetInFifoData(XPAR_AXI_AC97_0_BASEADDR, sample);
 		counter++;
 	}
 	return;
 }
 
 void updateSoundStates(){
-	if(tankFireBulletSound.currentIndex >= tankFireBullet_numberOfSamples){
+	if(tankFireBulletSound.currentIndex >= tankFire_numberOfSamples){
 		tankFireBulletSound.state = INACTIVE;
 		tankFireBulletSound.currentIndex = 0;
 	}
@@ -317,5 +332,9 @@ void updateSoundStates(){
 		invaderMove4Sound.state = INACTIVE;
 		aliensSoundState = 1;
 		invaderMove4Sound.currentIndex = 0;
+	}
+	if(redSpaceshipHitSound.currentIndex >= redSpaceshipLeave_numberOfSamples){
+		redSpaceshipHitSound.state = INACTIVE;
+		redSpaceshipHitSound.currentIndex = 0;
 	}
 }
