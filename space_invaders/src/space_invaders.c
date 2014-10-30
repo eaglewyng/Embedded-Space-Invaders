@@ -40,7 +40,7 @@ extern GameSound redSpaceshipLeaveSound;
 extern GameSound redSpaceshipOnScreenSound;
 extern GameSound tankFireBulletSound;
 extern GameSound tankExplodeSound;
-extern GameSound redSpaceshipHitSound;
+
 
 
 int main(){
@@ -235,8 +235,6 @@ void initializeLevel(){
 	invaderMove4Sound.currentIndex = 0;
 	redSpaceshipLeaveSound.state = INACTIVE;
 	redSpaceshipLeaveSound.currentIndex = 0;
-	redSpaceshipHitSound.state = INACTIVE;
-	redSpaceshipHitSound.currentIndex = 0;
 	redSpaceshipOnScreenSound.state = INACTIVE;
 	redSpaceshipOnScreenSound.currentIndex = 0;
 	tankFireBulletSound.state = INACTIVE;

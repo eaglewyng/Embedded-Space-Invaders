@@ -304,8 +304,6 @@ void clearRedSpaceship();
 
 //------------sounds.c----------------//
 void deactiveRedSpaceshipOnScreenSound();
-void activeInvaderDieSound();
-void adjustVolume(int);
 
 
 #endif /* SPACE_INVADERS_H_ */

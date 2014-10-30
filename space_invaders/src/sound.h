@@ -25,8 +25,6 @@ void activeInvaderDieSound();
 
 void fireTankBulletSound();
 
-void deactivefireTankBulletSound();
-
 void tankDeathSound();
 
 void deactiveTankDeathSound();

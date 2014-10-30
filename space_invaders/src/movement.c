@@ -118,8 +118,7 @@ void moveRedSpaceship(){
 //updates the origin location by the predefined amount
 void moveAliens(){
 	//call move aliens sound
-	//moveInvadersSound();
-	activeInvaderMoveSound();
+	moveInvadersSound();
 
 	//what to do if aliens are on the left side of the screen
 	if(alienDirection == LEFT && (alienOriginX - PIXELS_PER_MOVE < -1*(ALIEN_WIDTH * firstColAliveAliens))){
@@ -635,7 +634,7 @@ int chooseAlienToKill(int x, int y){
 						break;
 					}
 					alienArray[i] = DEAD_ALIEN;   //i like boys
-					activeInvaderDieSound(); //activeInvaderDieSound();
+					activeInvaderDieSound();
 					drawAliens();
 					lastAlienKilled = i;
 
@@ -841,7 +840,6 @@ void moveTankBullet(){
 			if(DB_ON1) xil_printf("This is oops: %d, %d\n\r",hitCoord.xcoord, hitCoord.ycoord);
 			clearTankBullet();
 			tankBullet.type = INACTIVE_BULLET; //bullet has hit something
-			deactiveFireTankBulletSound();
 			if(allAliensDead()){
 				drawAliens();
 				alienArray[lastAlienKilled] = NO_ALIEN;
