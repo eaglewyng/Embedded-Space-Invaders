@@ -13,6 +13,7 @@
 #include "interrupts.h"
 #include "time.h"
 #include "sound.h"
+#include "pit.h"
 
 u32 const TICS_UNTIL_DEBOUNCED = 5;		//the number of ticks needed from the timer for the switches to be debounced
 u32 const MS_PER_TIC = 10;
@@ -52,11 +53,17 @@ XGpio gpPB;   // This is a handle for the push-button GPIO block.
 
 void initInterrupts(){
 	//register interrupts
+	PIT_mReset(XPAR_PIT_0_BASEADDR);
 	microblaze_register_handler(interrupt_handler_dispatcher, NULL);
-	XIntc_EnableIntr(XPAR_INTC_0_BASEADDR, (XPAR_FIT_TIMER_0_INTERRUPT_MASK | XPAR_AXI_AC97_0_INTERRUPT_MASK));
+	XIntc_EnableIntr(XPAR_INTC_0_BASEADDR, (XPAR_FIT_TIMER_0_INTERRUPT_MASK | XPAR_AXI_AC97_0_INTERRUPT_MASK | XPAR_PIT_0_OUTPUT_MASK));
 	XIntc_MasterEnable(XPAR_INTC_0_BASEADDR);
 	microblaze_enable_interrupts();
-
+	PIT_mWriteSlaveReg0(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, COUNTDOWN_INITIAL_VALUE);
+	PIT_mWriteSlaveReg1(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, 0x5);
+	int temp = PIT_mReadReg(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET);
+	int temp2 = PIT_mReadReg(XPAR_PIT_0_BASEADDR, PIT_SLV_REG1_OFFSET);
+	xil_printf("I put this value in reg0 of the pit: %d\n\r",temp);
+	xil_printf("I put this value in reg1 of the pit: %d\n\r",temp2);
 }
 
 
@@ -65,12 +72,18 @@ void interrupt_handler_dispatcher(){
 	timerHandlerCounter++;
 	int intc_status = XIntc_GetIntrStatus(XPAR_INTC_0_BASEADDR);
 	// Check the FIT interrupt first.
-	if (intc_status & XPAR_FIT_TIMER_0_INTERRUPT_MASK){
-		XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_FIT_TIMER_0_INTERRUPT_MASK);
-		timer_interrupt_handler();
-	}
+/*	if (intc_status & XPAR_FIT_TIMER_0_INTERRUPT_MASK){
+		//XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_FIT_TIMER_0_INTERRUPT_MASK);
+
+	}*/
 	if (intc_status & XPAR_AXI_AC97_0_INTERRUPT_MASK){
 		sound_interrupt_handler();
+	}
+	if(intc_status & XPAR_PIT_0_OUTPUT_MASK){
+		XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_PIT_0_OUTPUT_MASK);
+		timer_interrupt_handler();
+		//xil_printf("The PIT interrupts! Wohoo!\n\r");
+		//PIT_mWriteSlaveReg1(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, 0x3);*/
 	}
 }
 

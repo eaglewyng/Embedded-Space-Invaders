@@ -152,7 +152,7 @@ int initializeDisplay(){
 	//XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_PCM_DAC_Rate, AC97_PCM_RATE_11025_HZ);
 	XAC97_WriteReg(XPAR_AXI_AC97_0_BASEADDR, AC97_AuxOutVol, AC97_VOL_MID);
 
-
+	//initialize PIT?
 
 
 	myFrameConfig.ReadFrameCount = 2;
