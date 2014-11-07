@@ -55,12 +55,36 @@ int main(){
 
 	while(1)
 	{
-		idleCounter++;
+		/*idleCounter++;
 		if(idleCounter % 10000 == 0){
 			//xil_printf("Adam said to print the idle counter, which is %d\r",idleCounter);
+		}*/
+		Xuint8 c;
+		if(DB_ON1) xil_printf("Please enter a timer value: ");
+		int collecting_info = 1;
+		int ctrVal = 0;
+		while(collecting_info){
+			c = XUartLite_RecvByte(XPAR_RS232_UART_1_BASEADDR);
+			switch(c){
+				case '\r':
+					collecting_info = 0;
+					if(ctrVal != 0)
+						PIT_mWriteSlaveReg0(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, ctrVal);
+					xil_printf("\nPlease enter a timer value: ");
+				break;
+				case '\r':
+					collecting_info = 0;
+					if(ctrVal != 0)
+						PIT_mWriteSlaveReg0(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, ctrVal);
+					xil_printf("\nPlease enter a timer value: ");
+				break;
+				default:
+					xil_printf("%c", c);
+					ctrVal = ctrVal * 10 + (c - 48);
 		}
+		
 	}
-	;
+	
 	return 0;
 
 }
@@ -68,7 +92,7 @@ int main(){
 void initializeDC(){
 	dcFront = 0;
 	int i;
-
+	
 	//insert the alien bullet fires into the delta clock
 	for(i = 0; i < 4; i++){
 		insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);
