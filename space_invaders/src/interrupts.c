@@ -59,7 +59,7 @@ void initInterrupts(){
 	XIntc_MasterEnable(XPAR_INTC_0_BASEADDR);
 	microblaze_enable_interrupts();
 	PIT_mWriteSlaveReg0(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, COUNTDOWN_INITIAL_VALUE);
-	PIT_mWriteSlaveReg1(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, 0x5);
+	PIT_mWriteSlaveReg1(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, 0x7);
 	int temp = PIT_mReadReg(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET);
 	int temp2 = PIT_mReadReg(XPAR_PIT_0_BASEADDR, PIT_SLV_REG1_OFFSET);
 	xil_printf("I put this value in reg0 of the pit: %d\n\r",temp);

@@ -13,7 +13,7 @@ void timer_interrupt_handler();
 
 #endif /* INTERRUPTS_H_ */
 
-#define COUNTDOWN_INITIAL_VALUE 100000 //every 10 ms
+#define COUNTDOWN_INITIAL_VALUE 1000000 //every 10 ms
 #define PIT_DECREMENT 0x1
 #define PIT_HOLD 0x0
 #define PIT_ENABLE_INTR 0x10
