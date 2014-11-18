@@ -9,22 +9,6 @@
 #include <stdio.h>
 #include "time.h"
 #include "xac97_l.h"
-#include "space_invaders.h"
-#include <stdio.h>
-#include "platform.h"
-#include "xparameters.h"
-#include "xaxivdma.h"
-#include "xio.h"
-#include "time.h"
-#include "unistd.h"
-#include "display.h"
-#include <xuartlite_l.h>
-#include <xparameters.h>
-#include <stdlib.h>
-#include "xgpio.h"          // Provides access to PB GPIO driver.
-#include "mb_interface.h"   // provides the microblaze interrupt enables, etc.
-#include "sound.h"
-#include "pit.h"
 
 
 int alienArray[55];	//1 denotes the alien is alive, 0 denotes the alien is dead
@@ -71,35 +55,12 @@ int main(){
 
 	while(1)
 	{
-		/*idleCounter++;
+		idleCounter++;
 		if(idleCounter % 10000 == 0){
 			//xil_printf("Adam said to print the idle counter, which is %d\r",idleCounter);
-		}*/
-		Xuint8 c;
-		xil_printf("\n\rPlease enter a timer value: ");
-		int collecting_info = 1;
-		int ctrVal = 0;
-		while(collecting_info){
-			c = XUartLite_RecvByte(XPAR_RS232_UART_1_BASEADDR);
-			switch(c){
-				case '\r':
-					collecting_info = 0;
-					if(ctrVal != 0)
-						PIT_mWriteSlaveReg0(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, ctrVal);
-				break;
-				case '\n':
-					collecting_info = 0;
-					if(ctrVal != 0)
-						PIT_mWriteSlaveReg0(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, ctrVal);
-				break;
-				default:
-					xil_printf("%c", c);
-					ctrVal = ctrVal * 10 + (c - 48);
-			}
 		}
-		
 	}
-	
+	;
 	return 0;
 
 }
@@ -107,7 +68,7 @@ int main(){
 void initializeDC(){
 	dcFront = 0;
 	int i;
-	
+
 	//insert the alien bullet fires into the delta clock
 	for(i = 0; i < 4; i++){
 		insertDC(rand() % MAX_TICS_BETWEEN_ALIEN_FIRE, EVENT_ALIEN_FIRE);

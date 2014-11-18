@@ -14,6 +14,7 @@
 #include "time.h"
 #include "sound.h"
 #include "pit.h"
+#include "nes_c_controller.h"
 
 u32 const TICS_UNTIL_DEBOUNCED = 5;		//the number of ticks needed from the timer for the switches to be debounced
 u32 const MS_PER_TIC = 10;
@@ -54,8 +55,9 @@ XGpio gpPB;   // This is a handle for the push-button GPIO block.
 void initInterrupts(){
 	//register interrupts
 	PIT_mReset(XPAR_PIT_0_BASEADDR);
+	NES_C_CONTROLLER_mReset(XPAR_NES_C_CONTROLLER_0_BASEADDR);
 	microblaze_register_handler(interrupt_handler_dispatcher, NULL);
-	XIntc_EnableIntr(XPAR_INTC_0_BASEADDR, (XPAR_FIT_TIMER_0_INTERRUPT_MASK | XPAR_AXI_AC97_0_INTERRUPT_MASK | XPAR_PIT_0_OUTPUT_MASK));
+	XIntc_EnableIntr(XPAR_INTC_0_BASEADDR, (XPAR_FIT_TIMER_0_INTERRUPT_MASK | XPAR_AXI_AC97_0_INTERRUPT_MASK | XPAR_PIT_0_OUTPUT_MASK | XPAR_NES_C_CONTROLLER_0_NES_C_INTERRUPT_MASK));
 	XIntc_MasterEnable(XPAR_INTC_0_BASEADDR);
 	microblaze_enable_interrupts();
 	PIT_mWriteSlaveReg0(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, COUNTDOWN_INITIAL_VALUE);
@@ -64,6 +66,7 @@ void initInterrupts(){
 	int temp2 = PIT_mReadReg(XPAR_PIT_0_BASEADDR, PIT_SLV_REG1_OFFSET);
 	xil_printf("I put this value in reg0 of the pit: %d\n\r",temp);
 	xil_printf("I put this value in reg1 of the pit: %d\n\r",temp2);
+	NES_C_CONTROLLER_mWriteSlaveReg0(XPAR_NES_C_CONTROLLER_0_BASEADDR, NES_C_CONTROLLER_SLV_REG0_OFFSET, ENABLE_INTERRUPT);
 }
 
 
@@ -84,6 +87,15 @@ void interrupt_handler_dispatcher(){
 		timer_interrupt_handler();
 		//xil_printf("The PIT interrupts! Wohoo!\n\r");
 		//PIT_mWriteSlaveReg1(XPAR_PIT_0_BASEADDR, PIT_SLV_REG0_OFFSET, 0x3);*/
+	}
+	if(intc_status & XPAR_NES_C_CONTROLLER_0_NES_C_INTERRUPT_MASK){
+		XIntc_AckIntr(XPAR_INTC_0_BASEADDR, XPAR_NES_C_CONTROLLER_0_NES_C_INTERRUPT_MASK);
+		if(NES_C_CONTROLLER_mReadSlaveReg1(XPAR_NES_C_CONTROLLER_0_BASEADDR, 0) != NO_BUTTONS_PRESSED){
+			int temp = NES_C_CONTROLLER_mReadSlaveReg1(XPAR_NES_C_CONTROLLER_0_BASEADDR, 0);
+
+			//xil_printf("NES controller value: %x \n\r", temp);
+		}
+		//xil_printf("The NES interrupts!\n\r");
 	}
 }
 
@@ -112,7 +124,6 @@ void timer_interrupt_handler(){
 			tankRevive();
 		}
 	}
-
 
 	if(gameOver){
 		getButtonInputGameOver();

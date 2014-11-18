@@ -20,6 +20,7 @@
 #include "xgpio.h"          // Provides access to PB GPIO driver.
 #include "mb_interface.h"   // provides the microblaze interrupt enables, etc.
 #include "sound.h"
+#include "nes_c_controller.h"
 #define ASCII_OFFSET 48
 
 extern int alienInOut;
@@ -144,21 +145,22 @@ void getKeyboardInput(){
 
 void getButtonInput(){
 
-	int currentButtonState = XGpio_DiscreteRead(&gpPB, 1);
+	//int currentButtonState = XGpio_DiscreteRead(&gpPB, 1);
+	int currentButtonState = NES_C_CONTROLLER_mReadSlaveReg1(XPAR_NES_C_CONTROLLER_0_BASEADDR, 0);
 
-	if (currentButtonState & MIDDLE_BUTTON_MASK){
+	if (!(currentButtonState & A_MASK)){ //MIDDLE_BUTTON_MASK
 		fireTankBullet();
 	}
-	if(currentButtonState & LEFT_BUTTON_MASK){
+	if(!(currentButtonState & LEFT_MASK)){//LEFT_BUTTON_MASK
 		moveTank(LEFT);
 	}
-	if(currentButtonState & RIGHT_BUTTON_MASK){
+	if(!(currentButtonState & RIGHT_MASK)){//RIGHT_BUTTON_MASK
 		moveTank(RIGHT);
 	}
-	if(currentButtonState & UP_BUTTON_MASK){
+	if(!(currentButtonState & START_MASK)){//UP_BUTTON_MASK
 		adjustVolume(VOLUME_UP);
 	}
-	if(currentButtonState & DOWN_BUTTON_MASK){
+	if(!(currentButtonState & SELECT_MASK)){//DOWN_BUTTON_MASK
 		adjustVolume(VOLUME_DOWN);
 	}
 	drawTank();
